@@ -128,14 +128,25 @@
 }
 
 html.dark {
-  /* 自定义深色背景颜色 */
-  --el-bg-color: rgb(218, 224, 234);
+  /* 自定义深色背景颜色 - 统一使用 slate-900 */
+  --el-bg-color: rgb(15, 23, 42);
   --el-bg-color-overlay: rgb(40, 51, 69);
+  --el-bg-color-page: rgb(15, 23, 42);
+  --el-fill-color-blank: rgb(15, 23, 42);
   --el-fill-color-light: rgb(15, 23, 42);
   --el-fill-color: rgb(15, 23, 42);
-  // --el-text-color-primary: rgb(255, 255, 255) !important;
-   .search-tooltip {
-    background-color:var(--el-bg-color-overlay);
-    border-color: var(--el-bg-color-overlay)
+  --el-menu-bg-color: rgb(15, 23, 42);
+  --el-menu-hover-bg-color: rgb(30, 41, 59);
+  --el-table-bg-color: rgb(15, 23, 42);
+  --el-table-tr-bg-color: rgb(15, 23, 42);
+  --el-table-header-bg-color: rgb(15, 23, 42);
+  --el-table-row-hover-bg-color: rgb(30, 41, 59);
+  --el-card-bg-color: rgb(15, 23, 42);
+  --el-dialog-bg-color: rgb(30, 41, 59);
+  --el-drawer-bg-color: rgb(30, 41, 59);
+  --el-tabs-header-bg-color: rgb(15, 23, 42);
+  .search-tooltip {
+    background-color: var(--el-bg-color-overlay);
+    border-color: var(--el-bg-color-overlay);
   }
 }

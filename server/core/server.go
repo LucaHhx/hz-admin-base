@@ -28,12 +28,7 @@ func RunWindowsServer() {
 	s := initServer(address, Router)
 
 	global.HAB_LOG.Info("server run success on ", zap.String("address", address))
-
-	fmt.Printf(`
-	HAB (Hz Admin Base) 后台管理系统
-	Swagger 文档地址: http://127.0.0.1%s/swagger/index.html
-	前端运行地址: http://127.0.0.1:8080
-`, address)
+	global.HAB_LOG.Info(fmt.Sprintf("Swagger 文档地址: http://127.0.0.1%s/swagger/index.html", address))
 	global.HAB_LOG.Error(s.ListenAndServe().Error())
 }
 

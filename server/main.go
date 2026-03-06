@@ -4,20 +4,22 @@ import (
 	"hab/core"
 	"hab/global"
 	"hab/initialize"
-	"log"
 	"net/http"
 	_ "net/http/pprof"
 	"time"
 
 	_ "go.uber.org/automaxprocs"
+	"go.uber.org/zap"
 )
 
 func main() {
 	core.InitServer()
 
 	go func() {
-		log.Println("Starting pprof server on :6060")
-		log.Println(http.ListenAndServe("localhost:6060", nil))
+		global.HAB_LOG.Info("Starting pprof server on :6060")
+		if err := http.ListenAndServe("localhost:6060", nil); err != nil {
+			global.HAB_LOG.Error("pprof server failed", zap.Error(err))
+		}
 	}()
 
 	// 设置时区
