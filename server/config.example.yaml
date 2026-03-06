@@ -51,6 +51,7 @@ autocode:
   web: web/src
   server: server
   module: hab
+  api-key: ""  # 留空表示禁用 API Key 认证；填入随机字符串启用
 
 # ===================== 本地文件存储 =====================
 local:

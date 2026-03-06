@@ -19,3 +19,4 @@
 | 13 | 多运行模式 | 已完成 | - | 支持 Backend / API / All 三种启动模式 |
 | 14 | 多数据库支持 | 已完成 | - | MySQL / PostgreSQL / SQLite / MSSQL / Oracle |
 | 15 | 项目清理 | 进行中 | - | 移除示例/插件代码，统一标识为 HAB，打造可复用基础模板 |
+| 16 | AI 自动化代码生成 Skill | 进行中 | - | 创建 hab-autocode skill，让 AI 通过 API Key 调用 AutoCode API 自动创建包和模块 |

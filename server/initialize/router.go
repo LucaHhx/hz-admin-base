@@ -71,6 +71,10 @@ func Routers() *gin.Engine {
 	PrivateGroup := Router.Group(global.HAB_CONFIG.System.RouterPrefix)
 	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 
+	// AutoCode 专用路由组，支持 API Key 或 JWT 双重认证
+	AutoCodeGroup := Router.Group(global.HAB_CONFIG.System.RouterPrefix)
+	AutoCodeGroup.Use(middleware.ApiKeyOrJWT()).Use(middleware.CasbinHandler())
+
 	{
 		// 健康监测
 		PublicGroup.GET("/health", func(c *gin.Context) {
@@ -89,11 +93,11 @@ func Routers() *gin.Engine {
 		systemRouter.InitMenuRouter(PrivateGroup)                       // 注册menu路由
 		systemRouter.InitSystemRouter(PrivateGroup)                     // system相关路由
 		systemRouter.InitCasbinRouter(PrivateGroup)                     // 权限相关路由
-		systemRouter.InitAutoCodeRouter(PrivateGroup, PublicGroup)      // 创建自动化代码
+		systemRouter.InitAutoCodeRouter(AutoCodeGroup, PublicGroup)     // 创建自动化代码 (改用 AutoCodeGroup)
 		systemRouter.InitAuthorityRouter(PrivateGroup)                  // 注册角色路由
 		systemRouter.InitTranslationRouter(PrivateGroup, PublicGroup)   // 翻译管理
 		systemRouter.InitSysDictionaryRouter(PrivateGroup, PublicGroup) // 字典管理
-		systemRouter.InitAutoCodeHistoryRouter(PrivateGroup)            // 自动化代码历史
+		systemRouter.InitAutoCodeHistoryRouter(AutoCodeGroup)           // 自动化代码历史 (改用 AutoCodeGroup)
 		systemRouter.InitSysOperationRecordRouter(PrivateGroup)         // 操作记录
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)        // 字典详情管理
 		systemRouter.InitSysExportTemplateRouter(PrivateGroup)          // 导出模板
