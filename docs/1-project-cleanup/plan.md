@@ -14,11 +14,13 @@
 
 - 移除 example 模块（客户管理、文件上传下载示例、断点续传示例）的前后端代码
 - 移除插件模块（announcement 公告、email 邮件）及其初始化注册代码
+- 清理前端相关残留：移除与 example、插件模块对应的前端页面（view 目录）、前端路由配置、前端 API 调用文件、前端组件等
 - 清理 business 目录残留（如已删除的 b_batch_pay.go），保留规范的空壳入口结构
 - 统一项目标识：Go 模块名、前端 package name、配置文件中的项目名称等全部改为 HAB 相关标识
 - 清理 .agents/skills/ 下已废弃的旧 skill 文件（code-generator、mysql-operator、skill-creator）
 - 更新 README 为通用模板说明
 - 更新配置示例文件（config.example.yaml）中的项目名称
+- 移除 Redis 强制依赖：模板项目默认使用 SQLite，Redis 作为可选组件而非必须
 
 **不包含:**
 
@@ -48,6 +50,7 @@
 
 - [ ] example 模块（前后端）已完全移除，代码可正常编译运行
 - [ ] announcement 和 email 插件已完全移除，相关初始化注册代码已清理，代码可正常编译运行
+- [ ] 前端已清理：与 example、插件模块相关的前端页面、路由配置、API 调用文件、组件均已移除
 - [ ] business 和 api 目录保留规范的空壳入口结构（enter.go），无业务残留文件
 - [ ] Go 模块名已从 hz-admin-base 改为 HAB 相关标识
 - [ ] 前端 package name 已更新为 HAB 相关标识
@@ -55,4 +58,5 @@
 - [ ] .gitignore 中的项目名称引用已更新
 - [ ] .agents/skills/ 下的废弃 skill 已清理
 - [ ] README 已更新为通用模板说明
+- [ ] Redis 依赖已改为可选，项目可使用 SQLite 独立运行，无需强制依赖 Redis
 - [ ] 项目可正常编译、启动

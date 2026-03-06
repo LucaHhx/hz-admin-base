@@ -129,6 +129,8 @@ git status 显示以下文件已标记为 deleted:
 
 | 位置 | 旧值 | 新值 |
 |------|------|------|
+| system.db-type | `mysql` | `sqlite` |
+| system.use-redis | `true` | `false` |
 | mysql.db-name | `hz-admin-base` | `hab` |
 | autocode.module | `hz-admin-base` | `hab` |
 | zap.prefix | `'[hz-admin-base]'` | `'[hab]'` |
@@ -189,6 +191,24 @@ git status 显示以下文件已标记为 deleted:
 | plugin-tool 保留 | 不删除 | 通用插件工具，非业务插件，其他新插件可能依赖 |
 | 文件上传下载移除 | 随 example 一起移除 | 属于示例代码，如需此功能可作为新模块重新实现 |
 | 种子数据清理 | 移除 example 相关条目 | 保持种子数据与代码一致，避免初始化时引用不存在的路由/模型 |
+
+## 数据库与缓存策略
+
+模板项目应降低外部依赖门槛，确保开箱即用：
+
+| 组件 | 默认配置 | 说明 |
+|------|----------|------|
+| 数据库 | SQLite | 嵌入式，无需独立数据库服务 |
+| Redis | 可选（默认关闭） | `config.example.yaml` 中 `use-redis: false`，项目可在无 Redis 的环境下运行 |
+
+### config.example.yaml 调整
+
+| 配置项 | 旧值 | 新值 | 理由 |
+|--------|------|------|------|
+| `system.db-type` | `mysql` | `sqlite` | 模板项目默认使用 SQLite，降低部署门槛 |
+| `system.use-redis` | `true` | `false` | Redis 为可选依赖，默认关闭 |
+
+**注意**: 项目已内置 SQLite 和 Redis 的支持代码，此处仅修改默认配置值，不涉及代码变更。使用者可根据需要在 config.yaml 中切换为 MySQL + Redis。
 
 ## 依赖与约束
 

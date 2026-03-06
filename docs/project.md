@@ -47,6 +47,7 @@
 - 新业务模块从零到可用的搭建时间不超过 1 天（借助代码生成器）
 - 基础权限体系开箱即用，无需业务项目重复实现
 - 系统稳定运行，支持多数据库（MySQL / PostgreSQL / SQLite / MSSQL / Oracle）
+- 模板项目开箱即用，默认使用 SQLite，Redis 为可选组件（非强制依赖）
 
 ## 目录结构
 
@@ -59,7 +60,7 @@
 │   ├── service/    # 业务逻辑层
 │   ├── router/     # 路由定义
 │   ├── middleware/  # 中间件（JWT / CORS / Casbin / 限流 / 操作记录）
-│   ├── initialize/ # 初始化（数据库 / 路由 / Redis / 定时任务 / 验证器）
+│   ├── initialize/ # 初始化（数据库 / 路由 / 定时任务 / 验证器）
 │   ├── plugin/     # 插件（公告 / 邮件）
 │   ├── source/     # 初始化种子数据
 │   └── utils/      # 工具函数

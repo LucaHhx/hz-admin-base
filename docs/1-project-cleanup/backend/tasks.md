@@ -4,9 +4,9 @@
 
 | # | 任务 | 状态 | 开始日期 | 完成日期 | 备注 |
 |---|------|------|----------|----------|------|
-| 1 | Go module 重命名: go.mod 中 `hz-admin-base` -> `hab` | 待办 |  |  | L2#4 |
-| 2 | 全局 import 替换: server/ 下所有 .go 文件中 `"hz-admin-base/` -> `"hab/` (255 文件 638 处) | 待办 |  |  | L2#4 |
-| 3 | 编译验证: 重命名后 `go build` 确认通过 | 待办 |  |  | L2#4 |
+| 1 | Go module 重命名: go.mod 中 `hz-admin-base` -> `hab` | 待办 |  |  | L2#5 |
+| 2 | 全局 import 替换: server/ 下所有 .go 文件中 `"hz-admin-base/` -> `"hab/` (255 文件 638 处) | 待办 |  |  | L2#5 |
+| 3 | 编译验证: 重命名后 `go build` 确认通过 | 待办 |  |  | L2#5 |
 | 4 | 删除 example 目录: api/v1/example, model/example, service/example, router/example, source/example | 待办 |  |  | L2#1 |
 | 5 | 清理 example 引用: api/v1/enter.go 移除 ExampleApiGroup 及 import | 待办 |  |  | L2#1 |
 | 6 | 清理 example 引用: router/enter.go 移除 Example 字段及 import | 待办 |  |  | L2#1 |
@@ -19,18 +19,18 @@
 | 13 | 清理插件引用: plugin_biz_v1.go 移除 email import，清空 bizPluginV1 函数体 | 待办 |  |  | L2#2 |
 | 14 | 清理插件引用: plugin_biz_v2.go 移除 announcement import，清空 bizPluginV2 函数体 | 待办 |  |  | L2#2 |
 | 15 | 编译验证: 插件移除后 `go build` 确认通过 | 待办 |  |  | L2#2 |
-| 16 | 清理 business 残留: 删除 model/business/request 空目录，创建 model/business/enter.go 空壳 | 待办 |  |  | L2#3 |
-| 17 | 编译验证: business 目录清理后 `go build` 确认通过 | 待办 |  |  | L2#3 |
+| 16 | 清理 business 残留: 删除 model/business/request 空目录，创建 model/business/enter.go 空壳 | 待办 |  |  | L2#4 |
+| 17 | 编译验证: business 目录清理后 `go build` 确认通过 | 待办 |  |  | L2#4 |
 | 18 | 清理种子数据: source/system/menu.go 移除 example 相关菜单项 (4 行) | 待办 |  |  | L2#1 |
 | 19 | 清理种子数据: source/system/api.go 移除 example 相关 API 种子数据 (分片上传/文件上传下载/客户/断点续传插件版/媒体库分类) | 待办 |  |  | L2#1 |
 | 20 | 清理种子数据: source/system/casbin.go 移除 example 相关 casbin 规则 (fileUploadAndDownload/customer/simpleUploader/attachmentCategory) | 待办 |  |  | L2#1 |
 | 21 | 清理种子数据: source/system/authorities_menus.go 调整菜单索引切片（因 example 菜单移除导致索引变化） | 待办 |  |  | L2#1 |
 | 22 | 编译验证: 种子数据清理后 `go build` 确认通过 | 待办 |  |  | L2#1 |
-| 23 | 更新 config.example.yaml: db-name/module/prefix 中 `hz-admin-base` -> `hab` (3 处) | 待办 |  |  | L2#4 |
-| 24 | 更新 .gitignore: `/server/hz-admin-base` -> `/server/hab` (2 处) | 待办 |  |  | L2#4 |
-| 25 | 更新 Dockerfile: WORKDIR/COPY/CMD 中 `hz-admin-base` -> `hab` (3 处) | 待办 |  |  | L2#4 |
-| 26 | 更新 .drone.yml: 全局替换 `hz-admin-base` -> `hab` (8 处) | 待办 |  |  | L2#4 |
-| 27 | 更新前端 package.json: name 字段 `hz-admin-base` -> `hab` | 待办 |  |  | L2#4 |
-| 28 | 确认废弃 skill 已清理: .claude/skills/ 下 code-generator/mysql-operator/skill-creator 已删除 | 待办 |  |  | L2#5 |
-| 29 | 更新 README.md: 改为通用模板说明（项目定位/快速开始/目录结构/扩展方式） | 待办 |  |  | L2#6 |
-| 30 | 最终编译验证: `go build` + 启动测试确认项目可正常运行 | 待办 |  |  | L2#7 |
+| 23 | 更新 config.example.yaml: db-name/module/prefix 中 `hz-admin-base` -> `hab` (3 处) | 待办 |  |  | L2#5 |
+| 24 | 更新 .gitignore: `/server/hz-admin-base` -> `/server/hab` (2 处) | 待办 |  |  | L2#5 |
+| 25 | 更新 Dockerfile: WORKDIR/COPY/CMD 中 `hz-admin-base` -> `hab` (3 处) | 待办 |  |  | L2#5 |
+| 26 | 更新 .drone.yml: 全局替换 `hz-admin-base` -> `hab` (8 处) | 待办 |  |  | L2#5 |
+| 27 | 更新 config.example.yaml: db-type 改为 sqlite, use-redis 改为 false (模板默认配置) | 待办 |  |  | L2#6 |
+| 28 | 确认废弃 skill 已清理: .claude/skills/ 下 code-generator/mysql-operator/skill-creator 已删除 | 待办 |  |  | L2#7 |
+| 29 | 更新 README.md: 改为通用模板说明（项目定位/快速开始/目录结构/扩展方式） | 待办 |  |  | L2#8 |
+| 30 | 最终编译验证: `go build` + 启动测试确认项目可正常运行 | 待办 |  |  | L2#9 |
