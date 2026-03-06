@@ -1,0 +1,17 @@
+{
+  "columns": {
+      "title": "标题",
+      "status": "状态",
+      "ID": "ID",
+      "CreatedAt": "创建时间",
+      "UpdatedAt": "更新时间",
+      "DeletedAt": "删除时间",
+      "CreatedBy": "创建人",
+      "UpdatedBy": "更新人",
+      "DeletedBy": "删除人"
+  },
+  "enums": {
+  },
+  "messages": {
+  }
+}

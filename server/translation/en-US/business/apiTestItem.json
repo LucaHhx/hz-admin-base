@@ -1,0 +1,17 @@
+{
+  "columns": {
+      "title": "Title",
+      "status": "Status",
+      "ID": "ID",
+      "CreatedAt": "Creation Time",
+      "UpdatedAt": "Update Time",
+      "DeletedAt": "Delete time",
+      "CreatedBy": "Create By",
+      "UpdatedBy": "Updated By",
+      "DeletedBy": "Deleted By"
+  },
+  "enums": {
+  },
+  "messages": {
+  }
+}

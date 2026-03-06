@@ -1,9 +1,8 @@
 package initialize
 
 import (
-	"hab/router"
-
 	"github.com/gin-gonic/gin"
+	"hab/router"
 )
 
 func holder(routers ...*gin.RouterGroup) {

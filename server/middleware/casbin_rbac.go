@@ -6,6 +6,7 @@ import (
 
 	"hab/global"
 	"hab/model/common/response"
+	systemReq "hab/model/system/request"
 	"hab/service"
 	"hab/utils"
 
@@ -17,7 +18,17 @@ var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 // CasbinHandler 拦截器
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		waitUse, _ := utils.GetClaims(c)
+		var waitUse *systemReq.CustomClaims
+		if claims, exists := c.Get("claims"); exists {
+			waitUse = claims.(*systemReq.CustomClaims)
+		} else {
+			waitUse, _ = utils.GetClaims(c)
+		}
+		if waitUse == nil {
+			response.FailWithDetailed(gin.H{}, "insufficient_permissions", c)
+			c.Abort()
+			return
+		}
 		if waitUse.AuthorityId == 1 {
 			// 如果为超级管理员则直接放行
 			c.Next()

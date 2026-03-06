@@ -3,6 +3,9 @@ package system
 import (
 	"context"
 	"fmt"
+	goast "go/ast"
+	goformat "go/format"
+	goparser "go/parser"
 	"go/token"
 	"os"
 	"path/filepath"
@@ -104,15 +107,130 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 	})
 }
 
-// Delete 删除包记录
-// @author: [piexlmax](https://github.com/piexlmax)
-// @author: [SliverHorn](https://github.com/SliverHorn)
+// Delete 删除包记录，同时清理文件系统和 AST 注入
+// 如果包下存在模块（目录中除 enter.go 外还有其他文件），则拒绝删除
 func (s *autoCodePackage) Delete(ctx context.Context, info common.GetById) error {
-	err := global.HAB_DB.WithContext(ctx).Delete(&model.SysAutoCodePackage{}, info.Uint()).Error
+	var entity model.SysAutoCodePackage
+	err := global.HAB_DB.WithContext(ctx).First(&entity, info.Uint()).Error
+	if err != nil {
+		return errors.Wrap(err, "查询包信息失败!")
+	}
+
+	if entity.Template == "package" {
+		serverRoot := filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server)
+		pkgDirs := []string{
+			filepath.Join(serverRoot, "api", "v1", entity.PackageName),
+			filepath.Join(serverRoot, "router", entity.PackageName),
+			filepath.Join(serverRoot, "service", entity.PackageName),
+		}
+
+		// 检查是否存在模块（目录中除 enter.go 外有其他文件）
+		for _, dir := range pkgDirs {
+			entries, readErr := os.ReadDir(dir)
+			if readErr != nil {
+				continue // 目录不存在则跳过
+			}
+			for _, entry := range entries {
+				if entry.Name() != "enter.go" {
+					return errors.Errorf("包 %s 下存在模块，不允许删除!", entity.PackageName)
+				}
+			}
+		}
+
+		// 无模块，清理 AST 注入（从父级 enter.go 中移除 struct field）
+		module := global.HAB_CONFIG.AutoCode.Module
+		enterFiles := []struct {
+			path       string
+			groupName  string
+			structName string
+			importPath string
+		}{
+			{
+				path:       filepath.Join(serverRoot, "api", "v1", "enter.go"),
+				groupName:  "ApiGroup",
+				structName: utils.FirstUpper(entity.PackageName) + "ApiGroup",
+				importPath: fmt.Sprintf(`"%s/api/v1/%s"`, module, entity.PackageName),
+			},
+			{
+				path:       filepath.Join(serverRoot, "router", "enter.go"),
+				groupName:  "RouterGroup",
+				structName: utils.FirstUpper(entity.PackageName),
+				importPath: fmt.Sprintf(`"%s/router/%s"`, module, entity.PackageName),
+			},
+			{
+				path:       filepath.Join(serverRoot, "service", "enter.go"),
+				groupName:  "ServiceGroup",
+				structName: utils.FirstUpper(entity.PackageName) + "ServiceGroup",
+				importPath: fmt.Sprintf(`"%s/service/%s"`, module, entity.PackageName),
+			},
+		}
+
+		for _, ef := range enterFiles {
+			if err := removeStructField(ef.path, ef.groupName, ef.structName, ef.importPath); err != nil {
+				fmt.Printf("[warn] 清理 %s 失败: %v\n", ef.path, err)
+			}
+		}
+
+		// 删除包目录
+		for _, dir := range pkgDirs {
+			if err := os.RemoveAll(dir); err != nil {
+				fmt.Printf("[warn] 删除目录 %s 失败: %v\n", dir, err)
+			}
+		}
+	}
+
+	err = global.HAB_DB.WithContext(ctx).Delete(&model.SysAutoCodePackage{}, info.Uint()).Error
 	if err != nil {
 		return errors.Wrap(err, "删除失败!")
 	}
 	return nil
+}
+
+// removeStructField 从 Go 文件的指定 struct 中移除字段，并清理对应的 import
+func removeStructField(filePath, groupName, fieldName, importPath string) error {
+	fileSet := token.NewFileSet()
+	file, err := goparser.ParseFile(fileSet, filePath, nil, goparser.ParseComments)
+	if err != nil {
+		return err
+	}
+
+	found := false
+	goast.Inspect(file, func(n goast.Node) bool {
+		genDecl, ok := n.(*goast.GenDecl)
+		if !ok || genDecl.Tok != token.TYPE {
+			return true
+		}
+		for _, spec := range genDecl.Specs {
+			typeSpec, ok := spec.(*goast.TypeSpec)
+			if !ok || typeSpec.Name.Name != groupName {
+				continue
+			}
+			structType, ok := typeSpec.Type.(*goast.StructType)
+			if !ok {
+				continue
+			}
+			for i, field := range structType.Fields.List {
+				if len(field.Names) == 1 && field.Names[0].Name == fieldName {
+					structType.Fields.List = append(structType.Fields.List[:i], structType.Fields.List[i+1:]...)
+					found = true
+					return false
+				}
+			}
+		}
+		return true
+	})
+
+	if !found {
+		return nil
+	}
+
+	_ = ast.NewImport(importPath).Rollback(file)
+
+	var buf strings.Builder
+	if err := goformat.Node(&buf, fileSet, file); err != nil {
+		return err
+	}
+	return os.WriteFile(filePath, []byte(buf.String()), 0644)
 }
 
 // All 获取所有包
