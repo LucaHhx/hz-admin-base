@@ -2,8 +2,8 @@ package system
 
 import (
 	"context"
-	model "hz-admin-base/model/system"
-	"hz-admin-base/model/system/request"
+	model "hab/model/system"
+	"hab/model/system/request"
 	"reflect"
 	"testing"
 )

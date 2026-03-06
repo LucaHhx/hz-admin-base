@@ -2,18 +2,18 @@ package system
 
 import (
 	"errors"
-	"hz-admin-base/enum"
-	"hz-admin-base/utils/pwd"
+	"hab/enum"
+	"hab/utils/pwd"
 	"strings"
 	"time"
 
-	"hz-admin-base/code"
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	systemReq "hz-admin-base/model/system/request"
-	systemRes "hz-admin-base/model/system/response"
-	"hz-admin-base/utils"
+	"hab/code"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	systemReq "hab/model/system/request"
+	systemRes "hab/model/system/response"
+	"hab/utils"
 
 	"crypto/rand"
 	"encoding/base32"
@@ -160,7 +160,7 @@ func (b *BaseApi) PasswordVerify(c *gin.Context) {
 	// 将用户信息存储到数据库中
 	err = userService.CreateBindSession(sessionToken, user)
 	if err != nil {
-		global.GVA_LOG.Error("Failed to store bind session", zap.Error(err))
+		global.HAB_LOG.Error("Failed to store bind session", zap.Error(err))
 		response.FailWithMessage("系统错误", c)
 		return
 	}
@@ -352,7 +352,7 @@ func (b *BaseApi) PasskeyAssertionVerify(c *gin.Context) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			response.FailWithErr(code.ErrPasskeyNotBound, c)
 		} else {
-			global.GVA_LOG.Error("Failed to get user by passkey credential", zap.String("credentialId", req.Id), zap.Error(err))
+			global.HAB_LOG.Error("Failed to get user by passkey credential", zap.String("credentialId", req.Id), zap.Error(err))
 			response.FailWithMessage("系统错误", c)
 		}
 		return
@@ -369,7 +369,7 @@ func (b *BaseApi) PasskeyAssertionVerify(c *gin.Context) {
 	}
 
 	// 实际项目中需要验证签名
-	global.GVA_LOG.Info("Passkey login successful", zap.String("user", user.Username))
+	global.HAB_LOG.Info("Passkey login successful", zap.String("user", user.Username))
 
 	// 登录成功，生成token
 	b.TokenNext(c, *user)
@@ -390,7 +390,7 @@ func (b *BaseApi) TotpBindInit(c *gin.Context) {
 	secret = secret[:32]
 
 	// 生成otpauth URL
-	issuer := global.GVA_CONFIG.AutoCode.Module
+	issuer := global.HAB_CONFIG.AutoCode.Module
 	username := "user" // 实际应该从上下文获取
 	otpauthUrl := fmt.Sprintf("otpauth://totp/%s:%s?secret=%s&issuer=%s&digits=6&period=30",
 		issuer, username, secret, issuer)
@@ -429,7 +429,7 @@ func (b *BaseApi) TotpBindVerify(c *gin.Context) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			response.FailWithMessage("绑定会话不存在或已失效", c)
 		} else {
-			global.GVA_LOG.Error("Failed to get bind session", zap.Error(err))
+			global.HAB_LOG.Error("Failed to get bind session", zap.Error(err))
 			response.FailWithMessage("系统错误", c)
 		}
 		return
@@ -445,7 +445,7 @@ func (b *BaseApi) TotpBindVerify(c *gin.Context) {
 	// 保存Passkey凭证到数据库
 	err = userService.BindGoogleAuth(session.UserID, req.Secret)
 	if err != nil {
-		global.GVA_LOG.Error("Failed to save passkey", zap.Error(err))
+		global.HAB_LOG.Error("Failed to save passkey", zap.Error(err))
 		response.FailWithMessage("保存Passkey失败", c)
 		return
 	}
@@ -453,7 +453,7 @@ func (b *BaseApi) TotpBindVerify(c *gin.Context) {
 	// 清除绑定会话
 	err = userService.DeleteBindSession(req.BindSession)
 	if err != nil {
-		global.GVA_LOG.Error("Failed to delete bind session", zap.Error(err))
+		global.HAB_LOG.Error("Failed to delete bind session", zap.Error(err))
 		// 不阻止绑定流程，只记录错误
 	}
 	// 绑定成功，更新用户记录
@@ -507,13 +507,13 @@ func (b *BaseApi) PasskeyAttestationOptions(c *gin.Context) {
 		publicKey = systemRes.PasskeyPublicKeyCredentialCreationOptions{
 			Challenge: generateChallenge(),
 			Rp: systemRes.PasskeyRelyingParty{
-				Name: global.GVA_CONFIG.AutoCode.Module,
+				Name: global.HAB_CONFIG.AutoCode.Module,
 				Id:   rpid,
 			},
 			User: systemRes.PasskeyUser{
 				//Id: "dummy",
-				Id:          base64.RawURLEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s-%s", req.DisplayName, enum.AppKey, global.GVA_CONFIG.System.Environment))),
-				Name:        fmt.Sprintf("%s:%s-%s", req.DisplayName, enum.AppKey, global.GVA_CONFIG.System.Environment),
+				Id:          base64.RawURLEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s-%s", req.DisplayName, enum.AppKey, global.HAB_CONFIG.System.Environment))),
+				Name:        fmt.Sprintf("%s:%s-%s", req.DisplayName, enum.AppKey, global.HAB_CONFIG.System.Environment),
 				DisplayName: req.DisplayName,
 			},
 			PubKeyCredParams: []systemRes.PasskeyPubKeyCredParam{
@@ -565,14 +565,14 @@ func (b *BaseApi) PasskeyAttestationVerify(c *gin.Context) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			response.FailWithMessage("绑定会话不存在或已失效", c)
 		} else {
-			global.GVA_LOG.Error("Failed to get bind session", zap.Error(err))
+			global.HAB_LOG.Error("Failed to get bind session", zap.Error(err))
 			response.FailWithMessage("系统错误", c)
 		}
 		return
 	}
 
 	// 简化的Passkey绑定验证 - 实际应该解析attestationObject并验证
-	global.GVA_LOG.Info("Passkey binding successful",
+	global.HAB_LOG.Info("Passkey binding successful",
 		zap.Uint("userId", session.UserID),
 		zap.String("username", session.Username),
 		zap.String("credentialId", req.Id))
@@ -580,7 +580,7 @@ func (b *BaseApi) PasskeyAttestationVerify(c *gin.Context) {
 	// 保存Passkey凭证到数据库
 	err = userService.BindPasskey(session.UserID, req.Id, strings.Contains(c.Request.Host, "127.0.0.1") || strings.Contains(c.Request.Host, "localhost"))
 	if err != nil {
-		global.GVA_LOG.Error("Failed to save passkey", zap.Error(err))
+		global.HAB_LOG.Error("Failed to save passkey", zap.Error(err))
 		response.FailWithMessage("保存Passkey失败", c)
 		return
 	}
@@ -588,7 +588,7 @@ func (b *BaseApi) PasskeyAttestationVerify(c *gin.Context) {
 	// 清除绑定会话
 	err = userService.DeleteBindSession(req.BindSession)
 	if err != nil {
-		global.GVA_LOG.Error("Failed to delete bind session", zap.Error(err))
+		global.HAB_LOG.Error("Failed to delete bind session", zap.Error(err))
 		// 不阻止绑定流程，只记录错误
 	}
 
@@ -601,11 +601,11 @@ func (b *BaseApi) PasskeyAttestationVerify(c *gin.Context) {
 func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 	token, claims, err := utils.LoginToken(&user)
 	if err != nil {
-		global.GVA_LOG.Error("Failed to get token!", zap.Error(err))
+		global.HAB_LOG.Error("Failed to get token!", zap.Error(err))
 		response.FailWithMessage("Failed to get token", c)
 		return
 	}
-	if !global.GVA_CONFIG.System.UseMultipoint {
+	if !global.HAB_CONFIG.System.UseMultipoint {
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
@@ -617,7 +617,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 
 	if jwtStr, err := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-			global.GVA_LOG.Error("Failed to set login status!", zap.Error(err))
+			global.HAB_LOG.Error("Failed to set login status!", zap.Error(err))
 			response.FailWithMessage("Failed to set login status", c)
 			return
 		}
@@ -628,7 +628,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
 		}, "Login successful", c)
 	} else if err != nil {
-		global.GVA_LOG.Error("Failed to set login status!", zap.Error(err))
+		global.HAB_LOG.Error("Failed to set login status!", zap.Error(err))
 		response.FailWithMessage("Failed to set login status", c)
 	} else {
 		var blackJWT system.JwtBlacklist
@@ -684,7 +684,7 @@ func (b *BaseApi) Register(c *gin.Context) {
 	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities, Enable: r.Enable, Phone: r.Phone, Email: r.Email, Type: r.Type, Parameter: r.Parameter}
 	userReturn, err := userService.Register(*user)
 	if err != nil {
-		global.GVA_LOG.Error("注册失败!", zap.Error(err))
+		global.HAB_LOG.Error("注册失败!", zap.Error(err))
 		response.FailWithErr(code.ErrUserExists, c)
 		return
 	}
@@ -712,10 +712,10 @@ func (b *BaseApi) ChangePassword(c *gin.Context) {
 		return
 	}
 	uid := utils.GetUserID(c)
-	u := &system.SysUser{GVA_MODEL: global.GVA_MODEL{ID: uid}, Password: req.Password}
+	u := &system.SysUser{HAB_MODEL: global.HAB_MODEL{ID: uid}, Password: req.Password}
 	_, err = userService.ChangePassword(u, req.NewPassword)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		global.HAB_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithErr(code.ErrOldPasswordError, c)
 		return
 	}
@@ -746,7 +746,7 @@ func (b *BaseApi) GetUserList(c *gin.Context) {
 
 	list, total, err := userService.GetUserInfoList(pageInfo, c)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithErr(code.ErrGetInfoFailed, c)
 		return
 	}
@@ -770,7 +770,7 @@ func (b *BaseApi) GetUserInfo(c *gin.Context) {
 	uuid := utils.GetUserUuid(c)
 	ReqUser, err := userService.GetUserInfo(uuid)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithErr(code.ErrGetInfoFailed, c)
 		return
 	}
@@ -817,7 +817,7 @@ func (b *BaseApi) BindGoogleAuthByLogin(c *gin.Context) {
 	// 绑定谷歌验证器
 	err = userService.BindGoogleAuth(user.ID, req.SecretKey)
 	if err != nil {
-		global.GVA_LOG.Error("绑定失败!", zap.Error(err))
+		global.HAB_LOG.Error("绑定失败!", zap.Error(err))
 		response.FailWithErr(code.ErrBindGoogleAuthFailed, c)
 		return
 	}
@@ -858,7 +858,7 @@ func (b *BaseApi) BindPasskeyByLogin(c *gin.Context) {
 	// 绑定Passkey
 	err = userService.BindPasskey(user.ID, req.PasskeyData, strings.Contains(c.Request.Host, "127.0.0.1") || strings.Contains(c.Request.Host, "localhost"))
 	if err != nil {
-		global.GVA_LOG.Error("绑定失败!", zap.Error(err))
+		global.HAB_LOG.Error("绑定失败!", zap.Error(err))
 		response.FailWithErr(code.ErrBindGoogleAuthFailed, c)
 		return
 	}

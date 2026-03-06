@@ -1,8 +1,8 @@
 package system
 
 import (
-	"hz-admin-base/middleware"
 	"github.com/gin-gonic/gin"
+	"hab/middleware"
 )
 
 type SysDataFilterRouter struct{}

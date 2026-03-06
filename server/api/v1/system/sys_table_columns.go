@@ -1,11 +1,11 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	systemReq "hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	systemReq "hab/model/system/request"
+	"hab/utils"
 
 	"github.com/samber/lo"
 
@@ -35,7 +35,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) CreateSysTableColumns(c *gin.Conte
 	sysTableColumns.CreatedBy = utils.GetUserID(c)
 	err = sysTableColumnsService.CreateSysTableColumns(&sysTableColumns)
 	if err != nil {
-		global.GVA_LOG.Error("Create failed!", zap.Error(err))
+		global.HAB_LOG.Error("Create failed!", zap.Error(err))
 		response.FailWithMessage("Create failed: "+err.Error(), c)
 		return
 	}
@@ -65,7 +65,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) ImportSysTableColumns(c *gin.Conte
 	}
 	err = sysTableColumnsService.ImportSysTableColumns(sysTableColumnsList)
 	if err != nil {
-		global.GVA_LOG.Error("Import failed!", zap.Error(err))
+		global.HAB_LOG.Error("Import failed!", zap.Error(err))
 		response.FailWithMessage("Import failed: "+err.Error(), c)
 		return
 	}
@@ -87,7 +87,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) DeleteSysTableColumns(c *gin.Conte
 	userID := utils.GetUserID(c)
 	err := sysTableColumnsService.DeleteSysTableColumns(ID, userID)
 	if err != nil {
-		global.GVA_LOG.Error("Delete failed!", zap.Error(err))
+		global.HAB_LOG.Error("Delete failed!", zap.Error(err))
 		response.FailWithMessage("Delete failed: "+err.Error(), c)
 		return
 	}
@@ -108,7 +108,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) DeleteSysTableColumnsByIds(c *gin.
 	userID := utils.GetUserID(c)
 	err := sysTableColumnsService.DeleteSysTableColumnsByIds(IDs, userID)
 	if err != nil {
-		global.GVA_LOG.Error("Batch delete failed!", zap.Error(err))
+		global.HAB_LOG.Error("Batch delete failed!", zap.Error(err))
 		response.FailWithMessage("Batch delete failed: "+err.Error(), c)
 		return
 	}
@@ -135,7 +135,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) UpdateSysTableColumns(c *gin.Conte
 	sysTableColumns.UpdatedBy = utils.GetUserID(c)
 	err = sysTableColumnsService.UpdateSysTableColumns(sysTableColumns)
 	if err != nil {
-		global.GVA_LOG.Error("Update failed!", zap.Error(err))
+		global.HAB_LOG.Error("Update failed!", zap.Error(err))
 		response.FailWithMessage("Update failed: "+err.Error(), c)
 		return
 	}
@@ -156,7 +156,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) FindSysTableColumns(c *gin.Context
 	ID := c.Query("ID")
 	resysTableColumns, err := sysTableColumnsService.GetSysTableColumns(ID)
 	if err != nil {
-		global.GVA_LOG.Error("Query failed!", zap.Error(err))
+		global.HAB_LOG.Error("Query failed!", zap.Error(err))
 		response.FailWithMessage("Query failed: "+err.Error(), c)
 		return
 	}
@@ -181,7 +181,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) GetSysTableColumnsList(c *gin.Cont
 	}
 	list, total, err := sysTableColumnsService.GetSysTableColumnsInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("Get list failed!", zap.Error(err))
+		global.HAB_LOG.Error("Get list failed!", zap.Error(err))
 		response.FailWithMessage("Get list failed: "+err.Error(), c)
 		return
 	}
@@ -197,7 +197,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) GetStructNameColumns(c *gin.Contex
 	structName := c.Query("structName")
 	columns, err := sysTableColumnsService.GetStructNameColumns(structName)
 	if err != nil {
-		global.GVA_LOG.Error("Get structName columns failed!", zap.Error(err))
+		global.HAB_LOG.Error("Get structName columns failed!", zap.Error(err))
 		response.FailWithMessage("Get structName columns failed: "+err.Error(), c)
 		return
 	}
@@ -229,7 +229,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) UpdateSysTableColumnsInfo(c *gin.C
 		return
 	}
 	updatedBy := utils.GetUserID(c)
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	err = global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		for _, item := range sysTableColumnsList {
 			err = tx.Model(&system.SysTableColumns{}).
 				Where("id = ?", item.ID).
@@ -266,7 +266,7 @@ func (sysTableColumnsApi *SysTableColumnsApi) UpdateSysTableColumnsInfo(c *gin.C
 		return nil
 	})
 	if err != nil {
-		global.GVA_LOG.Error("Update failed!", zap.Error(err))
+		global.HAB_LOG.Error("Update failed!", zap.Error(err))
 		response.FailWithMessage("Update failed: "+err.Error(), c)
 		return
 	}
@@ -278,9 +278,9 @@ func (sysTableColumnsApi *SysTableColumnsApi) SyncSysTableColumnsInfo(c *gin.Con
 	name := c.Query("name")
 	tbaleInfoList := utils.GetTableInfo(name).Fields
 	var sysTableColumnsList []system.SysTableColumns
-	err := global.GVA_DB.Find(&sysTableColumnsList, "struct_name=?", name).Error
+	err := global.HAB_DB.Find(&sysTableColumnsList, "struct_name=?", name).Error
 	if err != nil {
-		global.GVA_LOG.Error("Get table columns failed!", zap.Error(err))
+		global.HAB_LOG.Error("Get table columns failed!", zap.Error(err))
 		response.FailWithMessage("Get table columns failed: "+err.Error(), c)
 		return
 	}

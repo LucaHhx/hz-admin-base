@@ -1,10 +1,10 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	common "hz-admin-base/model/common/request"
-	"hz-admin-base/model/common/response"
-	request "hz-admin-base/model/system/request"
+	"hab/global"
+	common "hab/model/common/request"
+	"hab/model/common/response"
+	request "hab/model/system/request"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -54,7 +54,7 @@ func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
 	}
 	err = autoCodeHistoryService.Delete(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("Deletion failed", c)
 		return
 	}
@@ -103,7 +103,7 @@ func (a *AutoCodeHistoryApi) GetList(c *gin.Context) {
 	}
 	list, total, err := autoCodeHistoryService.GetList(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}

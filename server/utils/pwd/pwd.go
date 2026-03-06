@@ -2,9 +2,9 @@ package pwd
 
 import (
 	"context"
-	"hz-admin-base/global"
-	systemReq "hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
+	"hab/global"
+	systemReq "hab/model/system/request"
+	"hab/utils"
 	"strconv"
 	"strings"
 	"time"
@@ -21,7 +21,7 @@ func SetPwdToken(id uint) string {
 	token := idStr + "-" + uuid.New().String()
 	exp := 7 * 24 * time.Hour
 
-	global.GVA_REDIS.Set(context.Background(), key, token, exp)
+	global.HAB_REDIS.Set(context.Background(), key, token, exp)
 	global.BlackCache.Set(key, token, exp)
 	return token
 }
@@ -53,9 +53,9 @@ func CheckPwdToken(c *gin.Context) (uint, error) {
 		return id, nil
 	}
 
-	t, err = global.GVA_REDIS.Get(context.Background(), key).Result()
+	t, err = global.HAB_REDIS.Get(context.Background(), key).Result()
 	if err != nil {
-		global.GVA_LOG.Error("GetPwdToken Error " + err.Error())
+		global.HAB_LOG.Error("GetPwdToken Error " + err.Error())
 		return 0, tokenErr
 	}
 	if t != token {

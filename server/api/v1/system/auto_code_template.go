@@ -1,10 +1,10 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system/request"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -41,7 +41,7 @@ func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
 	info.PackageT = utils.FirstUpper(info.Package)
 	autoCode, err := autoCodeTemplateService.Preview(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error(err.Error(), zap.Error(err))
+		global.HAB_LOG.Error(err.Error(), zap.Error(err))
 		response.FailWithMessage("预览失败:"+err.Error(), c)
 	} else {
 		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
@@ -76,7 +76,7 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 	}
 	err = autoCodeTemplateService.Create(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
 		response.OkWithMessage("Success", c)
@@ -110,7 +110,7 @@ func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 		err = autoCodeTemplateService.AddFunc(info)
 	}
 	if err != nil {
-		global.GVA_LOG.Error("注入失败!", zap.Error(err))
+		global.HAB_LOG.Error("注入失败!", zap.Error(err))
 		response.FailWithMessage("注入失败", c)
 	} else {
 		if info.IsPreview {

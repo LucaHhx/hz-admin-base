@@ -46,8 +46,6 @@
     Link,
     User,
     Service,
-    Document,
-    Reading,
     Files,
     Memo
   } from '@element-plus/icons-vue'
@@ -94,18 +92,7 @@
     }
   ]
 
-  const recentVisits = [
-    {
-      icon: Reading,
-      title: '授权购买',
-      path: 'https://gin-vue-admin.com/empower/index.html'
-    },
-    {
-      icon: Document,
-      title: '插件市场',
-      path: 'https://plugin.gin-vue-admin.com/#/layout/home'
-    }
-  ]
+  const recentVisits = []
 </script>
 
 <style scoped lang="scss"></style>

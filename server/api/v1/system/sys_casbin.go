@@ -1,11 +1,11 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system/request"
-	systemRes "hz-admin-base/model/system/response"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system/request"
+	systemRes "hab/model/system/response"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -37,7 +37,7 @@ func (cas *CasbinApi) UpdateCasbin(c *gin.Context) {
 	adminAuthorityID := utils.GetUserAuthorityId(c)
 	err = casbinService.UpdateCasbin(adminAuthorityID, cmr.AuthorityId, cmr.CasbinInfos)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.HAB_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("Update failed", c)
 		return
 	}

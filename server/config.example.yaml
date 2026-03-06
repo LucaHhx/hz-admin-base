@@ -1,12 +1,12 @@
 # ===================== 系统核心配置 =====================
 system:
-  db-type: mysql
+  db-type: sqlite
   oss-type: local
   addr: 9688
   api-addr: 9689
   iplimit-count: 15000
   iplimit-time: 3600
-  use-redis: true
+  use-redis: false
   use-mongo: false
   use-strict-auth: true
   time-zone: "Asia/Shanghai"
@@ -18,7 +18,7 @@ system:
 mysql:
   path: 127.0.0.1
   port: "3306"
-  db-name: hz-admin-base
+  db-name: hab
   username: root
   password: your-password
   config: charset=utf8mb4&parseTime=True&loc=Local
@@ -50,7 +50,7 @@ captcha:
 autocode:
   web: web/src
   server: server
-  module: hz-admin-base
+  module: hab
 
 # ===================== 本地文件存储 =====================
 local:
@@ -63,7 +63,7 @@ excel:
 # ===================== 日志 =====================
 zap:
   level: info
-  prefix: '[hz-admin-base]'
+  prefix: '[hab]'
   format: console
   director: log
   encode-level: LowercaseColorLevelEncoder

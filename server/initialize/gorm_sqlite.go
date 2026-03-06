@@ -1,9 +1,9 @@
 package initialize
 
 import (
-	"hz-admin-base/config"
-	"hz-admin-base/global"
-	"hz-admin-base/initialize/internal"
+	"hab/config"
+	"hab/global"
+	"hab/initialize/internal"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
@@ -11,7 +11,7 @@ import (
 
 // GormSqlite 初始化Sqlite数据库
 func GormSqlite() *gorm.DB {
-	s := global.GVA_CONFIG.Sqlite
+	s := global.HAB_CONFIG.Sqlite
 	if s.Dbname == "" {
 		return nil
 	}

@@ -2,12 +2,12 @@
 package system
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 )
 
 // 参数 结构体  SysParams
 type SysParams struct {
-	global.GVA_MODEL
+	global.HAB_MODEL
 	Name  string `json:"name" form:"name" gorm:"column:name;comment:参数名称;" `   //参数名称
 	Key   string `json:"key" form:"key" gorm:"column:key;comment:参数键;" `       //参数键
 	Value string `json:"value" form:"value" gorm:"column:value;comment:参数值;" ` //参数值

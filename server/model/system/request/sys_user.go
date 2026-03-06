@@ -1,9 +1,9 @@
 package request
 
 import (
-	"hz-admin-base/enum"
-	common "hz-admin-base/model/common/request"
-	"hz-admin-base/model/system"
+	"hab/enum"
+	common "hab/model/common/request"
+	"hab/model/system"
 )
 
 // Register User register structure
@@ -57,7 +57,7 @@ type ChangeUserInfo struct {
 	Phone        string                `json:"phone"  gorm:"comment:用户手机号"`                                                          // 用户手机号
 	AuthorityIds []uint                `json:"authorityIds" gorm:"-"`                                                                // 角色ID
 	Email        string                `json:"email"  gorm:"comment:用户邮箱"`                                                           // 用户邮箱
-	HeaderImg    string                `json:"headerImg" gorm:"default:https://qmplusimg.henrongyi.top/gva_header.jpg;comment:用户头像"` // 用户头像
+	HeaderImg    string                `json:"headerImg" gorm:"default:https://qmplusimg.henrongyi.top/HAB_header.jpg;comment:用户头像"` // 用户头像
 	SideMode     string                `json:"sideMode"  gorm:"comment:用户侧边主题"`                                                      // 用户侧边主题
 	Enable       int                   `json:"enable" gorm:"comment:冻结用户"`                                                           //冻结用户
 	Authorities  []system.SysAuthority `json:"-" gorm:"many2many:sys_user_authority;"`

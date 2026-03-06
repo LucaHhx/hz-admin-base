@@ -2,10 +2,10 @@ package system
 
 import (
 	"errors"
-	"hz-admin-base/global"
-	"hz-admin-base/model/system"
-	"hz-admin-base/model/system/request"
-	"hz-admin-base/model/system/response"
+	"hab/global"
+	"hab/model/system"
+	"hab/model/system/request"
+	"hab/model/system/response"
 
 	"gorm.io/gorm"
 )
@@ -16,7 +16,7 @@ var AuthorityColServiceApp = new(AuthorityColService)
 
 func (a *AuthorityColService) GetAuthorityCol(req request.SysAuthorityColReq) (res response.SysAuthorityColRes, err error) {
 	var authorityCol []system.SysAuthorityCol
-	err = global.GVA_DB.Find(&authorityCol, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
+	err = global.HAB_DB.Find(&authorityCol, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
 	if err != nil {
 		return
 	}
@@ -29,7 +29,7 @@ func (a *AuthorityColService) GetAuthorityCol(req request.SysAuthorityColReq) (r
 }
 
 func (a *AuthorityColService) SetAuthorityCol(req request.SysAuthorityColReq) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	return global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		var authorityCol []system.SysAuthorityCol
 		err = tx.Delete(&[]system.SysAuthorityCol{}, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
 		if err != nil {
@@ -53,7 +53,7 @@ func (a *AuthorityColService) SetAuthorityCol(req request.SysAuthorityColReq) (e
 }
 
 func (a *AuthorityColService) CanRemoveAuthorityCol(ID string) (err error) {
-	fErr := global.GVA_DB.First(&system.SysAuthorityCol{}, "sys_table_columns_id = ?", ID).Error
+	fErr := global.HAB_DB.First(&system.SysAuthorityCol{}, "sys_table_columns_id = ?", ID).Error
 	if errors.Is(fErr, gorm.ErrRecordNotFound) {
 		return nil
 	}
@@ -62,6 +62,6 @@ func (a *AuthorityColService) CanRemoveAuthorityCol(ID string) (err error) {
 
 // GetMenuColumns 获取菜单对应的所有列
 func (a *AuthorityColService) GetMenuColumns(menuName string) (columns []system.SysTableColumns, err error) {
-	err = global.GVA_DB.Where("struct_name = ?", menuName).Find(&columns).Error
+	err = global.HAB_DB.Where("struct_name = ?", menuName).Find(&columns).Error
 	return columns, err
 }

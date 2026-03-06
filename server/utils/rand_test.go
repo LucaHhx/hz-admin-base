@@ -2,7 +2,7 @@ package utils_test
 
 import (
 	"fmt"
-	"hz-admin-base/utils"
+	"hab/utils"
 	"testing"
 )
 

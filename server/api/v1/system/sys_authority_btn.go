@@ -1,9 +1,9 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system/request"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system/request"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -29,7 +29,7 @@ func (a *AuthorityBtnApi) GetAuthorityBtn(c *gin.Context) {
 	}
 	res, err := authorityBtnService.GetAuthorityBtn(req)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.HAB_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -45,7 +45,7 @@ func (a *AuthorityBtnApi) GetAuthorityBtnAll(c *gin.Context) {
 	}
 	res, err := authorityBtnService.GetAuthorityBtnAll(req)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.HAB_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -70,7 +70,7 @@ func (a *AuthorityBtnApi) SetAuthorityBtn(c *gin.Context) {
 	}
 	err = authorityBtnService.SetAuthorityBtn(req)
 	if err != nil {
-		global.GVA_LOG.Error("分配失败!", zap.Error(err))
+		global.HAB_LOG.Error("分配失败!", zap.Error(err))
 		response.FailWithMessage("分配失败", c)
 		return
 	}
@@ -89,7 +89,7 @@ func (a *AuthorityBtnApi) CanRemoveAuthorityBtn(c *gin.Context) {
 	id := c.Query("id")
 	err := authorityBtnService.CanRemoveAuthorityBtn(id)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

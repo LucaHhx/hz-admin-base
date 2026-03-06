@@ -2,7 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"hz-admin-base/global"
+	"hab/global"
 	"strings"
 )
 

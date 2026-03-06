@@ -1,7 +1,7 @@
 <template>
   <div>
     <warning-bar title="注：右上角头像下拉可切换角色" />
-    <div class="gva-search-box">
+    <div class="hab-search-box">
       <el-form
         ref="searchForm"
         :inline="true"
@@ -48,8 +48,8 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="gva-table-box">
-      <div class="gva-btn-list">
+    <div class="hab-table-box">
+      <div class="hab-btn-list">
         <el-button
           type="primary"
           icon="plus"
@@ -237,7 +237,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="gva-pagination">
+      <div class="hab-pagination">
         <el-pagination
           :current-page="page"
           :page-size="pageSize"

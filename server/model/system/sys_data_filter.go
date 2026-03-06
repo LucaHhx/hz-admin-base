@@ -2,13 +2,13 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/gtype"
+	"hab/global"
+	"hab/model/gtype"
 )
 
 // sysDataFilter 结构体  SysDataFilter
 type SysDataFilter struct {
-	global.GVA_MODEL
+	global.HAB_MODEL
 	Name      string                         `json:"name" form:"name" gorm:"column:name;comment:;size:255;"`                                //名称
 	Sql       string                         `json:"sql" form:"sql" gorm:"column:sql;comment:;type:text;"`                                  //SQL
 	Columns   gtype.Arr[SysDataFilterColumn] `json:"columns" form:"columns" gorm:"column:columns;comment:;type:json;" swaggertype:"object"` //列

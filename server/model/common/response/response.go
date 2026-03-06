@@ -2,7 +2,7 @@ package response
 
 import (
 	"errors"
-	"hz-admin-base/code"
+	"hab/code"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

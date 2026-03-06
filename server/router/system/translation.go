@@ -1,7 +1,7 @@
 package system
 
 import (
-	"hz-admin-base/api/v1/system"
+	"hab/api/v1/system"
 
 	"github.com/gin-gonic/gin"
 )

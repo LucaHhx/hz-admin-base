@@ -2,9 +2,9 @@
   <div>
     <WarningBar
       title="本功能提供同步的表格导出功能，大数据量的异步表格导出功能，可以选择点我定制"
-      href="https://flipped-aurora.feishu.cn/docx/KwjxdnvatozgwIxGV0rcpkZSn4d"
+      href="#"
     />
-    <div class="gva-search-box">
+    <div class="hab-search-box">
       <el-form
         ref="elSearchFormRef"
         :inline="true"
@@ -95,8 +95,8 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="gva-table-box">
-      <div class="gva-btn-list">
+    <div class="hab-table-box">
+      <div class="hab-btn-list">
         <el-button
           type="primary"
           icon="plus"
@@ -143,7 +143,7 @@
           width="120"
         >
           <template #default="scope">
-            <span>{{ scope.row.dbName || 'GVA库' }}</span>
+            <span>{{ scope.row.dbName || '默认库' }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -215,7 +215,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="gva-pagination">
+      <div class="hab-pagination">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :current-page="page"
@@ -328,14 +328,14 @@
               type="textarea"
               :clearable="true"
               :rows="5"
-              placeholder="试试描述你要做的导出功能让AI帮你完成，在此之前请选择你需要导出的表所在的业务库，如不做选择，则默认使用gva库"
+              placeholder="试试描述你要做的导出功能让AI帮你完成，在此之前请选择你需要导出的表所在的业务库，如不做选择，则默认使用默认库"
             />
             <el-button
               class="absolute bottom-2 right-2"
               type="primary"
               @click="autoExport"
             >
-              <el-icon><ai-gva /></el-icon>帮写
+              <el-icon><ai-hab /></el-icon>帮写
             </el-button>
           </div>
         </el-form-item>
@@ -364,7 +364,7 @@
               type="primary"
               @click="getColumnFunc(true)"
             >
-              <el-icon><ai-gva /></el-icon>自动补全
+              <el-icon><ai-hab /></el-icon>自动补全
             </el-button>
             <el-button
               :disabled="!formData.tableName"

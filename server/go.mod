@@ -1,4 +1,4 @@
-module hz-admin-base
+module hab
 
 go 1.24.1
 

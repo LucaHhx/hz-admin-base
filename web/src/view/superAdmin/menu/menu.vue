@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="gva-table-box">
-      <div class="gva-btn-list">
+    <div class="hab-table-box">
+      <div class="hab-btn-list">
         <el-button
           type="primary"
           icon="plus"
@@ -517,7 +517,7 @@
           <el-icon
             class="cursor-pointer"
             @click="
-              toDoc('https://www.gin-vue-admin.com/guide/web/button-auth.html')
+              toDoc('#')
             "
           >
             <QuestionFilled />

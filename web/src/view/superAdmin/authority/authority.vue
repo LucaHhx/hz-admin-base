@@ -1,8 +1,8 @@
 <template>
   <div class="authority">
     <warning-bar :title="$t('superAdmin.authority.warningMessage')" />
-    <div class="gva-table-box">
-      <div class="gva-btn-list">
+    <div class="hab-table-box">
+      <div class="hab-btn-list">
         <el-button
           type="primary"
           icon="plus"

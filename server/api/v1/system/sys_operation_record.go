@@ -1,12 +1,12 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/request"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	systemReq "hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/request"
+	"hab/model/common/response"
+	"hab/model/system"
+	systemReq "hab/model/system/request"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -32,7 +32,7 @@ func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
 	}
 	err = operationRecordService.CreateSysOperationRecord(sysOperationRecord)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("Creation failed", c)
 		return
 	}
@@ -57,7 +57,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecord(c *gin.Context) {
 	}
 	err = operationRecordService.DeleteSysOperationRecord(sysOperationRecord)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("Deletion failed", c)
 		return
 	}
@@ -82,7 +82,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
 	}
 	err = operationRecordService.DeleteSysOperationRecordByIds(IDS)
 	if err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 		return
 	}
@@ -112,7 +112,7 @@ func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
 	}
 	reSysOperationRecord, err := operationRecordService.GetSysOperationRecord(sysOperationRecord.ID)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.HAB_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -137,7 +137,7 @@ func (s *OperationRecordApi) GetSysOperationRecordList(c *gin.Context) {
 	}
 	list, total, err := operationRecordService.GetSysOperationRecordInfoList(pageInfo, c)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}

@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"os"
 	"time"
 
@@ -20,19 +20,19 @@ func NewZapCore(level zapcore.Level) *ZapCore {
 	levelEnabler := zap.LevelEnablerFunc(func(l zapcore.Level) bool {
 		return l == level
 	})
-	entity.Core = zapcore.NewCore(global.GVA_CONFIG.Zap.Encoder(), syncer, levelEnabler)
+	entity.Core = zapcore.NewCore(global.HAB_CONFIG.Zap.Encoder(), syncer, levelEnabler)
 	return entity
 }
 
 func (z *ZapCore) WriteSyncer(formats ...string) zapcore.WriteSyncer {
 	cutter := NewCutter(
-		global.GVA_CONFIG.Zap.Director,
+		global.HAB_CONFIG.Zap.Director,
 		z.level.String(),
-		global.GVA_CONFIG.Zap.RetentionDay,
+		global.HAB_CONFIG.Zap.RetentionDay,
 		CutterWithLayout(time.DateOnly),
 		CutterWithFormats(formats...),
 	)
-	if global.GVA_CONFIG.Zap.LogInConsole {
+	if global.HAB_CONFIG.Zap.LogInConsole {
 		multiSyncer := zapcore.NewMultiWriteSyncer(os.Stdout, cutter)
 		return zapcore.AddSync(multiSyncer)
 	}
@@ -58,7 +58,7 @@ func (z *ZapCore) Write(entry zapcore.Entry, fields []zapcore.Field) error {
 	for i := 0; i < len(fields); i++ {
 		if fields[i].Key == "business" || fields[i].Key == "folder" || fields[i].Key == "directory" {
 			syncer := z.WriteSyncer(fields[i].String)
-			z.Core = zapcore.NewCore(global.GVA_CONFIG.Zap.Encoder(), syncer, z.level)
+			z.Core = zapcore.NewCore(global.HAB_CONFIG.Zap.Encoder(), syncer, z.level)
 		}
 	}
 	return z.Core.Write(entry, fields)

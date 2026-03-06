@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="gva-table-box">
-      <div class="gva-btn-list justify-between">
+    <div class="hab-table-box">
+      <div class="hab-btn-list justify-between">
         <span class="text font-bold">{{ $t('superAdmin.dictionary.detail.title') }}</span>
         <el-button
           type="primary"
@@ -94,7 +94,7 @@
         </el-table-column>
       </el-table>
 
-      <div class="gva-pagination">
+      <div class="hab-pagination">
         <el-pagination
           :current-page="page"
           :page-size="pageSize"

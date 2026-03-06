@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
-	"hz-admin-base/utils"
+	"hab/utils"
 
-	"hz-admin-base/global"
-	"hz-admin-base/model/system"
-	"hz-admin-base/service"
+	"hab/global"
+	"hab/model/system"
+	"hab/service"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -40,7 +40,7 @@ func OperationRecord() gin.HandlerFunc {
 			var err error
 			body, err = io.ReadAll(c.Request.Body)
 			if err != nil {
-				global.GVA_LOG.Error("read body from request error:", zap.Error(err))
+				global.HAB_LOG.Error("read body from request error:", zap.Error(err))
 			} else {
 				c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
 			}
@@ -118,7 +118,7 @@ func OperationRecord() gin.HandlerFunc {
 		}
 
 		if err := operationRecordService.CreateSysOperationRecord(record); err != nil {
-			global.GVA_LOG.Error("create operation record error:", zap.Error(err))
+			global.HAB_LOG.Error("create operation record error:", zap.Error(err))
 		}
 	}
 }

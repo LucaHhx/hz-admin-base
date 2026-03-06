@@ -2,7 +2,7 @@ package utils
 
 import (
 	"context"
-	"hz-admin-base/global"
+	"hab/global"
 	"time"
 )
 
@@ -30,16 +30,16 @@ func DeleteRedisNx(key string) {
 }
 
 func (r *RedisNx) SetNx(expiration time.Duration) bool {
-	result, _ := global.GVA_REDIS.SetNX(context.Background(), r.key, 1, expiration).Result()
+	result, _ := global.HAB_REDIS.SetNX(context.Background(), r.key, 1, expiration).Result()
 	return result
 }
 
 func (r *RedisNx) Del() {
-	global.GVA_REDIS.Del(context.Background(), r.key)
+	global.HAB_REDIS.Del(context.Background(), r.key)
 }
 
 func (r *RedisNx) IsLocked() bool {
-	val, err := global.GVA_REDIS.Get(context.Background(), r.key).Result()
+	val, err := global.HAB_REDIS.Get(context.Background(), r.key).Result()
 	if err != nil {
 		return false
 	}

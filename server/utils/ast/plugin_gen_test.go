@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 	"testing"
 )
@@ -24,8 +24,8 @@ func TestPluginGenModel_Injection(t *testing.T) {
 			name: "测试 GvaUser 结构体注入",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
 				IsNew:       false,
@@ -35,8 +35,8 @@ func TestPluginGenModel_Injection(t *testing.T) {
 			name: "测试 GvaUser 结构体注入",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
 				IsNew:       true,
@@ -84,8 +84,8 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 			name: "测试 GvaUser 回滚",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
 				IsNew:       false,
@@ -95,8 +95,8 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 			name: "测试 GvaUser 回滚",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
 				IsNew:       true,

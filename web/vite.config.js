@@ -1,4 +1,3 @@
-import legacyPlugin from '@vitejs/plugin-legacy'
 import { viteLogo } from './src/core/config'
 import Banner from 'vite-plugin-banner'
 import * as path from 'path'
@@ -36,7 +35,8 @@ export default ({ mode }) => {
   }
 
   const esbuild = {
-    target: 'esnext'
+    target: 'esnext',
+    drop: ['console', 'debugger']
   }
 
   const rollupOptions = {
@@ -89,17 +89,10 @@ export default ({ mode }) => {
     },
     build: {
       target: 'esnext',
-      minify: 'terser', // 是否进行压缩,boolean | 'terser' | 'esbuild',默认使用terser
-      manifest: false, // 是否产出manifest.json
-      sourcemap: false, // 是否产出sourcemap.json
-      outDir: 'dist', // 产出目录
-      terserOptions: {
-        compress: {
-          // 生产环境时移除console
-          drop_console: true,
-          drop_debugger: true
-        }
-      },
+      minify: 'esbuild',
+      manifest: false,
+      sourcemap: false,
+      outDir: 'dist',
       rollupOptions,
       copyPublicDir: true,
       assetsDir: 'assets'
@@ -109,19 +102,9 @@ export default ({ mode }) => {
     plugins: [
       process.env.VITE_POSITION === 'open' &&
         vueDevTools({ launchEditor: process.env.VITE_EDITOR }),
-      legacyPlugin({
-        targets: [
-          'Android > 39',
-          'Chrome >= 60',
-          'Safari >= 10.1',
-          'iOS >= 10.3',
-          'Firefox >= 54',
-          'Edge >= 15'
-        ]
-      }),
       vuePlugin(),
       svgBuilder(['./src/assets/icons/', './src/plugin/'], '/', 'dist', 'assets', mode),
-      [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],
+      [Banner(`\n Build based on hab \n Time : ${timestamp}`)],
       VueFilePathPlugin('./src/pathInfo.json'),
     ]
   }

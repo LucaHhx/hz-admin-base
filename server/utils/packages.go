@@ -2,8 +2,8 @@ package utils
 
 import (
 	"fmt"
-	"hz-admin-base/global"
 	"go/types"
+	"hab/global"
 	"reflect"
 	"strings"
 	"testing"
@@ -27,18 +27,18 @@ type FieldInfo struct {
 }
 
 var predefinedStructs = map[string][]FieldInfo{
-	"GVA_MODEL": {
+	"HAB_MODEL": {
 		{Name: "ID", Type: "uint", JSONTag: "ID", ColumnTag: "id"},
 		{Name: "CreatedAt", Type: "time.Time", JSONTag: "CreatedAt", ColumnTag: "created_at", Comment: "创建日期"},
 		{Name: "UpdatedAt", Type: "time.Time", JSONTag: "UpdatedAt", ColumnTag: "updated_at", Comment: "修改日期"},
 		{Name: "DeletedAt", Type: "time.Time", JSONTag: "DeletedAt", ColumnTag: "deleted_at", Comment: "删除日期"},
 	},
-	"GVA_MODEL_NOD": {
+	"HAB_MODEL_NOD": {
 		{Name: "ID", Type: "uint", JSONTag: "ID", ColumnTag: "id"},
 		{Name: "CreatedAt", Type: "time.Time", JSONTag: "CreatedAt", ColumnTag: "created_at", Comment: "创建日期"},
 		{Name: "UpdatedAt", Type: "time.Time", JSONTag: "UpdatedAt", ColumnTag: "updated_at", Comment: "修改日期"},
 	},
-	"GVA_MODEL_NOID": {
+	"HAB_MODEL_NOID": {
 		{Name: "CreatedAt", Type: "time.Time", JSONTag: "CreatedAt", ColumnTag: "created_at", Comment: "创建日期"},
 		{Name: "UpdatedAt", Type: "time.Time", JSONTag: "UpdatedAt", ColumnTag: "updated_at", Comment: "修改日期"},
 		{Name: "DeletedAt", Type: "time.Time", JSONTag: "DeletedAt", ColumnTag: "deleted_at", Comment: "删除日期"},
@@ -56,9 +56,9 @@ func GetTableInfo(name string) TableInfo {
 	var tables map[string]TableInfo
 	switch name[0] {
 	case 'b':
-		tables = CollectTables(fmt.Sprintf("%s/%s/model/business", global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server))
+		tables = CollectTables(fmt.Sprintf("%s/%s/model/business", global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server))
 	case 'v':
-		tables = CollectTables(fmt.Sprintf("%s/%s/model/view", global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server))
+		tables = CollectTables(fmt.Sprintf("%s/%s/model/view", global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server))
 
 	}
 	return tables[strings.ToLower(name)]

@@ -2,9 +2,8 @@ package initialize
 
 import (
 	"context"
-	"hz-admin-base/model/example"
-	sysModel "hz-admin-base/model/system"
-	"hz-admin-base/service/system"
+	sysModel "hab/model/system"
+	"hab/service/system"
 
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"gorm.io/gorm"
@@ -55,11 +54,6 @@ func (e *ensureTables) MigrateTable(ctx context.Context) (context.Context, error
 		sysModel.SysParams{},
 
 		adapter.CasbinRule{},
-
-		example.ExaFile{},
-		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
 	}
 	for _, t := range tables {
 		_ = db.AutoMigrate(&t)
@@ -93,11 +87,6 @@ func (e *ensureTables) TableCreated(ctx context.Context) bool {
 		sysModel.JoinTemplate{},
 
 		adapter.CasbinRule{},
-
-		example.ExaFile{},
-		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
 	}
 	yes := true
 	for _, t := range tables {

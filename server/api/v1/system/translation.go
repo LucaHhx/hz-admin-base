@@ -4,8 +4,8 @@ import (
 	"archive/zip"
 	"encoding/json"
 	"fmt"
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
+	"hab/global"
+	"hab/model/common/response"
 	"io"
 	"io/ioutil"
 	"os"
@@ -81,7 +81,7 @@ type IntegrityCheckResult struct {
 
 // GetFileTree 获取翻译文件树结构
 func (t *TranslationApi) GetFileTree(ctx *gin.Context) {
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 
 	tree := make([]FileNode, 0)
 	languages, err := os.ReadDir(dir)
@@ -168,7 +168,7 @@ func (t *TranslationApi) GetFileContent(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	filePath := filepath.Join(dir, language, file)
 
 	// 读取文件内容
@@ -196,7 +196,7 @@ func (t *TranslationApi) UpdateTranslation(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	filePath := filepath.Join(dir, req.Language, req.File)
 
 	// 确保目录存在
@@ -236,7 +236,7 @@ func (t *TranslationApi) CopyLanguage(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	srcPath := filepath.Join(dir, req.FromLang)
 	destPath := filepath.Join(dir, req.ToLang)
 
@@ -293,7 +293,7 @@ func (t *TranslationApi) CompareTranslation(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	sourceFile := filepath.Join(dir, req.SourceLang, req.File)
 	targetFile := filepath.Join(dir, req.TargetLang, req.File)
 
@@ -337,7 +337,7 @@ func (t *TranslationApi) ExportTranslation(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	langDir := filepath.Join(dir, language)
 
 	// 检查语言目录是否存在
@@ -429,7 +429,7 @@ func (t *TranslationApi) ImportTranslation(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	targetDir := filepath.Join(dir, language)
 
 	// 确保目标目录存在
@@ -447,7 +447,7 @@ func (t *TranslationApi) ImportTranslation(ctx *gin.Context) {
 
 // CheckIntegrity 检查翻译完整性
 func (t *TranslationApi) CheckIntegrity(ctx *gin.Context) {
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	baseLang := "zh-CN" // 使用中文作为基准语言
 
 	// 获取所有语言
@@ -544,7 +544,7 @@ func (t *TranslationApi) BatchUpdate(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 
 	for _, update := range req.Updates {
 		filePath := filepath.Join(dir, update.Language, update.File)
@@ -575,7 +575,7 @@ func (t *TranslationApi) ExportLanguage(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	langDir := filepath.Join(dir, req.Language)
 
 	// 检查语言目录是否存在
@@ -722,7 +722,7 @@ func (t *TranslationApi) DeleteLanguage(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	langDir := filepath.Join(dir, req.Language)
 
 	// 检查语言目录是否存在
@@ -748,7 +748,7 @@ func (t *TranslationApi) DownloadLanguage(ctx *gin.Context) {
 		return
 	}
 
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	langDir := filepath.Join(dir, language)
 
 	// 检查语言目录是否存在
@@ -855,7 +855,7 @@ func (t *TranslationApi) UploadLanguage(ctx *gin.Context) {
 	defer reader.Close()
 
 	// 获取目标目录
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	targetDir := filepath.Join(dir, language)
 
 	// 解压文件
@@ -900,7 +900,7 @@ func (t *TranslationApi) UploadLanguage(ctx *gin.Context) {
 
 // GetMessages 获取所有翻译内容
 func (t *TranslationApi) GetMessages(ctx *gin.Context) {
-	dir := global.GVA_CONFIG.System.TranslationDir
+	dir := global.HAB_CONFIG.System.TranslationDir
 	messages := make(map[string]map[string]interface{})
 
 	// 读取所有语言目录
@@ -964,7 +964,7 @@ func (t *TranslationApi) GetMessages(ctx *gin.Context) {
 		messages[lang.Name()] = langMessages
 		messages[lang.Name()]["business"] = businessDir
 	}
-	timeZone := global.GVA_CONFIG.System.TimeZone
+	timeZone := global.HAB_CONFIG.System.TimeZone
 	//nowTime := time.Now().Unix()
 	response.OkWithData(map[string]interface{}{
 		"messages": messages,

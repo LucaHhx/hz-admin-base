@@ -1,9 +1,9 @@
 package system
 
 import (
-	"hz-admin-base/enum"
-	"hz-admin-base/global"
-	"hz-admin-base/model/common"
+	"hab/enum"
+	"hab/global"
+	"hab/model/common"
 
 	"github.com/google/uuid"
 )
@@ -22,12 +22,12 @@ type Login interface {
 var _ Login = new(SysUser)
 
 type SysUser struct {
-	global.GVA_MODEL
+	global.HAB_MODEL
 	UUID          uuid.UUID        `json:"uuid" gorm:"index;comment:用户UUID"`                                                                   // 用户UUID
 	Username      string           `json:"userName" gorm:"index;comment:用户登录名"`                                                                // 用户登录名
 	Password      string           `json:"-"  gorm:"comment:用户登录密码"`                                                                           // 用户登录密码
 	NickName      string           `json:"nickName" gorm:"default:系统用户;comment:用户昵称"`                                                          // 用户昵称
-	HeaderImg     string           `json:"headerImg" gorm:"default:https://qmplusimg.henrongyi.top/gva_header.jpg;comment:用户头像"`               // 用户头像
+	HeaderImg     string           `json:"headerImg" gorm:"default:https://qmplusimg.henrongyi.top/HAB_header.jpg;comment:用户头像"`               // 用户头像
 	Authority     SysAuthority     `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`                        // 用户角色
 	AuthorityId   uint             `json:"authorityId" gorm:"default:888;comment:用户角色ID"`                                                      // 用户角色ID
 	SideMode      string           `json:"sideMode" gorm:"default:dark;comment:用户角色ID"`                                                        // 用户侧边主题
@@ -92,7 +92,7 @@ func (s *SysUser) GetParameter() string {
 
 // SysBindSession 用户绑定会话表
 type SysBindSession struct {
-	global.GVA_MODEL
+	global.HAB_MODEL
 	SessionToken string `json:"session_token" gorm:"uniqueIndex;comment:会话token"`
 	UserID       uint   `json:"user_id" gorm:"comment:用户ID"`
 	Username     string `json:"username" gorm:"comment:用户名"`

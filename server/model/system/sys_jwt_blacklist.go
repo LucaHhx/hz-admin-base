@@ -1,10 +1,10 @@
 package system
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 )
 
 type JwtBlacklist struct {
-	global.GVA_MODEL
+	global.HAB_MODEL
 	Jwt string `gorm:"type:text;comment:jwt"`
 }

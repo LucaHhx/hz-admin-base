@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="gva-search-box">
+    <div class="hab-search-box">
       <el-form
         ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline"
         :rules="searchRule"
@@ -79,8 +79,8 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="gva-table-box">
-      <div class="gva-btn-list">
+    <div class="hab-table-box">
+      <div class="hab-btn-list">
         <el-button v-auth="btnAuth.add" type="primary" icon="plus" @click="openDialog()">
           新增
         </el-button>
@@ -191,7 +191,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="gva-pagination">
+      <div class="hab-pagination">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper" :current-page="page" :page-size="pageSize"
           :page-sizes="[10, 30, 50, 100]" :total="total" @current-change="handleCurrentChange"

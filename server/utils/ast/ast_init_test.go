@@ -1,11 +1,11 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 )
 
 func init() {
-	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("../../../")
-	global.GVA_CONFIG.AutoCode.Server = "server"
+	global.HAB_CONFIG.AutoCode.Root, _ = filepath.Abs("../../../")
+	global.HAB_CONFIG.AutoCode.Server = "server"
 }

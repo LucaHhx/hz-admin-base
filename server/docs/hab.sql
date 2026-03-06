@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 80042 (8.0.42)
  Source Host           : 16.163.7.125:3306
- Source Schema         : gva-base
+ Source Schema         : hab
 
  Target Server Type    : MySQL
  Target Server Version : 80042 (8.0.42)
@@ -40,149 +40,7 @@ CREATE TABLE `casbin_rule` (
 BEGIN;
 COMMIT;
 
--- ----------------------------
--- Table structure for exa_attachment_category
--- ----------------------------
-DROP TABLE IF EXISTS `exa_attachment_category`;
-CREATE TABLE `exa_attachment_category` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(3) DEFAULT NULL,
-  `updated_at` datetime(3) DEFAULT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '分类名称',
-  `pid` bigint DEFAULT '0' COMMENT '父节点ID',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_exa_attachment_category_deleted_at` (`deleted_at`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------
--- Records of exa_attachment_category
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for exa_customers
--- ----------------------------
-DROP TABLE IF EXISTS `exa_customers`;
-CREATE TABLE `exa_customers` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(3) DEFAULT NULL,
-  `updated_at` datetime(3) DEFAULT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `customer_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '客户名',
-  `customer_phone_data` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '客户手机号',
-  `sys_user_id` bigint unsigned DEFAULT NULL COMMENT '管理ID',
-  `sys_user_authority_id` bigint unsigned DEFAULT NULL COMMENT '管理角色ID',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_exa_customers_deleted_at` (`deleted_at`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Records of exa_customers
--- ----------------------------
-BEGIN;
-INSERT INTO `exa_customers` (`id`, `created_at`, `updated_at`, `deleted_at`, `customer_name`, `customer_phone_data`, `sys_user_id`, `sys_user_authority_id`) VALUES (1, '2025-03-12 17:51:22.168', '2025-03-12 17:51:22.168', NULL, '1', '2', 1, 888);
-INSERT INTO `exa_customers` (`id`, `created_at`, `updated_at`, `deleted_at`, `customer_name`, `customer_phone_data`, `sys_user_id`, `sys_user_authority_id`) VALUES (2, '2025-03-12 17:51:27.840', '2025-03-12 17:51:27.840', NULL, '1', '2', 1, 888);
-INSERT INTO `exa_customers` (`id`, `created_at`, `updated_at`, `deleted_at`, `customer_name`, `customer_phone_data`, `sys_user_id`, `sys_user_authority_id`) VALUES (3, '2025-03-12 17:51:31.790', '2025-03-12 17:51:31.790', NULL, '1', '2', 1, 888);
-COMMIT;
-
--- ----------------------------
--- Table structure for exa_file_chunks
--- ----------------------------
-DROP TABLE IF EXISTS `exa_file_chunks`;
-CREATE TABLE `exa_file_chunks` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(3) DEFAULT NULL,
-  `updated_at` datetime(3) DEFAULT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `exa_file_id` bigint unsigned DEFAULT NULL,
-  `file_chunk_number` bigint DEFAULT NULL,
-  `file_chunk_path` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_exa_file_chunks_deleted_at` (`deleted_at`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Records of exa_file_chunks
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for exa_file_upload_and_downloads
--- ----------------------------
-DROP TABLE IF EXISTS `exa_file_upload_and_downloads`;
-CREATE TABLE `exa_file_upload_and_downloads` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(3) DEFAULT NULL,
-  `updated_at` datetime(3) DEFAULT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文件名',
-  `class_id` bigint DEFAULT '0' COMMENT '分类id',
-  `url` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文件地址',
-  `tag` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文件标签',
-  `key` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_exa_file_upload_and_downloads_deleted_at` (`deleted_at`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Records of exa_file_upload_and_downloads
--- ----------------------------
-BEGIN;
-INSERT INTO `exa_file_upload_and_downloads` (`id`, `created_at`, `updated_at`, `deleted_at`, `name`, `class_id`, `url`, `tag`, `key`) VALUES (1, '2025-03-12 11:33:34.964', '2025-03-12 11:33:34.964', NULL, '10.png', 0, 'https://qmplusimg.henrongyi.top/gvalogo.png', 'png', '158787308910.png');
-INSERT INTO `exa_file_upload_and_downloads` (`id`, `created_at`, `updated_at`, `deleted_at`, `name`, `class_id`, `url`, `tag`, `key`) VALUES (2, '2025-03-12 11:33:34.964', '2025-03-12 11:33:34.964', NULL, 'logo.png', 0, 'https://qmplusimg.henrongyi.top/1576554439myAvatar.png', 'png', '1587973709logo.png');
-COMMIT;
-
--- ----------------------------
--- Table structure for exa_files
--- ----------------------------
-DROP TABLE IF EXISTS `exa_files`;
-CREATE TABLE `exa_files` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(3) DEFAULT NULL,
-  `updated_at` datetime(3) DEFAULT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `file_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `file_md5` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `file_path` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `chunk_total` bigint DEFAULT NULL,
-  `is_finish` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_exa_files_deleted_at` (`deleted_at`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Records of exa_files
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for gva_announcements_info
--- ----------------------------
-DROP TABLE IF EXISTS `gva_announcements_info`;
-CREATE TABLE `gva_announcements_info` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(3) DEFAULT NULL,
-  `updated_at` datetime(3) DEFAULT NULL,
-  `deleted_at` datetime(3) DEFAULT NULL,
-  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '公告标题',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '公告内容',
-  `user_id` bigint DEFAULT NULL COMMENT '发布者',
-  `attachments` json DEFAULT NULL COMMENT '相关附件',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_gva_announcements_info_deleted_at` (`deleted_at`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Records of gva_announcements_info
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
 -- Table structure for jwt_blacklists
 -- ----------------------------
 DROP TABLE IF EXISTS `jwt_blacklists`;
@@ -263,23 +121,9 @@ INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, 
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (38, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/menu/getBaseMenuTree', '获取用户动态路由', 'menuManagement', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (39, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/menu/getMenuAuthority', '获取指定角色menu', 'menuManagement', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (40, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/menu/addMenuAuthority', '增加menu和角色关联关系', 'menuManagement', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (41, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/findFile', '寻找目标文件（秒传）', 'breakpointContinue', 'GET');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (42, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/breakpointContinue', '断点续传', 'breakpointContinue', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (43, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/breakpointContinueFinish', '断点续传完成', 'breakpointContinue', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (44, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/removeChunk', '上传完成移除文件', 'breakpointContinue', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (45, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/upload', '文件上传（建议选择）', 'breakpointContinue', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (46, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/deleteFile', '删除文件', 'breakpointContinue', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (47, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/editFileName', '文件名或者备注编辑', 'breakpointContinue', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (48, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/getFileList', '获取上传文件列表', 'breakpointContinue', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (49, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/fileUploadAndDownload/importURL', '导入URL', 'breakpointContinue', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (50, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/system/getServerInfo', '获取服务器信息', 'systemConfig', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (51, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/system/getSystemConfig', '获取配置文件内容', 'systemConfig', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (52, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/system/setSystemConfig', '设置配置文件内容', 'systemConfig', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (53, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/customer/customer', '更新客户', 'customerList', 'PUT');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (54, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/customer/customer', '创建客户', 'customerList', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (55, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/customer/customer', '删除客户', 'customerList', 'DELETE');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (56, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/customer/customer', '获取单一客户', 'customerList', 'GET');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (57, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/customer/customerList', '获取客户列表', 'customerList', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (58, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/autoCode/getDB', '获取所有数据库', 'codeGenerator', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (59, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/autoCode/getTables', '获取数据库表', 'codeGenerator', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (60, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/autoCode/createTemp', '自动化代码', 'codeGenerator', 'POST');
@@ -311,11 +155,6 @@ INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, 
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (86, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysOperationRecord/getSysOperationRecordList', '获取操作记录列表', 'operationHistory', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (87, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysOperationRecord/deleteSysOperationRecord', '删除操作记录', 'operationHistory', 'DELETE');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (88, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysOperationRecord/deleteSysOperationRecordByIds', '批量删除操作历史', 'operationHistory', 'DELETE');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (89, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/simpleUploader/upload', '插件版分片上传', 'breakpointContinue', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (90, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/simpleUploader/checkFileMd5', '文件完整度验证', 'breakpointContinue', 'GET');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (91, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/simpleUploader/mergeFileMd5', '上传完成合并文件', 'breakpointContinue', 'GET');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (92, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/email/emailTest', '发送测试邮件', 'emailPlugin', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (93, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/email/sendEmail', '发送邮件', 'emailPlugin', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (94, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/authorityBtn/setAuthorityBtn', '设置按钮权限', 'roleManagement', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (95, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/authorityBtn/getAuthorityBtn', '获取已有按钮权限', 'roleManagement', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (96, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/authorityBtn/canRemoveAuthorityBtn', '删除按钮', 'roleManagement', 'POST');
@@ -328,12 +167,6 @@ INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, 
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (103, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysExportTemplate/exportExcel', '导出Excel', 'exportTemplate', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (104, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysExportTemplate/exportTemplate', '下载模板', 'exportTemplate', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (105, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysExportTemplate/importExcel', '导入Excel', 'exportTemplate', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (106, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/info/createInfo', '新建公告', 'announcement', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (107, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/info/deleteInfo', '删除公告', 'announcement', 'DELETE');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (108, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/info/deleteInfoByIds', '批量删除公告', 'announcement', 'DELETE');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (109, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/info/updateInfo', '更新公告', 'announcement', 'PUT');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (110, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/info/findInfo', '根据ID获取公告', 'announcement', 'GET');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (111, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/info/getInfoList', '获取公告列表', 'announcement', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (112, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysParams/createSysParams', '新建参数', 'parameterManagement', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (113, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysParams/deleteSysParams', '删除参数', 'parameterManagement', 'DELETE');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (114, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysParams/deleteSysParamsByIds', '批量删除参数', 'parameterManagement', 'DELETE');
@@ -341,9 +174,6 @@ INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, 
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (116, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysParams/findSysParams', '根据ID获取参数', 'parameterManagement', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (117, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysParams/getSysParamsList', '获取参数列表', 'parameterManagement', 'GET');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (118, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/sysParams/getSysParam', '获取参数列表', 'parameterManagement', 'GET');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (119, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/attachmentCategory/getCategoryList', '分类列表', 'mediaLibrary', 'GET');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (120, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/attachmentCategory/addCategory', '添加/编辑分类', 'mediaLibrary', 'POST');
-INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (121, '2025-03-12 11:33:34.723', '2025-03-12 11:33:34.723', NULL, '/attachmentCategory/deleteCategory', '删除分类', 'mediaLibrary', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (164, '2025-03-13 14:18:35.407', '2025-03-13 14:18:35.407', NULL, '/sysTableColumns/createSysTableColumns', 'add', 'sysTableColumns', 'POST');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (165, '2025-03-13 14:18:35.414', '2025-03-13 14:18:35.414', NULL, '/sysTableColumns/deleteSysTableColumns', 'delete', 'sysTableColumns', 'DELETE');
 INSERT INTO `sys_apis` (`id`, `created_at`, `updated_at`, `deleted_at`, `path`, `description`, `api_group`, `method`) VALUES (166, '2025-03-13 14:18:35.417', '2025-03-13 14:18:35.417', NULL, '/sysTableColumns/deleteSysTableColumnsByIds', 'batchDelete', 'sysTableColumns', 'DELETE');
@@ -557,10 +387,6 @@ INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (9, 55);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (10, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (10, 55);
-INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (11, 1);
-INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (12, 1);
-INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (13, 1);
-INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (14, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (15, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (16, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (17, 1);
@@ -568,15 +394,13 @@ INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (19, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (20, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (21, 1);
-INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (22, 1);
+
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (23, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (24, 1);
-INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (25, 1);
+
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (26, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (27, 1);
-INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (28, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (29, 1);
-INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (30, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (31, 1);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (31, 55);
 INSERT INTO `sys_authority_menus` (`sys_base_menu_id`, `sys_authority_authority_id`) VALUES (33, 1);
@@ -746,10 +570,6 @@ INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `m
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (8, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 3, 'dictionary', 'dictionary', 0, 'view/superAdmin/dictionary/sysDictionary.vue', 5, '', 0, 0, 'dictionaryManagement', 'notebook', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (9, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 3, 'operation', 'operation', 0, 'view/superAdmin/operation/sysOperationRecord.vue', 6, '', 0, 0, 'operationHistory', 'pie-chart', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (10, '2025-03-12 11:33:34.783', '2025-07-15 17:15:54.328', NULL, 0, 0, 'person', 'person', 1, 'view/person/person.vue', 99, '', 0, 0, 'personalInfo', 'message', 0, NULL);
-INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (11, '2025-03-12 11:33:34.783', '2025-07-15 17:15:31.035', NULL, 0, 0, 'example', 'example', 0, 'view/example/index.vue', 99, '', 0, 0, 'exampleFile', 'management', 0, NULL);
-INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (12, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 11, 'upload', 'upload', 0, 'view/example/upload/upload.vue', 5, '', 0, 0, 'mediaLibrary', 'upload', 0, NULL);
-INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (13, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 11, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', 6, '', 0, 0, 'breakpointContinue', 'upload-filled', 0, NULL);
-INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (14, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 11, 'customer', 'customer', 0, 'view/example/customer/customer.vue', 7, '', 0, 0, 'customerList', 'avatar', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (15, '2025-03-12 11:33:34.783', '2025-07-15 17:15:44.539', NULL, 0, 0, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', 99, '', 0, 0, 'systemTools', 'tools', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (16, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 15, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', 1, '', 1, 0, 'codeGenerator', 'cpu', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (17, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 15, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', 3, '', 1, 0, 'formGenerator', 'magic-stick', 0, NULL);
@@ -757,15 +577,13 @@ INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `m
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (19, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 15, 'autoCodeAdmin', 'autoCodeAdmin', 0, 'view/systemTools/autoCodeAdmin/index.vue', 2, '', 0, 0, 'autocodeAdmin', 'magic-stick', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (20, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 15, 'autoCodeEdit/:id', 'autoCodeEdit', 1, 'view/systemTools/autoCode/index.vue', 0, '', 0, 0, 'autocodeDetail', 'magic-stick', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (21, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 15, 'autoPkg', 'autoPkg', 0, 'view/systemTools/autoPkg/autoPkg.vue', 0, '', 0, 0, 'templateConfig', 'folder', 0, NULL);
-INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (22, '2025-03-12 11:33:34.783', '2025-07-15 17:15:05.952', NULL, 0, 0, 'https://www.gin-vue-admin.com', 'https://www.gin-vue-admin.com', 1, '/', 99, '', 0, 0, 'officialWebsite', 'customer-gva', 0, NULL);
+
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (23, '2025-03-12 11:33:34.783', '2025-07-15 17:15:23.544', NULL, 0, 0, 'state', 'state', 0, 'view/system/state.vue', 99, '', 0, 0, 'serverStatus', 'cloudy', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (24, '2025-03-12 11:33:34.783', '2025-07-15 17:15:37.271', NULL, 0, 0, 'plugin', 'plugin', 0, 'view/routerHolder.vue', 99, '', 0, 0, 'pluginSystem', 'cherry', 0, NULL);
-INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (25, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 24, 'https://plugin.gin-vue-admin.com/', 'https://plugin.gin-vue-admin.com/', 0, 'https://plugin.gin-vue-admin.com/', 0, '', 0, 0, 'pluginMarket', 'shop', 0, NULL);
+
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (26, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 24, 'installPlugin', 'installPlugin', 0, 'view/systemTools/installPlugin/index.vue', 1, '', 0, 0, 'pluginInstall', 'box', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (27, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 24, 'pubPlug', 'pubPlug', 0, 'view/systemTools/pubPlug/pubPlug.vue', 3, '', 0, 0, 'pluginPacking', 'files', 0, NULL);
-INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (28, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 24, 'plugin-email', 'plugin-email', 0, 'plugin/email/view/index.vue', 4, '', 0, 0, 'emailPlugin', 'message', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (29, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 15, 'exportTemplate', 'exportTemplate', 0, 'view/systemTools/exportTemplate/exportTemplate.vue', 5, '', 0, 0, 'exportTemplate', 'reading', 0, NULL);
-INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (30, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 24, 'anInfo', 'anInfo', 0, 'plugin/announcement/view/info.vue', 5, '', 0, 0, 'announcement', 'scaleToOriginal', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (31, '2025-03-12 11:33:34.783', '2025-03-12 11:33:34.783', NULL, 0, 3, 'sysParams', 'sysParams', 0, 'view/superAdmin/params/sysParams.vue', 7, '', 0, 0, 'parameterManagement', 'compass', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (33, '2025-03-13 14:18:35.433', '2025-07-15 18:26:06.188', NULL, 0, 3, 'sysTableColumns', 'sysTableColumns', 0, 'view/system/sysTableColumns/sysTableColumns.vue', 10, '', 0, 0, 'sysTableColumns', 'list', 0, NULL);
 INSERT INTO `sys_base_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_level`, `parent_id`, `path`, `name`, `hidden`, `component`, `sort`, `active_name`, `keep_alive`, `default_menu`, `title`, `icon`, `close_tab`, `transition_type`) VALUES (34, '2025-03-18 03:49:20.437', '2025-07-15 18:14:58.894', NULL, 0, 0, 'userInfo', 'userInfo', 0, 'view/person/person.vue', 0, '', 0, 0, 'userInfo', 'home-filled', 0, NULL);
@@ -1191,7 +1009,7 @@ CREATE TABLE `sys_users` (
   `username` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户登录名',
   `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户登录密码',
   `nick_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '系统用户' COMMENT '用户昵称',
-  `header_img` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'https://qmplusimg.henrongyi.top/gva_header.jpg' COMMENT '用户头像',
+  `header_img` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'https://qmplusimg.henrongyi.top/HAB_header.jpg' COMMENT '用户头像',
   `authority_id` bigint unsigned DEFAULT '888' COMMENT '用户角色ID',
   `phone` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户手机号',
   `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户邮箱',

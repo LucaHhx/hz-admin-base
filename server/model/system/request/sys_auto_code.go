@@ -3,10 +3,10 @@ package request
 import (
 	"encoding/json"
 	"fmt"
-	"hz-admin-base/global"
-	"hz-admin-base/model/system"
-	model "hz-admin-base/model/system"
 	"go/token"
+	"hab/global"
+	"hab/model/system"
+	model "hab/model/system"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -382,7 +382,7 @@ func (r *AutoCode) Menu(template string) model.SysBaseMenu {
 // Pretreatment 预处理
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (r *AutoCode) Pretreatment() error {
-	r.Module = global.GVA_CONFIG.AutoCode.Module
+	r.Module = global.HAB_CONFIG.AutoCode.Module
 	if token.IsKeyword(r.Abbreviation) {
 		r.Abbreviation = r.Abbreviation + "_"
 	} // go 关键字处理

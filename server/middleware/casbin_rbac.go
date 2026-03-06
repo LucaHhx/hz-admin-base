@@ -4,10 +4,10 @@ import (
 	"strconv"
 	"strings"
 
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/service"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/service"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +25,7 @@ func CasbinHandler() gin.HandlerFunc {
 		}
 		//获取请求的PATH
 		path := c.Request.URL.Path
-		obj := strings.TrimPrefix(path, global.GVA_CONFIG.System.RouterPrefix)
+		obj := strings.TrimPrefix(path, global.HAB_CONFIG.System.RouterPrefix)
 		// 获取请求方法
 		act := c.Request.Method
 		// 获取用户的角色

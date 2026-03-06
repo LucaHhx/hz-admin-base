@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 	"testing"
 )
@@ -22,9 +22,9 @@ func TestPluginInitialize_Injection(t *testing.T) {
 			name: "测试 Gva插件 注册注入",
 			fields: fields{
 				Type:       TypePluginInitializeV2,
-				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
-				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
-				ImportPath: `"hz-admin-base/plugin/gva"`,
+				Path:       filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
+				PluginPath: filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
+				ImportPath: `"hab/plugin/gva"`,
 			},
 			wantErr: false,
 		},
@@ -69,9 +69,9 @@ func TestPluginInitialize_Rollback(t *testing.T) {
 			name: "测试 Gva插件 回滚",
 			fields: fields{
 				Type:       TypePluginInitializeV2,
-				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
-				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
-				ImportPath: `"hz-admin-base/plugin/gva"`,
+				Path:       filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
+				PluginPath: filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
+				ImportPath: `"hab/plugin/gva"`,
 			},
 			wantErr: false,
 		},

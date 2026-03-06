@@ -3,39 +3,38 @@ package initialize
 import (
 	"os"
 
-	"hz-admin-base/global"
-	"hz-admin-base/model/example"
-	"hz-admin-base/model/system"
+	"hab/global"
+	"hab/model/system"
 
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 func Gorm() *gorm.DB {
-	switch global.GVA_CONFIG.System.DbType {
+	switch global.HAB_CONFIG.System.DbType {
 	case "mysql":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Mysql.Dbname
+		global.HAB_ACTIVE_DBNAME = &global.HAB_CONFIG.Mysql.Dbname
 		return GormMysql()
 	case "pgsql":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Pgsql.Dbname
+		global.HAB_ACTIVE_DBNAME = &global.HAB_CONFIG.Pgsql.Dbname
 		return GormPgSql()
 	case "oracle":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Oracle.Dbname
+		global.HAB_ACTIVE_DBNAME = &global.HAB_CONFIG.Oracle.Dbname
 		return GormOracle()
 	case "mssql":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Mssql.Dbname
+		global.HAB_ACTIVE_DBNAME = &global.HAB_CONFIG.Mssql.Dbname
 		return GormMssql()
 	case "sqlite":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Sqlite.Dbname
+		global.HAB_ACTIVE_DBNAME = &global.HAB_CONFIG.Sqlite.Dbname
 		return GormSqlite()
 	default:
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Mysql.Dbname
+		global.HAB_ACTIVE_DBNAME = &global.HAB_CONFIG.Mysql.Dbname
 		return GormMysql()
 	}
 }
 
 func RegisterTables() {
-	db := global.GVA_DB
+	db := global.HAB_DB
 	err := db.AutoMigrate(
 
 		system.SysApi{},
@@ -59,26 +58,20 @@ func RegisterTables() {
 		system.JoinTemplate{},
 		system.SysParams{},
 
-		example.ExaFile{},
-		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
-		example.ExaAttachmentCategory{},
-
 		system.SysTableColumns{},
 
 		system.SysDataFilter{},
 	)
 	if err != nil {
-		global.GVA_LOG.Error("register table failed", zap.Error(err))
+		global.HAB_LOG.Error("register table failed", zap.Error(err))
 		os.Exit(0)
 	}
 
 	err = bizModel()
 
 	if err != nil {
-		global.GVA_LOG.Error("register biz_table failed", zap.Error(err))
+		global.HAB_LOG.Error("register biz_table failed", zap.Error(err))
 		os.Exit(0)
 	}
-	global.GVA_LOG.Info("register table success")
+	global.HAB_LOG.Info("register table success")
 }

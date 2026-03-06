@@ -11,9 +11,9 @@ RUN apk --no-cache add \
 
 ENV TZ=Asia/Shanghai
 
-WORKDIR /srv/hz-admin-base
-COPY . /srv/hz-admin-base
+WORKDIR /srv/hab
+COPY . /srv/hab
 
 EXPOSE 9688 9689
 
-CMD ["./hz-admin-base", "-type=all"]
+CMD ["./hab", "-type=all"]

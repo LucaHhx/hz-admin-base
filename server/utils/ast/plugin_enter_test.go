@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 	"testing"
 )
@@ -27,8 +27,8 @@ func TestPluginEnter_Injection(t *testing.T) {
 			name: "测试 Gva插件UserApi 注入",
 			fields: fields{
 				Type:            TypePluginApiEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "api", "enter.go"),
-				ImportPath:      `"hz-admin-base/plugin/gva/service"`,
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "api", "enter.go"),
+				ImportPath:      `"hab/plugin/gva/service"`,
 				StructName:      "User",
 				StructCamelName: "user",
 				ModuleName:      "serviceUser",
@@ -42,8 +42,8 @@ func TestPluginEnter_Injection(t *testing.T) {
 			name: "测试 Gva插件UserRouter 注入",
 			fields: fields{
 				Type:            TypePluginRouterEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "router", "enter.go"),
-				ImportPath:      `"hz-admin-base/plugin/gva/api"`,
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "router", "enter.go"),
+				ImportPath:      `"hab/plugin/gva/api"`,
 				StructName:      "User",
 				StructCamelName: "user",
 				ModuleName:      "userApi",
@@ -57,7 +57,7 @@ func TestPluginEnter_Injection(t *testing.T) {
 			name: "测试 Gva插件UserService 注入",
 			fields: fields{
 				Type:            TypePluginServiceEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
 				ImportPath:      "",
 				StructName:      "User",
 				StructCamelName: "user",
@@ -72,7 +72,7 @@ func TestPluginEnter_Injection(t *testing.T) {
 			name: "测试 gva的User 注入",
 			fields: fields{
 				Type:            TypePluginServiceEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
 				ImportPath:      "",
 				StructName:      "User",
 				StructCamelName: "user",
@@ -131,8 +131,8 @@ func TestPluginEnter_Rollback(t *testing.T) {
 			name: "测试 Gva插件UserRouter 回滚",
 			fields: fields{
 				Type:            TypePluginRouterEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "router", "enter.go"),
-				ImportPath:      `"hz-admin-base/plugin/gva/api"`,
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "router", "enter.go"),
+				ImportPath:      `"hab/plugin/gva/api"`,
 				StructName:      "User",
 				StructCamelName: "user",
 				ModuleName:      "userApi",
@@ -146,8 +146,8 @@ func TestPluginEnter_Rollback(t *testing.T) {
 			name: "测试 Gva插件UserApi 回滚",
 			fields: fields{
 				Type:            TypePluginApiEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "api", "enter.go"),
-				ImportPath:      `"hz-admin-base/plugin/gva/service"`,
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "api", "enter.go"),
+				ImportPath:      `"hab/plugin/gva/service"`,
 				StructName:      "User",
 				StructCamelName: "user",
 				ModuleName:      "serviceUser",
@@ -161,7 +161,7 @@ func TestPluginEnter_Rollback(t *testing.T) {
 			name: "测试 Gva插件UserService 回滚",
 			fields: fields{
 				Type:            TypePluginServiceEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
 				ImportPath:      "",
 				StructName:      "User",
 				StructCamelName: "user",

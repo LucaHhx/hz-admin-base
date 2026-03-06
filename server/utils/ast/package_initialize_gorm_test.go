@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 	"testing"
 )
@@ -24,8 +24,8 @@ func TestPackageInitializeGorm_Injection(t *testing.T) {
 			name: "测试 &example.ExaFileUploadAndDownload{} 注入",
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
-				ImportPath:  `"hz-admin-base/model/example"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+				ImportPath:  `"hab/model/example"`,
 				StructName:  "ExaFileUploadAndDownload",
 				PackageName: "example",
 				IsNew:       false,
@@ -35,8 +35,8 @@ func TestPackageInitializeGorm_Injection(t *testing.T) {
 			name: "测试 &example.ExaCustomer{} 注入",
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
-				ImportPath:  `"hz-admin-base/model/example"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+				ImportPath:  `"hab/model/example"`,
 				StructName:  "ExaCustomer",
 				PackageName: "example",
 				IsNew:       false,
@@ -46,8 +46,8 @@ func TestPackageInitializeGorm_Injection(t *testing.T) {
 			name: "测试 new(example.ExaFileUploadAndDownload) 注入",
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
-				ImportPath:  `"hz-admin-base/model/example"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+				ImportPath:  `"hab/model/example"`,
 				StructName:  "ExaFileUploadAndDownload",
 				PackageName: "example",
 				IsNew:       true,
@@ -57,8 +57,8 @@ func TestPackageInitializeGorm_Injection(t *testing.T) {
 			name: "测试 new(example.ExaCustomer) 注入",
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
-				ImportPath:  `"hz-admin-base/model/example"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+				ImportPath:  `"hab/model/example"`,
 				StructName:  "ExaCustomer",
 				PackageName: "example",
 				IsNew:       true,
@@ -106,8 +106,8 @@ func TestPackageInitializeGorm_Rollback(t *testing.T) {
 			name: "测试 &example.ExaFileUploadAndDownload{} 回滚",
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
-				ImportPath:  `"hz-admin-base/model/example"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+				ImportPath:  `"hab/model/example"`,
 				StructName:  "ExaFileUploadAndDownload",
 				PackageName: "example",
 				IsNew:       false,
@@ -117,8 +117,8 @@ func TestPackageInitializeGorm_Rollback(t *testing.T) {
 			name: "测试 &example.ExaCustomer{} 回滚",
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
-				ImportPath:  `"hz-admin-base/model/example"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+				ImportPath:  `"hab/model/example"`,
 				StructName:  "ExaCustomer",
 				PackageName: "example",
 				IsNew:       false,
@@ -128,8 +128,8 @@ func TestPackageInitializeGorm_Rollback(t *testing.T) {
 			name: "测试 new(example.ExaFileUploadAndDownload) 回滚",
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
-				ImportPath:  `"hz-admin-base/model/example"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+				ImportPath:  `"hab/model/example"`,
 				StructName:  "ExaFileUploadAndDownload",
 				PackageName: "example",
 				IsNew:       true,
@@ -139,8 +139,8 @@ func TestPackageInitializeGorm_Rollback(t *testing.T) {
 			name: "测试 new(example.ExaCustomer) 回滚",
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
-				ImportPath:  `"hz-admin-base/model/example"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+				ImportPath:  `"hab/model/example"`,
 				StructName:  "ExaCustomer",
 				PackageName: "example",
 				IsNew:       true,

@@ -1,8 +1,8 @@
 package request
 
 import (
-	"hz-admin-base/global"
-	model "hz-admin-base/model/system"
+	"hab/global"
+	model "hab/model/system"
 )
 
 type SysAutoCodePackageCreate struct {
@@ -16,7 +16,7 @@ type SysAutoCodePackageCreate struct {
 func (r *SysAutoCodePackageCreate) AutoCode() AutoCode {
 	return AutoCode{
 		Package: r.PackageName,
-		Module:  global.GVA_CONFIG.AutoCode.Module,
+		Module:  global.HAB_CONFIG.AutoCode.Module,
 	}
 }
 
@@ -26,6 +26,6 @@ func (r *SysAutoCodePackageCreate) Create() model.SysAutoCodePackage {
 		Label:       r.Label,
 		Template:    r.Template,
 		PackageName: r.PackageName,
-		Module:      global.GVA_CONFIG.AutoCode.Module,
+		Module:      global.HAB_CONFIG.AutoCode.Module,
 	}
 }

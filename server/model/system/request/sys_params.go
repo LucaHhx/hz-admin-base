@@ -1,7 +1,7 @@
 package request
 
 import (
-	"hz-admin-base/model/common/request"
+	"hab/model/common/request"
 	"time"
 )
 

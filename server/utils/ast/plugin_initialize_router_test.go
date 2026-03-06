@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 	"testing"
 )
@@ -27,8 +27,8 @@ func TestPluginInitializeRouter_Injection(t *testing.T) {
 			name: "测试 Gva插件User 注入",
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
-				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
-				ImportPath:           `"hz-admin-base/plugin/gva/router"`,
+				Path:                 filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
+				ImportPath:           `"hab/plugin/gva/router"`,
 				AppName:              "Router",
 				GroupName:            "User",
 				PackageName:          "router",
@@ -42,8 +42,8 @@ func TestPluginInitializeRouter_Injection(t *testing.T) {
 			name: "测试 中文 注入",
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
-				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
-				ImportPath:           `"hz-admin-base/plugin/gva/router"`,
+				Path:                 filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
+				ImportPath:           `"hab/plugin/gva/router"`,
 				AppName:              "Router",
 				GroupName:            "U中文",
 				PackageName:          "router",
@@ -101,8 +101,8 @@ func TestPluginInitializeRouter_Rollback(t *testing.T) {
 			name: "测试 Gva插件User 回滚",
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
-				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
-				ImportPath:           `"hz-admin-base/plugin/gva/router"`,
+				Path:                 filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
+				ImportPath:           `"hab/plugin/gva/router"`,
 				AppName:              "Router",
 				GroupName:            "User",
 				PackageName:          "router",
@@ -116,8 +116,8 @@ func TestPluginInitializeRouter_Rollback(t *testing.T) {
 			name: "测试 中文 注入",
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
-				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
-				ImportPath:           `"hz-admin-base/plugin/gva/router"`,
+				Path:                 filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
+				ImportPath:           `"hab/plugin/gva/router"`,
 				AppName:              "Router",
 				GroupName:            "U中文",
 				PackageName:          "router",

@@ -1,6 +1,6 @@
 package response
 
-import "hz-admin-base/model/system"
+import "hab/model/system"
 
 type SysMenusResponse struct {
 	Menus []system.SysMenu `json:"menus"`

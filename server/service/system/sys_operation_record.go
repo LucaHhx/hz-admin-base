@@ -1,12 +1,12 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/request"
-	"hz-admin-base/model/system"
-	systemReq "hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
 	"github.com/gin-gonic/gin"
+	"hab/global"
+	"hab/model/common/request"
+	"hab/model/system"
+	systemReq "hab/model/system/request"
+	"hab/utils"
 )
 
 //@author: [granty1](https://github.com/granty1)
@@ -20,7 +20,7 @@ type OperationRecordService struct{}
 var OperationRecordServiceApp = new(OperationRecordService)
 
 func (operationRecordService *OperationRecordService) CreateSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Create(&sysOperationRecord).Error
+	err = global.HAB_DB.Create(&sysOperationRecord).Error
 	return err
 }
 
@@ -32,7 +32,7 @@ func (operationRecordService *OperationRecordService) CreateSysOperationRecord(s
 //@return: err error
 
 func (operationRecordService *OperationRecordService) DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]system.SysOperationRecord{}, "id in (?)", ids.Ids).Error
+	err = global.HAB_DB.Delete(&[]system.SysOperationRecord{}, "id in (?)", ids.Ids).Error
 	return err
 }
 
@@ -43,7 +43,7 @@ func (operationRecordService *OperationRecordService) DeleteSysOperationRecordBy
 //@return: err error
 
 func (operationRecordService *OperationRecordService) DeleteSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Delete(&sysOperationRecord).Error
+	err = global.HAB_DB.Delete(&sysOperationRecord).Error
 	return err
 }
 
@@ -54,7 +54,7 @@ func (operationRecordService *OperationRecordService) DeleteSysOperationRecord(s
 //@return: sysOperationRecord system.SysOperationRecord, err error
 
 func (operationRecordService *OperationRecordService) GetSysOperationRecord(id uint) (sysOperationRecord system.SysOperationRecord, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&sysOperationRecord).Error
+	err = global.HAB_DB.Where("id = ?", id).First(&sysOperationRecord).Error
 	return
 }
 
@@ -69,7 +69,7 @@ func (operationRecordService *OperationRecordService) GetSysOperationRecordInfoL
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&system.SysOperationRecord{})
+	db := global.HAB_DB.Model(&system.SysOperationRecord{})
 	var sysOperationRecords []system.SysOperationRecord
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Method != "" {

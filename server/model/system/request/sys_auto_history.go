@@ -1,8 +1,8 @@
 package request
 
 import (
-	common "hz-admin-base/model/common/request"
-	model "hz-admin-base/model/system"
+	common "hab/model/common/request"
+	model "hab/model/system"
 )
 
 type SysAutoHistoryCreate struct {

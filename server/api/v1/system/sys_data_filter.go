@@ -1,16 +1,16 @@
 package system
 
 import (
-	"hz-admin-base/code"
-	"hz-admin-base/enum"
-	"hz-admin-base/model/common/request"
+	"hab/code"
+	"hab/enum"
+	"hab/model/common/request"
 
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	"hz-admin-base/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	"hab/utils"
 )
 
 type SysDataFilterApi struct{}
@@ -34,7 +34,7 @@ func (sysDataFilterApi *SysDataFilterApi) CreateSysDataFilter(c *gin.Context) {
 	sysDataFilter.CreatedBy = utils.GetUserID(c)
 	err = sysDataFilterService.CreateSysDataFilter(&sysDataFilter, c)
 	if err != nil {
-		global.GVA_LOG.Error("Create failed!", zap.Error(err))
+		global.HAB_LOG.Error("Create failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_Create, err.Error(), c)
 		return
 	}
@@ -66,7 +66,7 @@ func (sysDataFilterApi *SysDataFilterApi) ImportSysDataFilter(c *gin.Context) {
 	}
 	err = sysDataFilterService.ImportSysDataFilter(data.Type, data.List, c)
 	if err != nil {
-		global.GVA_LOG.Error("Import failed!", zap.Error(err))
+		global.HAB_LOG.Error("Import failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_Import, err.Error(), c)
 		return
 	}
@@ -87,7 +87,7 @@ func (sysDataFilterApi *SysDataFilterApi) DeleteSysDataFilter(c *gin.Context) {
 	userID := utils.GetUserID(c)
 	err := sysDataFilterService.DeleteSysDataFilter(ID, userID, c)
 	if err != nil {
-		global.GVA_LOG.Error("Delete failed!", zap.Error(err))
+		global.HAB_LOG.Error("Delete failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_Delete, err.Error(), c)
 		return
 	}
@@ -107,7 +107,7 @@ func (sysDataFilterApi *SysDataFilterApi) DeleteSysDataFilterByIds(c *gin.Contex
 	userID := utils.GetUserID(c)
 	err := sysDataFilterService.DeleteSysDataFilterByIds(IDs, userID, c)
 	if err != nil {
-		global.GVA_LOG.Error("Batch delete failed!", zap.Error(err))
+		global.HAB_LOG.Error("Batch delete failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_Delete, err.Error(), c)
 		return
 	}
@@ -133,7 +133,7 @@ func (sysDataFilterApi *SysDataFilterApi) UpdateSysDataFilter(c *gin.Context) {
 	sysDataFilter.UpdatedBy = utils.GetUserID(c)
 	err = sysDataFilterService.UpdateSysDataFilter(sysDataFilter, c)
 	if err != nil {
-		global.GVA_LOG.Error("Update failed!", zap.Error(err))
+		global.HAB_LOG.Error("Update failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_Update, err.Error(), c)
 		return
 	}
@@ -153,7 +153,7 @@ func (sysDataFilterApi *SysDataFilterApi) FindSysDataFilter(c *gin.Context) {
 	ID := c.Query("ID")
 	resysDataFilter, err := sysDataFilterService.GetSysDataFilter(ID, c)
 	if err != nil {
-		global.GVA_LOG.Error("Query failed!", zap.Error(err))
+		global.HAB_LOG.Error("Query failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_Get, err.Error(), c)
 		return
 	}
@@ -194,7 +194,7 @@ func (sysDataFilterApi *SysDataFilterApi) GetSysDataFilterList(c *gin.Context) {
 
 	list, total, err := sysDataFilterService.GetSysDataFilterInfoList(pageInfo, c)
 	if err != nil {
-		global.GVA_LOG.Error("Get list failed!", zap.Error(err))
+		global.HAB_LOG.Error("Get list failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_List, err.Error(), c)
 		return
 	}
@@ -226,7 +226,7 @@ func (sysDataFilterApi *SysDataFilterApi) ExecuteSql(c *gin.Context) {
 	sql := c.Query("sql")
 	data, err := sysDataFilterService.ExecuteSql(sql)
 	if err != nil {
-		global.GVA_LOG.Error("Query failed!", zap.Error(err))
+		global.HAB_LOG.Error("Query failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_Get, err.Error(), c)
 		return
 	}
@@ -245,7 +245,7 @@ func (sysDataFilterApi *SysDataFilterApi) FilterData(c *gin.Context) {
 	}
 	FilterData, err := sysDataFilterService.FilterData(data.Filters, data.Id)
 	if err != nil {
-		global.GVA_LOG.Error("Query failed!", zap.Error(err))
+		global.HAB_LOG.Error("Query failed!", zap.Error(err))
 		response.FailWithErrData(code.Err_Business_Get, err.Error(), c)
 		return
 	}

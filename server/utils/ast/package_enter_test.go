@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 	"testing"
 )
@@ -24,8 +24,8 @@ func TestPackageEnter_Rollback(t *testing.T) {
 			name: "测试ExampleApiGroup回滚",
 			fields: fields{
 				Type:              TypePackageApiEnter,
-				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", "enter.go"),
-				ImportPath:        `"hz-admin-base/api/v1/example"`,
+				Path:              filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "api", "v1", "enter.go"),
+				ImportPath:        `"hab/api/v1/example"`,
 				StructName:        "ExampleApiGroup",
 				PackageName:       "example",
 				PackageStructName: "ApiGroup",
@@ -36,8 +36,8 @@ func TestPackageEnter_Rollback(t *testing.T) {
 			name: "测试ExampleRouterGroup回滚",
 			fields: fields{
 				Type:              TypePackageRouterEnter,
-				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
-				ImportPath:        `"hz-admin-base/router/example"`,
+				Path:              filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "router", "enter.go"),
+				ImportPath:        `"hab/router/example"`,
 				StructName:        "Example",
 				PackageName:       "example",
 				PackageStructName: "RouterGroup",
@@ -48,8 +48,8 @@ func TestPackageEnter_Rollback(t *testing.T) {
 			name: "测试ExampleServiceGroup回滚",
 			fields: fields{
 				Type:              TypePackageServiceEnter,
-				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
-				ImportPath:        `"hz-admin-base/service/example"`,
+				Path:              filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "service", "enter.go"),
+				ImportPath:        `"hab/service/example"`,
 				StructName:        "ExampleServiceGroup",
 				PackageName:       "example",
 				PackageStructName: "ServiceGroup",
@@ -98,8 +98,8 @@ func TestPackageEnter_Injection(t *testing.T) {
 			name: "测试ExampleApiGroup注入",
 			fields: fields{
 				Type:              TypePackageApiEnter,
-				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", "enter.go"),
-				ImportPath:        `"hz-admin-base/api/v1/example"`,
+				Path:              filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "api", "v1", "enter.go"),
+				ImportPath:        `"hab/api/v1/example"`,
 				StructName:        "ExampleApiGroup",
 				PackageName:       "example",
 				PackageStructName: "ApiGroup",
@@ -109,8 +109,8 @@ func TestPackageEnter_Injection(t *testing.T) {
 			name: "测试ExampleRouterGroup注入",
 			fields: fields{
 				Type:              TypePackageRouterEnter,
-				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
-				ImportPath:        `"hz-admin-base/router/example"`,
+				Path:              filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "router", "enter.go"),
+				ImportPath:        `"hab/router/example"`,
 				StructName:        "Example",
 				PackageName:       "example",
 				PackageStructName: "RouterGroup",
@@ -121,8 +121,8 @@ func TestPackageEnter_Injection(t *testing.T) {
 			name: "测试ExampleServiceGroup注入",
 			fields: fields{
 				Type:              TypePackageServiceEnter,
-				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
-				ImportPath:        `"hz-admin-base/service/example"`,
+				Path:              filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "service", "enter.go"),
+				ImportPath:        `"hab/service/example"`,
 				StructName:        "ExampleServiceGroup",
 				PackageName:       "example",
 				PackageStructName: "ServiceGroup",

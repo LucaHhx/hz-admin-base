@@ -1,10 +1,10 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	systemReq "hz-admin-base/model/system/request"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	systemReq "hab/model/system/request"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -30,7 +30,7 @@ func (sysParamsApi *SysParamsApi) CreateSysParams(c *gin.Context) {
 	}
 	err = sysParamsService.CreateSysParams(&sysParams)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败:"+err.Error(), c)
 		return
 	}
@@ -50,7 +50,7 @@ func (sysParamsApi *SysParamsApi) DeleteSysParams(c *gin.Context) {
 	ID := c.Query("ID")
 	err := sysParamsService.DeleteSysParams(ID)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败:"+err.Error(), c)
 		return
 	}
@@ -69,7 +69,7 @@ func (sysParamsApi *SysParamsApi) DeleteSysParamsByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
 	err := sysParamsService.DeleteSysParamsByIds(IDs)
 	if err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败:"+err.Error(), c)
 		return
 	}
@@ -94,7 +94,7 @@ func (sysParamsApi *SysParamsApi) UpdateSysParams(c *gin.Context) {
 	}
 	err = sysParamsService.UpdateSysParams(sysParams)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.HAB_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败:"+err.Error(), c)
 		return
 	}
@@ -114,7 +114,7 @@ func (sysParamsApi *SysParamsApi) FindSysParams(c *gin.Context) {
 	ID := c.Query("ID")
 	resysParams, err := sysParamsService.GetSysParams(ID)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.HAB_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败:"+err.Error(), c)
 		return
 	}
@@ -139,7 +139,7 @@ func (sysParamsApi *SysParamsApi) GetSysParamsList(c *gin.Context) {
 	}
 	list, total, err := sysParamsService.GetSysParamsInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败:"+err.Error(), c)
 		return
 	}
@@ -164,7 +164,7 @@ func (sysParamsApi *SysParamsApi) GetSysParam(c *gin.Context) {
 	k := c.Query("key")
 	params, err := sysParamsService.GetSysParam(k)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败:"+err.Error(), c)
 		return
 	}

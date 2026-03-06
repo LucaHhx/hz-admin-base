@@ -3,10 +3,10 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"hz-admin-base/global"
 	"go/parser"
 	"go/token"
 	"go/types"
+	"hab/global"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -36,7 +36,7 @@ func NewExpression(value any) (*Expression, error) {
 	}
 	err := exp.AnalysisStructure(value, "")
 	if err != nil {
-		global.GVA_LOG.Error("AnalysisStructure error", zap.Error(err))
+		global.HAB_LOG.Error("AnalysisStructure error", zap.Error(err))
 		return nil, err
 	}
 	return exp, nil
@@ -67,7 +67,7 @@ func (e *Expression) AnalysisStructure(v interface{}, prefix string) error {
 		if prefix != "" {
 			fName = prefix + "." + field.Name
 		}
-		fName = strings.ReplaceAll(fName, "GVA_MODEL.", "")
+		fName = strings.ReplaceAll(fName, "HAB_MODEL.", "")
 		gormTag := field.Tag.Get("gorm")
 		// Check if the field is a struct or a pointer to a struct
 		if fieldValue.Type() == reflect.TypeOf(time.Time{}) || fieldValue.Type() == reflect.TypeOf(&time.Time{}) {
@@ -115,7 +115,7 @@ func (e *Expression) AnalysisStructure(v interface{}, prefix string) error {
 func (e *Expression) Evaluate(expression string) (bool, error) {
 	exp, err := e.ParseContainsExpression(expression)
 	if err != nil {
-		global.GVA_LOG.Error("ParseContainsExpression error", zap.Error(err), zap.String("expression", expression))
+		global.HAB_LOG.Error("ParseContainsExpression error", zap.Error(err), zap.String("expression", expression))
 		return false, err
 	}
 	e.Expression = e.ReplaceFieldsWithValues(exp)
@@ -123,24 +123,24 @@ func (e *Expression) Evaluate(expression string) (bool, error) {
 	fset := token.NewFileSet()
 	_, err = parser.ParseExpr(e.Expression)
 	if err != nil {
-		global.GVA_LOG.Error("failed to parse expression", zap.Error(err), zap.String("expression", e.Expression))
+		global.HAB_LOG.Error("failed to parse expression", zap.Error(err), zap.String("expression", e.Expression))
 		return false, err
 	}
 
 	// Evaluate the parsed expression
 	result, err := types.Eval(fset, nil, token.NoPos, e.Expression)
 	if err != nil {
-		global.GVA_LOG.Error("failed to evaluate expression", zap.Error(err), zap.String("expression", e.Expression))
+		global.HAB_LOG.Error("failed to evaluate expression", zap.Error(err), zap.String("expression", e.Expression))
 		return false, err
 	}
 
 	// Convert the result to a boolean value
 	value, err := strconv.ParseBool(result.Value.String())
 	if err != nil {
-		global.GVA_LOG.Error("failed to convert result to boolean", zap.Error(err), zap.String("expression", e.Expression))
+		global.HAB_LOG.Error("failed to convert result to boolean", zap.Error(err), zap.String("expression", e.Expression))
 		return false, err
 	}
-	global.GVA_LOG.Info("expression evaluation result", zap.String("expression", e.Expression), zap.Bool("result", value))
+	global.HAB_LOG.Info("expression evaluation result", zap.String("expression", e.Expression), zap.Bool("result", value))
 	return value, nil
 }
 

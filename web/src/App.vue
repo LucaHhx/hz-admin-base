@@ -64,14 +64,14 @@ defineOptions({
     font-weight: 400 !important;
   }
 
-  .gva-body-h {
+  .hab-body-h {
     min-height: calc(100% - 3rem);
   }
 
-  .gva-container {
+  .hab-container {
     height: calc(100% - 2.5rem);
   }
-  .gva-container2 {
+  .hab-container2 {
     height: calc(100% - 4.5rem);
   }
 

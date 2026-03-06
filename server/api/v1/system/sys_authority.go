@@ -1,11 +1,11 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	systemRes "hz-admin-base/model/system/response"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	systemRes "hab/model/system/response"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -39,20 +39,20 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 		return
 	}
 
-	if *authority.ParentId == 0 && global.GVA_CONFIG.System.UseStrictAuth {
+	if *authority.ParentId == 0 && global.HAB_CONFIG.System.UseStrictAuth {
 		authority.ParentId = utils.Pointer(utils.GetUserAuthorityId(c))
 	}
 
 	tep, pas := utils.GetUserTypeInfo(c)
 
 	if authBack, err = authorityService.CreateAuthority(authority, tep, pas); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("Creation failed"+err.Error(), c)
 		return
 	}
 	err = casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error("创建成功，权限刷新失败。", zap.Error(err))
+		global.HAB_LOG.Error("创建成功，权限刷新失败。", zap.Error(err))
 		response.FailWithMessage("创建成功，权限刷新失败。"+err.Error(), c)
 		return
 	}
@@ -88,7 +88,7 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 	adminAuthorityID := utils.GetUserAuthorityId(c)
 	authBack, err := authorityService.CopyAuthority(adminAuthorityID, copyInfo)
 	if err != nil {
-		global.GVA_LOG.Error("拷贝失败!", zap.Error(err))
+		global.HAB_LOG.Error("拷贝失败!", zap.Error(err))
 		response.FailWithMessage("拷贝失败"+err.Error(), c)
 		return
 	}
@@ -117,7 +117,7 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 	}
 	// 删除角色之前需要判断是否有用户正在使用此角色
 	if err = authorityService.DeleteAuthority(&authority); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("Deletion failed"+err.Error(), c)
 		return
 	}
@@ -148,7 +148,7 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 	}
 	authority, err := authorityService.UpdateAuthority(auth)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.HAB_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("Update failed"+err.Error(), c)
 		return
 	}
@@ -168,7 +168,7 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 	authorityID := utils.GetUserAuthorityId(c)
 	list, err := authorityService.GetAuthorityInfoList(authorityID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get"+err.Error(), c)
 		return
 	}
@@ -199,7 +199,7 @@ func (a *AuthorityApi) SetDataAuthority(c *gin.Context) {
 	adminAuthorityID := utils.GetUserAuthorityId(c)
 	err = authorityService.SetDataAuthority(adminAuthorityID, auth)
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		global.HAB_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败"+err.Error(), c)
 		return
 	}

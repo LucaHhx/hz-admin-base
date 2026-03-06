@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 )
 
 func bizModel() error {
-	db := global.GVA_DB
+	db := global.HAB_DB
 	err := db.AutoMigrate()
 	if err != nil {
 		return err

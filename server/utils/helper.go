@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"hz-admin-base/global"
+	"hab/global"
 	"runtime"
 	"strings"
 )
@@ -17,8 +17,8 @@ func If[T any](condition bool, trueVal, falseVal T) T {
 // PanicRecover 捕获恐慌
 func PanicRecover() {
 	if err := recover(); err != nil {
-		global.GVA_LOG.Error("Analysis panic " + fmt.Sprintf("%v", err))
-		global.GVA_LOG.Error(Stack())
+		global.HAB_LOG.Error("Analysis panic " + fmt.Sprintf("%v", err))
+		global.HAB_LOG.Error(Stack())
 		return
 	}
 }

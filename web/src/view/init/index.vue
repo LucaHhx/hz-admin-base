@@ -16,7 +16,7 @@
           <div
             class="font-sans text-4xl font-bold text-center mb-4 dark:text-white"
           >
-            GIN-VUE-ADMIN
+            HAB
           </div>
           <p class="text-gray-600 dark:text-gray-300 mb-2">
             初始化须知
@@ -25,16 +25,7 @@
             1.您需有用一定的VUE和GOLANG基础
           </p>
           <p class="text-gray-600 dark:text-gray-300 mb-2">
-            2.请您确认是否已经阅读过<a
-              class="text-blue-600 font-bold"
-              href="https://www.gin-vue-admin.com"
-              target="_blank"
-            >官方文档</a>
-            <a
-              class="text-blue-600 font-bold"
-              href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=2"
-              target="_blank"
-            >初始化视频</a>
+            2.请您确认是否已经阅读过相关文档
           </p>
           <p class="text-gray-600 dark:text-gray-300 mb-2">
             3.请您确认是否了解后续的配置流程
@@ -226,7 +217,7 @@
   }
 
   const goDoc = () => {
-    window.open('https://www.gin-vue-admin.com/guide/start-quickly/env.html')
+    window.open('#')
   }
 
   const out = ref(false)
@@ -238,7 +229,7 @@
     port: '3306',
     userName: 'root',
     password: '',
-    dbName: 'gva',
+    dbName: 'hab',
     dbPath: ''
   })
 
@@ -253,7 +244,7 @@
           port: '3306',
           userName: 'root',
           password: '',
-          dbName: 'gva',
+          dbName: 'hab',
           dbPath: ''
         })
         break
@@ -265,7 +256,7 @@
           port: '5432',
           userName: 'postgres',
           password: '',
-          dbName: 'gva',
+          dbName: 'hab',
           dbPath: '',
           template: 'template0'
         })
@@ -278,7 +269,7 @@
           port: '1521',
           userName: 'oracle',
           password: '',
-          dbName: 'gva',
+          dbName: 'hab',
           dbPath: ''
         })
         break
@@ -290,7 +281,7 @@
           port: '1433',
           userName: 'mssql',
           password: '',
-          dbName: 'gva',
+          dbName: 'hab',
           dbPath: ''
         })
         break
@@ -302,7 +293,7 @@
           port: '',
           userName: '',
           password: '',
-          dbName: 'gva',
+          dbName: 'hab',
           dbPath: ''
         })
         break
@@ -314,7 +305,7 @@
           port: '3306',
           userName: 'root',
           password: '',
-          dbName: 'gva',
+          dbName: 'hab',
           dbPath: ''
         })
     }

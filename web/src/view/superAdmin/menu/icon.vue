@@ -23,7 +23,7 @@
         :value="item.key"
       >
         <span
-          class="gva-icon"
+          class="hab-icon"
           style="padding: 3px 0 0"
           :class="item.label"
         >
@@ -1175,7 +1175,7 @@ const options = reactive([
 </script>
 
 <style lang="scss">
-  .gva-icon {
+  .hab-icon {
     color: rgb(132, 146, 166);
     font-size: 14px;
     margin-right: 10px;

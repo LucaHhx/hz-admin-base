@@ -1,10 +1,10 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -25,7 +25,7 @@ func (j *JwtApi) JsonInBlacklist(c *gin.Context) {
 	jwt := system.JwtBlacklist{Jwt: token}
 	err := jwtService.JsonInBlacklist(jwt)
 	if err != nil {
-		global.GVA_LOG.Error("jwt作废失败!", zap.Error(err))
+		global.HAB_LOG.Error("jwt作废失败!", zap.Error(err))
 		response.FailWithMessage("jwt作废失败", c)
 		return
 	}

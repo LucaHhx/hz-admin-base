@@ -1,7 +1,7 @@
 package response
 
 import (
-	"hz-admin-base/model/system"
+	"hab/model/system"
 )
 
 type SysUserResponse struct {

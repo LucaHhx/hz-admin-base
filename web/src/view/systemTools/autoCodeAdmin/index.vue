@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="gva-table-box">
-      <div class="gva-btn-list">
+    <div class="hab-table-box">
+      <div class="hab-btn-list">
         <el-button
           type="primary"
           icon="plus"
@@ -119,7 +119,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="gva-pagination">
+      <div class="hab-pagination">
         <el-pagination
           :current-page="page"
           :page-size="pageSize"
@@ -289,7 +289,7 @@
                   class="absolute right-2 bottom-2"
                   @click="aiAddFunc"
                 >
-                  <ai-gva />{{ $t('autoCode.admin.functionDrawer.aiWrite') }}
+                  <ai-hab />{{ $t('autoCode.admin.functionDrawer.aiWrite') }}
                 </el-button>
               </div>
             </el-form-item>
@@ -330,7 +330,7 @@
                 type="primary"
                 @click="autoComplete"
               >
-                <ai-gva />{{ $t('autoCode.admin.functionDrawer.complete') }}
+                <ai-hab />{{ $t('autoCode.admin.functionDrawer.complete') }}
               </el-button>
             </div>
           </el-form-item>

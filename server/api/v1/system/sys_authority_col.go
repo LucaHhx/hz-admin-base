@@ -1,10 +1,10 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system/request"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -30,7 +30,7 @@ func (a *AuthorityColApi) GetAuthorityCol(c *gin.Context) {
 	}
 	res, err := authorityColService.GetAuthorityCol(req)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}
@@ -55,7 +55,7 @@ func (a *AuthorityColApi) SetAuthorityCol(c *gin.Context) {
 	}
 	err = authorityColService.SetAuthorityCol(req)
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		global.HAB_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 		return
 	}
@@ -75,7 +75,7 @@ func (a *AuthorityColApi) CanRemoveAuthorityCol(c *gin.Context) {
 	id := c.Query("id")
 	err := authorityColService.CanRemoveAuthorityCol(id)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -99,7 +99,7 @@ func (a *AuthorityColApi) GetMenuColumns(c *gin.Context) {
 	}
 	columns, err := authorityColService.GetMenuColumns(menuName)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}

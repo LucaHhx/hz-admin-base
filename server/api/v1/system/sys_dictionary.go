@@ -1,9 +1,9 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -29,7 +29,7 @@ func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 	}
 	err = dictionaryService.CreateSysDictionary(dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("Creation failed", c)
 		return
 	}
@@ -54,7 +54,7 @@ func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 	}
 	err = dictionaryService.DeleteSysDictionary(dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("Deletion failed", c)
 		return
 	}
@@ -79,7 +79,7 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 	}
 	err = dictionaryService.UpdateSysDictionary(&dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.HAB_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("Update failed", c)
 		return
 	}
@@ -104,7 +104,7 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 	}
 	sysDictionary, err := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID, dictionary.Status)
 	if err != nil {
-		global.GVA_LOG.Error("字典未创建或未开启!", zap.Error(err))
+		global.HAB_LOG.Error("字典未创建或未开启!", zap.Error(err))
 		response.FailWithMessage("Dictionary not created or not opened", c)
 		return
 	}
@@ -122,7 +122,7 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
 	list, err := dictionaryService.GetSysDictionaryInfoList()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}

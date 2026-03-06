@@ -2,4 +2,4 @@
 
 后端代码解压后同理，放到自己想要的 mvc对应路径 并且到 initRouter中注册自动生成的路由 到registerTable中注册自动生成的model
 
-项目基于 gin-vue-admin 框架
+项目基于 HAB 框架

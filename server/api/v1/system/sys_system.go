@@ -1,11 +1,11 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	systemRes "hz-admin-base/model/system/response"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	systemRes "hab/model/system/response"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -23,7 +23,7 @@ type SystemApi struct{}
 func (s *SystemApi) GetSystemConfig(c *gin.Context) {
 	config, err := systemConfigService.GetSystemConfig()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}
@@ -47,7 +47,7 @@ func (s *SystemApi) SetSystemConfig(c *gin.Context) {
 	}
 	err = systemConfigService.SetSystemConfig(sys)
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		global.HAB_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 		return
 	}
@@ -64,7 +64,7 @@ func (s *SystemApi) SetSystemConfig(c *gin.Context) {
 func (s *SystemApi) ReloadSystem(c *gin.Context) {
 	err := utils.Reload()
 	if err != nil {
-		global.GVA_LOG.Error("重启系统失败!", zap.Error(err))
+		global.HAB_LOG.Error("重启系统失败!", zap.Error(err))
 		response.FailWithMessage("重启系统失败", c)
 		return
 	}
@@ -81,7 +81,7 @@ func (s *SystemApi) ReloadSystem(c *gin.Context) {
 func (s *SystemApi) GetServerInfo(c *gin.Context) {
 	server, err := systemConfigService.GetServerInfo()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}

@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"hz-admin-base/enum"
+	"hab/enum"
 	"regexp"
 	"strconv"
 	"strings"

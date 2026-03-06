@@ -75,7 +75,7 @@
       </el-icon>
     </el-tooltip>
 
-    <gva-setting v-model:drawer="showSettingDrawer" />
+    <hab-setting v-model:drawer="showSettingDrawer" />
     <command-menu ref="command" />
     <bcache ref="bcache" />
   </div>
@@ -83,7 +83,7 @@
 
 <script setup>
 import { useAppStore } from '@/pinia'
-import GvaSetting from '@/view/layout/setting/index.vue'
+import HabSetting from '@/view/layout/setting/index.vue'
 import { ref } from 'vue'
 import { emitter } from '@/utils/bus.js'
 import CommandMenu from '@/components/commandMenu/index.vue'

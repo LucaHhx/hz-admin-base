@@ -3,7 +3,7 @@ package gtype
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"hz-admin-base/enum"
+	"hab/enum"
 )
 
 type Limit struct {

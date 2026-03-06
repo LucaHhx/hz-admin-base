@@ -2,10 +2,10 @@ package ast
 
 import (
 	"fmt"
-	"hz-admin-base/model/system"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"hab/model/system"
 	"log"
 )
 

@@ -1,6 +1,6 @@
 package initialize
 
-import "hz-admin-base/utils"
+import "hab/utils"
 
 func init() {
 	_ = utils.RegisterRule("PageVerify",

@@ -29,8 +29,8 @@ rm_file/
 /server/latest_log
 /server/__debug_bin*
 server/uploads/
-/server/hz-admin-base
-/server/hz-admin-base/config.yaml
+/server/hab
+/server/hab/config.yaml
 
 *.iml
 web/.pnpm-debug.log

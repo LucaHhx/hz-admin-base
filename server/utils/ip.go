@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"hz-admin-base/utils/gurl"
+	"hab/utils/gurl"
 )
 
 type IpInfo struct {

@@ -13,13 +13,13 @@ volumes:
       path: /root/.ssh/known_hosts
   - name: base_dir
     host:
-      path: /srv/server/hz-admin-base
+      path: /srv/server/hab
   - name: docker_sock
     host:
       path: /var/run/docker.sock
   - name: node_modules
     host:
-      path: /srv/server/hz-admin-base/web/node_modules
+      path: /srv/server/hab/web/node_modules
   - name: webDir
     host:
       path: /srv/www
@@ -30,13 +30,13 @@ steps:
     commands:
     - set -euo pipefail
     - apt-get update && apt-get install -y --no-install-recommends rsync ca-certificates && rm -rf /var/lib/apt/lists/*
-    - export BASE_DIR=/srv/server/hz-admin-base
+    - export BASE_DIR=/srv/server/hab
     - mkdir -p "$BASE_DIR/server"
 
     - cd ./server
     - go mod tidy
-    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o hz-admin-base
-    - rsync -av ./hz-admin-base "$BASE_DIR/server/hz-admin-base"
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o hab
+    - rsync -av ./hab "$BASE_DIR/server/hab"
     - rsync -av ./config.${DRONE_BRANCH}.yaml "$BASE_DIR/server/config.yaml"
 
     - cd ../
@@ -47,7 +47,7 @@ steps:
       - name: go-cache
         path: /root/.cache/go-build
       - name: base_dir
-        path: /srv/server/hz-admin-base
+        path: /srv/server/hab
     when:
       branch: [pre,prod]
 
@@ -73,11 +73,11 @@ steps:
   - name: deploy-service
     image: docker/compose:latest
     commands:
-      - cd /srv/server/hz-admin-base
+      - cd /srv/server/hab
       - docker-compose up -d --force-recreate
     volumes:
       - name: base_dir
-        path: /srv/server/hz-admin-base
+        path: /srv/server/hab
       - name: docker_sock
         path: /var/run/docker.sock
     when:

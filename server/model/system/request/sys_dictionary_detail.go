@@ -1,8 +1,8 @@
 package request
 
 import (
-	"hz-admin-base/model/common/request"
-	"hz-admin-base/model/system"
+	"hab/model/common/request"
+	"hab/model/system"
 )
 
 type SysDictionaryDetailSearch struct {

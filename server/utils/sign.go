@@ -27,7 +27,7 @@ func MakeOriginSign(params map[string]interface{}, secret string) string {
 		arr = append(arr, k+"="+newpParams[k])
 	}
 	s = strings.Join(arr, "&") + secret
-	//global.GVA_LOG.Info(s)
+	//global.HAB_LOG.Info(s)
 	return s
 }
 

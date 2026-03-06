@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"hz-admin-base/timedtask"
+	"hab/timedtask"
 )
 
 func Timer() {

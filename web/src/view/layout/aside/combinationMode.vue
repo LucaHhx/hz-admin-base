@@ -73,7 +73,7 @@ const appStore = useAppStore()
 const { device, config } = storeToRefs(appStore)
 
 defineOptions({
-  name: 'GvaAside'
+  name: 'HabAside'
 })
 
 defineProps({

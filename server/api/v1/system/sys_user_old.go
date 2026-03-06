@@ -4,15 +4,15 @@ import (
 	"strconv"
 	"time"
 
-	"hz-admin-base/code"
-	"hz-admin-base/global"
-	"hz-admin-base/model/common"
-	"hz-admin-base/model/common/request"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	systemReq "hz-admin-base/model/system/request"
-	systemRes "hz-admin-base/model/system/response"
-	"hz-admin-base/utils"
+	"hab/code"
+	"hab/global"
+	"hab/model/common"
+	"hab/model/common/request"
+	"hab/model/common/response"
+	"hab/model/system"
+	systemReq "hab/model/system/request"
+	systemRes "hab/model/system/response"
+	"hab/utils"
 
 	"encoding/base32"
 	"fmt"
@@ -82,7 +82,7 @@ import (
 //		}
 //	}
 //	if user.Enable != 1 {
-//		global.GVA_LOG.Error("Login failed! User is disabled!")
+//		global.HAB_LOG.Error("Login failed! User is disabled!")
 //		response.FailWithErr(code.ErrUserDisabled, c)
 //		return
 //	}
@@ -93,7 +93,7 @@ import (
 //		secret = secret[:32]
 //
 //		// 生成二维码内容
-//		issuer := global.GVA_CONFIG.AutoCode.Module
+//		issuer := global.HAB_CONFIG.AutoCode.Module
 //		qrCode := fmt.Sprintf("otpauth://totp/%s:%s?secret=%s&issuer=%s", issuer, user.Username, secret, issuer)
 //		response.FailWithErrData(code.ErrUnsafe, BindKeyInfo{
 //			PassKeyInfo: PassKeyInfo{
@@ -106,8 +106,8 @@ import (
 //					DisplayName string `json:"displayName"`
 //				}{
 //					Id:          strconv.Itoa(int(user.ID)),
-//					Name:        fmt.Sprintf("%s:%s-%s", user.Username, enum.AppKey, global.GVA_CONFIG.System.Environment),
-//					DisplayName: fmt.Sprintf("%s:%s-%s", user.NickName, enum.AppKey, global.GVA_CONFIG.System.Environment),
+//					Name:        fmt.Sprintf("%s:%s-%s", user.Username, enum.AppKey, global.HAB_CONFIG.System.Environment),
+//					DisplayName: fmt.Sprintf("%s:%s-%s", user.NickName, enum.AppKey, global.HAB_CONFIG.System.Environment),
 //				},
 //			},
 //			GoogleAuthInfo: GoogleAuthInfo{
@@ -145,7 +145,7 @@ import (
 //					}{
 //						Id:          strconv.Itoa(int(user.ID)),
 //						Name:        user.Username,
-//						DisplayName: fmt.Sprintf("%s:%s-%s", user.NickName, enum.AppKey, global.GVA_CONFIG.System.Environment),
+//						DisplayName: fmt.Sprintf("%s:%s-%s", user.NickName, enum.AppKey, global.HAB_CONFIG.System.Environment),
 //					},
 //				},
 //			}, c)
@@ -156,7 +156,7 @@ import (
 //				err = code.ErrPasskeyRequired
 //			} else {
 //				// 这里应该验证Passkey的签名等，但为了简化，我们暂时只检查用户是否已绑定
-//				global.GVA_LOG.Info("Passkey login attempt", zap.String("user", user.Username))
+//				global.HAB_LOG.Info("Passkey login attempt", zap.String("user", user.Username))
 //			}
 //		}
 //	default:
@@ -177,7 +177,7 @@ import (
 //		}
 //	}
 //	if err != nil {
-//		global.GVA_LOG.Error("Login failed!", zap.Error(err))
+//		global.HAB_LOG.Error("Login failed!", zap.Error(err))
 //		response.FailWithErr(err, c)
 //		return
 //	}
@@ -189,11 +189,11 @@ import (
 //func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 //	token, claims, err := utils.LoginToken(&user)
 //	if err != nil {
-//		global.GVA_LOG.Error("Failed to get token!", zap.Error(err))
+//		global.HAB_LOG.Error("Failed to get token!", zap.Error(err))
 //		response.FailWithMessage("Failed to get token", c)
 //		return
 //	}
-//	if !global.GVA_CONFIG.System.UseMultipoint {
+//	if !global.HAB_CONFIG.System.UseMultipoint {
 //		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 //		response.OkWithDetailed(systemRes.LoginResponse{
 //			User:      user,
@@ -205,7 +205,7 @@ import (
 //
 //	if jwtStr, err := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
 //		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-//			global.GVA_LOG.Error("Failed to set login status!", zap.Error(err))
+//			global.HAB_LOG.Error("Failed to set login status!", zap.Error(err))
 //			response.FailWithMessage("Failed to set login status", c)
 //			return
 //		}
@@ -216,7 +216,7 @@ import (
 //			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
 //		}, "Login successful", c)
 //	} else if err != nil {
-//		global.GVA_LOG.Error("Failed to set login status!", zap.Error(err))
+//		global.HAB_LOG.Error("Failed to set login status!", zap.Error(err))
 //		response.FailWithMessage("Failed to set login status", c)
 //	} else {
 //		var blackJWT system.JwtBlacklist
@@ -270,7 +270,7 @@ import (
 //	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities, Enable: r.Enable, Phone: r.Phone, Email: r.Email, Type: r.Type, Parameter: r.Parameter}
 //	userReturn, err := userService.Register(*user)
 //	if err != nil {
-//		global.GVA_LOG.Error("注册失败!", zap.Error(err))
+//		global.HAB_LOG.Error("注册失败!", zap.Error(err))
 //		response.FailWithErr(code.ErrUserExists, c)
 //		return
 //	}
@@ -298,10 +298,10 @@ import (
 //		return
 //	}
 //	uid := utils.GetUserID(c)
-//	u := &system.SysUser{GVA_MODEL: global.GVA_MODEL{ID: uid}, Password: req.Password}
+//	u := &system.SysUser{HAB_MODEL: global.HAB_MODEL{ID: uid}, Password: req.Password}
 //	_, err = userService.ChangePassword(u, req.NewPassword)
 //	if err != nil {
-//		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+//		global.HAB_LOG.Error("修改失败!", zap.Error(err))
 //		response.FailWithErr(code.ErrOldPasswordError, c)
 //		return
 //	}
@@ -332,7 +332,7 @@ import (
 //
 //	list, total, err := userService.GetUserInfoList(pageInfo, c)
 //	if err != nil {
-//		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+//		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 //		response.FailWithErr(code.ErrGetInfoFailed, c)
 //		return
 //	}
@@ -367,7 +367,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	userID := utils.GetUserID(c)
 	err = userService.SetUserAuthority(userID, sua.AuthorityId)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		global.HAB_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithErr(code.ErrSetInfoFailed, c)
 		return
 	}
@@ -375,7 +375,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	claims.AuthorityId = sua.AuthorityId
 	token, err := utils.NewJWT().CreateToken(*claims)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		global.HAB_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -404,7 +404,7 @@ func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 	authorityID := utils.GetUserAuthorityId(c)
 	err = userService.SetUserAuthorities(authorityID, sua.ID, sua.AuthorityIds)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		global.HAB_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage("修改失败", c)
 		return
 	}
@@ -439,7 +439,7 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 	}
 	err = userService.DeleteUser(reqId.ID)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("Deletion failed", c)
 		return
 	}
@@ -471,13 +471,13 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		authorityID := utils.GetUserAuthorityId(c)
 		err = userService.SetUserAuthorities(authorityID, user.ID, user.AuthorityIds)
 		if err != nil {
-			global.GVA_LOG.Error("设置失败!", zap.Error(err))
+			global.HAB_LOG.Error("设置失败!", zap.Error(err))
 			response.FailWithErr(code.ErrSetInfoFailed, c)
 			return
 		}
 	}
 	err = userService.SetUserInfo(system.SysUser{
-		GVA_MODEL: global.GVA_MODEL{
+		HAB_MODEL: global.HAB_MODEL{
 			ID: user.ID,
 		},
 		NickName:  user.NickName,
@@ -490,7 +490,7 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		Parameter: user.Parameter,
 	})
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		global.HAB_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithErr(code.ErrSetInfoFailed, c)
 		return
 	}
@@ -515,7 +515,7 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 	}
 	user.ID = utils.GetUserID(c)
 	err = userService.SetSelfInfo(system.SysUser{
-		GVA_MODEL: global.GVA_MODEL{
+		HAB_MODEL: global.HAB_MODEL{
 			ID: user.ID,
 		},
 		NickName:  user.NickName,
@@ -525,7 +525,7 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		Enable:    user.Enable,
 	})
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		global.HAB_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 		return
 	}
@@ -551,7 +551,7 @@ func (b *BaseApi) SetSelfSetting(c *gin.Context) {
 
 	err = userService.SetSelfSetting(req, utils.GetUserID(c))
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		global.HAB_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 		return
 	}
@@ -570,7 +570,7 @@ func (b *BaseApi) SetSelfSetting(c *gin.Context) {
 //	uuid := utils.GetUserUuid(c)
 //	ReqUser, err := userService.GetUserInfo(uuid)
 //	if err != nil {
-//		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+//		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 //		response.FailWithErr(code.ErrGetInfoFailed, c)
 //		return
 //	}
@@ -594,7 +594,7 @@ func (b *BaseApi) ResetPassword(c *gin.Context) {
 	}
 	err = userService.ResetPassword(user.ID)
 	if err != nil {
-		global.GVA_LOG.Error("重置失败!", zap.Error(err))
+		global.HAB_LOG.Error("重置失败!", zap.Error(err))
 		response.FailWithErr(code.ErrResetPasswordFailed, c)
 		return
 	}
@@ -613,7 +613,7 @@ func (b *BaseApi) GetGoogleAuthQR(c *gin.Context) {
 	userID := utils.GetUserID(c)
 	user, err := userService.GetUserByID(userID)
 	if err != nil {
-		global.GVA_LOG.Error("获取用户信息失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取用户信息失败!", zap.Error(err))
 		response.FailWithMessage("获取用户信息失败", c)
 		return
 	}
@@ -623,7 +623,7 @@ func (b *BaseApi) GetGoogleAuthQR(c *gin.Context) {
 	secret = secret[:32]
 
 	// 生成二维码内容
-	issuer := global.GVA_CONFIG.AutoCode.Module
+	issuer := global.HAB_CONFIG.AutoCode.Module
 	qrCode := fmt.Sprintf("otpauth://totp/%s:%s?secret=%s&issuer=%s", issuer, user.Username, secret, issuer)
 
 	response.OkWithDetailed(systemRes.GoogleAuthResponse{
@@ -659,7 +659,7 @@ func (b *BaseApi) GetGoogleAuthQR(c *gin.Context) {
 //	userID := utils.GetUserID(c)
 //	err = userService.BindGoogleAuth(userID, req.SecretKey)
 //	if err != nil {
-//		global.GVA_LOG.Error("绑定失败!", zap.Error(err))
+//		global.HAB_LOG.Error("绑定失败!", zap.Error(err))
 //		response.FailWithErr(code.ErrBindGoogleAuthFailed, c)
 //		return
 //	}
@@ -678,7 +678,7 @@ func (b *BaseApi) ResetGoogleAuth(c *gin.Context) {
 	userID := utils.GetUserID(c)
 	err := userService.ResetGoogleAuth(userID)
 	if err != nil {
-		global.GVA_LOG.Error("重置失败!", zap.Error(err))
+		global.HAB_LOG.Error("重置失败!", zap.Error(err))
 		response.FailWithErr(code.ErrResetGoogleAuthFailed, c)
 		return
 	}
@@ -706,7 +706,7 @@ func (b *BaseApi) ResetGoogleAuth(c *gin.Context) {
 //	userID := utils.GetUserID(c)
 //	err = userService.BindPasskey(userID, req.PasskeyData)
 //	if err != nil {
-//		global.GVA_LOG.Error("绑定失败!", zap.Error(err))
+//		global.HAB_LOG.Error("绑定失败!", zap.Error(err))
 //		response.FailWithErr(code.ErrBindGoogleAuthFailed, c)
 //		return
 //	}
@@ -737,7 +737,7 @@ func (b *BaseApi) UnbindSecurity(c *gin.Context) {
 
 	err = userService.UnbindSecurity(uint(reqId.ID))
 	if err != nil {
-		global.GVA_LOG.Error("解绑失败!", zap.Error(err))
+		global.HAB_LOG.Error("解绑失败!", zap.Error(err))
 		response.FailWithMessage("解绑失败", c)
 		return
 	}
@@ -784,7 +784,7 @@ func (b *BaseApi) UnbindSecurity(c *gin.Context) {
 //	// 绑定谷歌验证器
 //	err = userService.BindGoogleAuth(user.ID, req.SecretKey)
 //	if err != nil {
-//		global.GVA_LOG.Error("绑定失败!", zap.Error(err))
+//		global.HAB_LOG.Error("绑定失败!", zap.Error(err))
 //		response.FailWithErr(code.ErrBindGoogleAuthFailed, c)
 //		return
 //	}
@@ -825,7 +825,7 @@ func (b *BaseApi) UnbindSecurity(c *gin.Context) {
 //	// 绑定Passkey
 //	err = userService.BindPasskey(user.ID, req.PasskeyData)
 //	if err != nil {
-//		global.GVA_LOG.Error("绑定失败!", zap.Error(err))
+//		global.HAB_LOG.Error("绑定失败!", zap.Error(err))
 //		response.FailWithErr(code.ErrBindGoogleAuthFailed, c)
 //		return
 //	}

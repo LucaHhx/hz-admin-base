@@ -6,15 +6,8 @@
     />
     <div
       v-if="!isAdd"
-      class="gva-search-box"
+      class="hab-search-box"
     >
-      <!-- <div class="text-lg mb-2 text-gray-600">
-        {{ $t('autoCode.aiCreate') }}<a
-          class="text-blue-600 text-sm ml-4"
-          href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
-          target="_blank"
-        >{{ $t('autoCode.getAiPath') }}</a>
-      </div> -->
       <!-- <div class="relative">
         <el-input
           v-model="prompt"
@@ -40,7 +33,7 @@
               @click="eyeFunc()"
             >
               <el-icon size="18">
-                <ai-gva />
+                <ai-hab />
               </el-icon>
               {{ $t('autoCode.recognize') }}
             </el-button>
@@ -60,7 +53,7 @@
               @click="llmAutoFunc()"
             >
               <el-icon size="18">
-                <ai-gva />
+                <ai-hab />
               </el-icon>
               {{ $t('autoCode.generate') }}
             </el-button>
@@ -71,7 +64,7 @@
     <!-- 从数据库直接获取字段 -->
     <div
       v-if="!isAdd"
-      class="gva-search-box"
+      class="hab-search-box"
     >
       <div class="text-lg mb-2 text-gray-600">
         {{ $t('autoCode.fromDb') }}
@@ -185,7 +178,7 @@
         </el-row>
       </el-form>
     </div>
-    <div class="gva-search-box">
+    <div class="hab-search-box">
       <!-- 初始版本自动化代码工具 -->
       <div class="text-lg mb-2 text-gray-600">
         {{ $t('autoCode.autoStruct') }}
@@ -216,7 +209,7 @@
                   @click="llmAutoFunc(true)"
                 >
                   <el-icon size="18">
-                    <ai-gva />
+                    <ai-hab />
                   </el-icon>
                   {{ $t('autoCode.generate') }}
                 </el-button>
@@ -369,7 +362,7 @@
         </el-row>
       </el-form>
     </div>
-    <div class="gva-search-box">
+    <div class="hab-search-box">
       <el-collapse class="no-border-collapse">
         <el-collapse-item>
           <template #title>
@@ -391,14 +384,14 @@
               <el-row :gutter="20">
                 <el-col :span="3">
                   <el-tooltip
-                    :content="$t('autoCode.gvaModelTip')"
+                    :content="$t('autoCode.habModelTip')"
                     placement="top"
                     effect="light"
                   >
-                    <el-form-item :label="$t('autoCode.index.useGVAStructure')">
+                    <el-form-item :label="$t('autoCode.index.useDefaultStructure')">
                       <el-checkbox
-                        v-model="form.gvaModel"
-                        @change="useGva"
+                        v-model="form.habModel"
+                        @change="useHab"
                       />
                     </el-form-item>
                   </el-tooltip>
@@ -562,8 +555,8 @@
       </el-collapse>
     </div>
     <!-- 组件列表 -->
-    <div class="gva-table-box">
-      <div class="gva-btn-list">
+    <div class="hab-table-box">
+      <div class="hab-btn-list">
         <el-button
           type="primary"
           :disabled="form.onlyTemplate"
@@ -877,7 +870,7 @@
         </el-table>
       </div>
       <!-- 组件列表 -->
-      <div class="gva-btn-list justify-end mt-4">
+      <div class="hab-btn-list justify-end mt-4">
         <el-button
           type="primary"
           :disabled="isAdd"
@@ -1382,7 +1375,7 @@ const form = ref({
   autoCreateMenuToSql: true,
   autoCreateBtnAuth: true,
   autoMigrate: true,
-  gvaModel: true,
+  habModel: true,
   autoCreateResource: true,
   onlyTemplate: false,
   isTree: false,
@@ -1415,10 +1408,10 @@ const bk = ref({})
 const dialogFlag = ref(false)
 const previewFlag = ref(false)
 
-const useGva = (e) => {
+const useHab = (e) => {
   if (e && form.value.fields.length) {
     ElMessageBox.confirm(
-      '如果您开启GVA默认结构，会自动添加ID,CreatedAt,UpdatedAt,DeletedAt字段，此行为将自动清除您目前在下方创建的重名字段，是否继续？',
+      '如果您开启默认结构，会自动添加ID,CreatedAt,UpdatedAt,DeletedAt字段，此行为将自动清除您目前在下方创建的重名字段，是否继续？',
       '注意',
       {
         confirmButtonText: '继续',
@@ -1433,7 +1426,7 @@ const useGva = (e) => {
         )
       })
       .catch(() => {
-        form.value.gvaModel = false
+        form.value.habModel = false
       })
   }
 }
@@ -1526,7 +1519,7 @@ const enterForm = async(isPreview) => {
     }
 
     if (
-      !form.value.gvaModel &&
+      !form.value.habModel &&
         form.value.fields.every((item) => !item.primaryKey)
     ) {
       ElMessage({
@@ -1672,7 +1665,7 @@ const getColumnFunc = async() => {
       const dbraw = toRaw(dbtmp)
       dbtype = dbraw.dbtype
     }
-    form.value.gvaModel = true
+    form.value.habModel = true
     const tbHump = toHump(dbform.value.tableName)
     form.value.structName = toUpperCase(tbHump)
     form.value.businessDB = dbform.value.businessDB
@@ -1732,7 +1725,7 @@ const getColumnFunc = async() => {
 const needAppend = (item) => {
   let isAppend = true
   if (
-    form.value.gvaModel &&
+    form.value.habModel &&
       gormModelList.some((gormfd) => gormfd === item.columnName)
   ) {
     isAppend = false
@@ -1829,7 +1822,7 @@ const clearCatch = async() => {
     autoCreateMenuToSql: true,
     autoCreateBtnAuth: false,
     autoMigrate: true,
-    gvaModel: true,
+    habModel: true,
     autoCreateResource: false,
     onlyTemplate: false,
     isTree: false,

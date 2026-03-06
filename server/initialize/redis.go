@@ -3,8 +3,8 @@ package initialize
 import (
 	"context"
 
-	"hz-admin-base/config"
-	"hz-admin-base/global"
+	"hab/config"
+	"hab/global"
 
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
@@ -28,26 +28,26 @@ func initRedisClient(redisCfg config.Redis) (redis.UniversalClient, error) {
 	}
 	pong, err := client.Ping(context.Background()).Result()
 	if err != nil {
-		global.GVA_LOG.Error("redis connect ping failed, err:", zap.String("name", redisCfg.Name), zap.Error(err))
+		global.HAB_LOG.Error("redis connect ping failed, err:", zap.String("name", redisCfg.Name), zap.Error(err))
 		return nil, err
 	}
 
-	global.GVA_LOG.Info("redis connect ping response:", zap.String("name", redisCfg.Name), zap.String("pong", pong))
+	global.HAB_LOG.Info("redis connect ping response:", zap.String("name", redisCfg.Name), zap.String("pong", pong))
 	return client, nil
 }
 
 func Redis() {
-	redisClient, err := initRedisClient(global.GVA_CONFIG.Redis)
+	redisClient, err := initRedisClient(global.HAB_CONFIG.Redis)
 	if err != nil {
 		panic(err)
 	}
-	global.GVA_REDIS = redisClient
+	global.HAB_REDIS = redisClient
 }
 
 func RedisList() {
 	redisMap := make(map[string]redis.UniversalClient)
 
-	for _, redisCfg := range global.GVA_CONFIG.RedisList {
+	for _, redisCfg := range global.HAB_CONFIG.RedisList {
 		client, err := initRedisClient(redisCfg)
 		if err != nil {
 			panic(err)
@@ -55,5 +55,5 @@ func RedisList() {
 		redisMap[redisCfg.Name] = client
 	}
 
-	global.GVA_REDISList = redisMap
+	global.HAB_REDISList = redisMap
 }

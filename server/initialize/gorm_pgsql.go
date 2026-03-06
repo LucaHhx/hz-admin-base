@@ -1,9 +1,9 @@
 package initialize
 
 import (
-	"hz-admin-base/config"
-	"hz-admin-base/global"
-	"hz-admin-base/initialize/internal"
+	"hab/config"
+	"hab/global"
+	"hab/initialize/internal"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -13,7 +13,7 @@ import (
 // Author [piexlmax](https://github.com/piexlmax)
 // Author [SliverHorn](https://github.com/SliverHorn)
 func GormPgSql() *gorm.DB {
-	p := global.GVA_CONFIG.Pgsql
+	p := global.HAB_CONFIG.Pgsql
 	if p.Dbname == "" {
 		return nil
 	}

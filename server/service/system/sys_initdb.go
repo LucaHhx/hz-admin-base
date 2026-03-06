@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"hz-admin-base/global"
-	"hz-admin-base/model/system/request"
+	"hab/global"
+	"hab/model/system/request"
 	"sort"
 
 	"gorm.io/gorm"
@@ -122,7 +122,7 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) (err error) {
 	}
 
 	db := ctx.Value("db").(*gorm.DB)
-	global.GVA_DB = db
+	global.HAB_DB = db
 
 	if err = initHandler.InitTables(ctx, initializers); err != nil {
 		return err

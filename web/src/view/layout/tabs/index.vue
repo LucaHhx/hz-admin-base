@@ -3,7 +3,7 @@
     @date: 2024/5/7
 !-->
 <template>
-  <div class="gva-tabs">
+  <div class="hab-tabs">
     <el-tabs
       v-model="activeValue"
       :closable="!(historys.length === 1 && $route.name === defaultRouter)"
@@ -399,7 +399,7 @@ const middleCloseTab = (e) => {
 
   $base-tag-item-height: 4rem;
 
-  .gva-tabs {
+  .hab-tabs {
     ::v-deep(.el-tabs--card > .el-tabs__header) {
       border: none;
     }

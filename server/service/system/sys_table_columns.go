@@ -1,9 +1,9 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/system"
-	systemReq "hz-admin-base/model/system/request"
+	"hab/global"
+	"hab/model/system"
+	systemReq "hab/model/system/request"
 
 	"gorm.io/gorm"
 )
@@ -13,14 +13,14 @@ type SysTableColumnsService struct{}
 // CreateSysTableColumns 创建表字段配置记录
 // Author [yourname](https://github.com/yourname)
 func (sysTableColumnsService *SysTableColumnsService) CreateSysTableColumns(sysTableColumns *system.SysTableColumns) (err error) {
-	err = global.GVA_DB.Create(sysTableColumns).Error
+	err = global.HAB_DB.Create(sysTableColumns).Error
 	return err
 }
 
 // ImportSysTableColumns 导入表字段配置记录
 // Author [yourname](https://github.com/yourname)
 func (sysTableColumnsService *SysTableColumnsService) ImportSysTableColumns(sysTableColumnsList []system.SysTableColumns) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	return global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		// 截断表（清空表并重置自增ID）
 		if err := tx.Exec("TRUNCATE TABLE sys_table_columns").Error; err != nil {
 			return err
@@ -36,7 +36,7 @@ func (sysTableColumnsService *SysTableColumnsService) ImportSysTableColumns(sysT
 // DeleteSysTableColumns 删除表字段配置记录
 // Author [yourname](https://github.com/yourname)
 func (sysTableColumnsService *SysTableColumnsService) DeleteSysTableColumns(ID string, userID uint) (err error) {
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	err = global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&system.SysTableColumns{}).Where("id = ?", ID).Update("deleted_by", userID).Error; err != nil {
 			return err
 		}
@@ -51,7 +51,7 @@ func (sysTableColumnsService *SysTableColumnsService) DeleteSysTableColumns(ID s
 // DeleteSysTableColumnsByIds 批量删除表字段配置记录
 // Author [yourname](https://github.com/yourname)
 func (sysTableColumnsService *SysTableColumnsService) DeleteSysTableColumnsByIds(IDs []string, deleted_by uint) (err error) {
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	err = global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&system.SysTableColumns{}).Where("id in ?", IDs).Update("deleted_by", deleted_by).Error; err != nil {
 			return err
 		}
@@ -66,14 +66,14 @@ func (sysTableColumnsService *SysTableColumnsService) DeleteSysTableColumnsByIds
 // UpdateSysTableColumns 更新表字段配置记录
 // Author [yourname](https://github.com/yourname)
 func (sysTableColumnsService *SysTableColumnsService) UpdateSysTableColumns(sysTableColumns system.SysTableColumns) (err error) {
-	err = global.GVA_DB.Model(&system.SysTableColumns{}).Where("id = ?", sysTableColumns.ID).Updates(&sysTableColumns).Error
+	err = global.HAB_DB.Model(&system.SysTableColumns{}).Where("id = ?", sysTableColumns.ID).Updates(&sysTableColumns).Error
 	return err
 }
 
 // GetSysTableColumns 根据ID获取表字段配置记录
 // Author [yourname](https://github.com/yourname)
 func (sysTableColumnsService *SysTableColumnsService) GetSysTableColumns(ID string) (sysTableColumns system.SysTableColumns, err error) {
-	err = global.GVA_DB.Where("id = ?", ID).First(&sysTableColumns).Error
+	err = global.HAB_DB.Where("id = ?", ID).First(&sysTableColumns).Error
 	return
 }
 
@@ -83,7 +83,7 @@ func (sysTableColumnsService *SysTableColumnsService) GetSysTableColumnsInfoList
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// Create db
-	db := global.GVA_DB.Model(&system.SysTableColumns{})
+	db := global.HAB_DB.Model(&system.SysTableColumns{})
 	var sysTableColumnss []system.SysTableColumns
 	// If there is a condition search, the search statement will be automatically created below
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
@@ -157,6 +157,6 @@ func (sysTableColumnsService *SysTableColumnsService) GetSysTableColumnsPublic()
 }
 
 func (sysTableColumnsService *SysTableColumnsService) GetStructNameColumns(structName string) (columns []system.SysTableColumns, err error) {
-	err = global.GVA_DB.Where("struct_name = ?", structName).Preload("SysDataFilter").Find(&columns).Error
+	err = global.HAB_DB.Where("struct_name = ?", structName).Preload("SysDataFilter").Find(&columns).Error
 	return
 }

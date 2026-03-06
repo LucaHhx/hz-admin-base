@@ -3,11 +3,11 @@ package ast
 import (
 	"bytes"
 	"fmt"
-	"hz-admin-base/global"
 	"go/ast"
 	"go/parser"
 	"go/printer"
 	"go/token"
+	"hab/global"
 	"os"
 	"path/filepath"
 )
@@ -22,7 +22,7 @@ func RollGormBack(pk, model string) {
 	// 首先分析存在多少个ttt作为调用方的node块
 	// 如果多个 仅仅删除对应块即可
 	// 如果单个 那么还需要剔除import
-	path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go")
+	path := filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go")
 	src, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
@@ -70,7 +70,7 @@ func RollGormBack(pk, model string) {
 			if gen, ok := node.(*ast.GenDecl); ok {
 				for i := range gen.Specs {
 					if imspec, ok := gen.Specs[i].(*ast.ImportSpec); ok {
-						if imspec.Path.Value == "\"hz-admin-base/model/"+pk+"\"" {
+						if imspec.Path.Value == "\"hab/model/"+pk+"\"" {
 							gp = gen
 							imI = i
 							return false
@@ -99,7 +99,7 @@ func RollRouterBack(pk, model string) {
 	// 首先抓到所有的代码块结构 {}
 	// 分析结构中是否存在一个变量叫做 pk+Router
 	// 然后获取到代码块指针 对内部需要回滚的代码进行剔除
-	path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go")
+	path := filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "router_biz.go")
 	src, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)

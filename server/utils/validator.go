@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"hz-admin-base/enum"
+	"hab/enum"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

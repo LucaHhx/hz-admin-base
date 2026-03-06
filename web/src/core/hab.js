@@ -1,5 +1,5 @@
 /*
- * gin-vue-admin web框架组
+ * HAB web 框架初始化
  *
  * */
 // 加载网站配置文件夹

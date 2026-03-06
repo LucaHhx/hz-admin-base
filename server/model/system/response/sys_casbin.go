@@ -1,7 +1,7 @@
 package response
 
 import (
-	"hz-admin-base/model/system/request"
+	"hab/model/system/request"
 )
 
 type PolicyPathResponse struct {

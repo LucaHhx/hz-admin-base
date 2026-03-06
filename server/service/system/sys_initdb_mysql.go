@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"hz-admin-base/config"
+	"hab/config"
 
 	"github.com/gookit/color"
 
-	"hz-admin-base/utils"
+	"hab/utils"
 
-	"hz-admin-base/global"
-	"hz-admin-base/model/system/request"
+	"hab/global"
+	"hab/model/system/request"
 
 	"github.com/google/uuid"
 	"gorm.io/driver/mysql"
@@ -32,15 +32,15 @@ func (h MysqlInitHandler) WriteConfig(ctx context.Context) error {
 	if !ok {
 		return errors.New("mysql config invalid")
 	}
-	global.GVA_CONFIG.System.DbType = "mysql"
-	global.GVA_CONFIG.Mysql = c
-	global.GVA_CONFIG.JWT.SigningKey = uuid.New().String()
-	cs := utils.StructToMap(global.GVA_CONFIG)
+	global.HAB_CONFIG.System.DbType = "mysql"
+	global.HAB_CONFIG.Mysql = c
+	global.HAB_CONFIG.JWT.SigningKey = uuid.New().String()
+	cs := utils.StructToMap(global.HAB_CONFIG)
 	for k, v := range cs {
-		global.GVA_VP.Set(k, v)
+		global.HAB_VP.Set(k, v)
 	}
-	global.GVA_ACTIVE_DBNAME = &c.Dbname
-	return global.GVA_VP.WriteConfig()
+	global.HAB_ACTIVE_DBNAME = &c.Dbname
+	return global.HAB_VP.WriteConfig()
 }
 
 // EnsureDB 创建数据库并初始化 mysql
@@ -69,7 +69,7 @@ func (h MysqlInitHandler) EnsureDB(ctx context.Context, conf *request.InitDB) (n
 	}), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}); err != nil {
 		return ctx, err
 	}
-	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")
+	global.HAB_CONFIG.AutoCode.Root, _ = filepath.Abs("..")
 	next = context.WithValue(next, "db", db)
 	return next, err
 }

@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 	"testing"
 )
@@ -27,8 +27,8 @@ func TestPackageInitializeRouter_Injection(t *testing.T) {
 			name: "测试 InitCustomerRouter 注入",
 			fields: fields{
 				Type:            TypePackageInitializeRouter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
-				ImportPath:      `"hz-admin-base/router"`,
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
+				ImportPath:      `"hab/router"`,
 				AppName:         "RouterGroupApp",
 				GroupName:       "Example",
 				ModuleName:      "exampleRouter",
@@ -42,8 +42,8 @@ func TestPackageInitializeRouter_Injection(t *testing.T) {
 			name: "测试 InitFileUploadAndDownloadRouter 注入",
 			fields: fields{
 				Type:            TypePackageInitializeRouter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
-				ImportPath:      `"hz-admin-base/router"`,
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
+				ImportPath:      `"hab/router"`,
 				AppName:         "RouterGroupApp",
 				GroupName:       "Example",
 				ModuleName:      "exampleRouter",
@@ -104,8 +104,8 @@ func TestPackageInitializeRouter_Rollback(t *testing.T) {
 			name: "测试 InitCustomerRouter 回滚",
 			fields: fields{
 				Type:            TypePackageInitializeRouter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
-				ImportPath:      `"hz-admin-base/router"`,
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
+				ImportPath:      `"hab/router"`,
 				AppName:         "RouterGroupApp",
 				GroupName:       "Example",
 				ModuleName:      "exampleRouter",
@@ -119,8 +119,8 @@ func TestPackageInitializeRouter_Rollback(t *testing.T) {
 			name: "测试 InitFileUploadAndDownloadRouter 回滚",
 			fields: fields{
 				Type:            TypePackageInitializeRouter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
-				ImportPath:      `"hz-admin-base/router"`,
+				Path:            filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
+				ImportPath:      `"hab/router"`,
 				AppName:         "RouterGroupApp",
 				GroupName:       "Example",
 				ModuleName:      "exampleRouter",

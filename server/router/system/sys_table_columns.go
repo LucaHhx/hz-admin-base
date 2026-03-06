@@ -1,7 +1,7 @@
 package system
 
 import (
-	"hz-admin-base/middleware"
+	"hab/middleware"
 
 	"github.com/gin-gonic/gin"
 )

@@ -3,10 +3,10 @@ package system
 import (
 	"context"
 	"errors"
-	"hz-admin-base/config"
-	"hz-admin-base/global"
-	"hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
+	"hab/config"
+	"hab/global"
+	"hab/model/system/request"
+	"hab/utils"
 	"path/filepath"
 
 	"github.com/google/uuid"
@@ -27,15 +27,15 @@ func (h MssqlInitHandler) WriteConfig(ctx context.Context) error {
 	if !ok {
 		return errors.New("mssql config invalid")
 	}
-	global.GVA_CONFIG.System.DbType = "mssql"
-	global.GVA_CONFIG.Mssql = c
-	global.GVA_CONFIG.JWT.SigningKey = uuid.New().String()
-	cs := utils.StructToMap(global.GVA_CONFIG)
+	global.HAB_CONFIG.System.DbType = "mssql"
+	global.HAB_CONFIG.Mssql = c
+	global.HAB_CONFIG.JWT.SigningKey = uuid.New().String()
+	cs := utils.StructToMap(global.HAB_CONFIG)
 	for k, v := range cs {
-		global.GVA_VP.Set(k, v)
+		global.HAB_VP.Set(k, v)
 	}
-	global.GVA_ACTIVE_DBNAME = &c.Dbname
-	return global.GVA_VP.WriteConfig()
+	global.HAB_ACTIVE_DBNAME = &c.Dbname
+	return global.HAB_VP.WriteConfig()
 }
 
 // EnsureDB 创建数据库并初始化 mssql
@@ -63,7 +63,7 @@ func (h MssqlInitHandler) EnsureDB(ctx context.Context, conf *request.InitDB) (n
 		return nil, err
 	}
 
-	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")
+	global.HAB_CONFIG.AutoCode.Root, _ = filepath.Abs("..")
 	next = context.WithValue(next, "db", db)
 	return next, err
 }

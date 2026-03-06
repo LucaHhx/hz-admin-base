@@ -2,8 +2,8 @@ package internal
 
 import (
 	"fmt"
-	"hz-admin-base/config"
-	"hz-admin-base/global"
+	"hab/config"
+	"hab/global"
 
 	"gorm.io/gorm/logger"
 )
@@ -27,15 +27,15 @@ func (c *Writer) Printf(message string, data ...any) {
 	if c.config.LogZap {
 		switch c.config.LogLevel() {
 		case logger.Silent:
-			global.GVA_LOG.Debug(fmt.Sprintf(message, data...))
+			global.HAB_LOG.Debug(fmt.Sprintf(message, data...))
 		case logger.Error:
-			global.GVA_LOG.Error(fmt.Sprintf(message, data...))
+			global.HAB_LOG.Error(fmt.Sprintf(message, data...))
 		case logger.Warn:
-			global.GVA_LOG.Warn(fmt.Sprintf(message, data...))
+			global.HAB_LOG.Warn(fmt.Sprintf(message, data...))
 		case logger.Info:
-			global.GVA_LOG.Info(fmt.Sprintf(message, data...))
+			global.HAB_LOG.Info(fmt.Sprintf(message, data...))
 		default:
-			global.GVA_LOG.Info(fmt.Sprintf(message, data...))
+			global.HAB_LOG.Info(fmt.Sprintf(message, data...))
 		}
 		return
 	}

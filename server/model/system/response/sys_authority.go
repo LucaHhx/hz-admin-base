@@ -1,6 +1,6 @@
 package response
 
-import "hz-admin-base/model/system"
+import "hab/model/system"
 
 type SysAuthorityResponse struct {
 	Authority system.SysAuthority `json:"authority"`

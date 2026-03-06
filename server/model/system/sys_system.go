@@ -1,7 +1,7 @@
 package system
 
 import (
-	"hz-admin-base/config"
+	"hab/config"
 )
 
 // 配置文件结构体

@@ -93,7 +93,7 @@ func RandomIntString(n int) string {
 //		startLong = startLong + i
 //		for i := 0; i < 10; i++ {
 //			nowkey := begin + RandomString(startLong)
-//			result, err := global.GVA_REDIS.SetNX(context.Background(), fmt.Sprintf("%s:{%s}:%s", enum.NxUid, key, nowkey), 1, 24*time.Hour).Result()
+//			result, err := global.HAB_REDIS.SetNX(context.Background(), fmt.Sprintf("%s:{%s}:%s", enum.NxUid, key, nowkey), 1, 24*time.Hour).Result()
 //			if err != nil || !result {
 //				continue
 //			}

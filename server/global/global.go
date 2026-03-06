@@ -3,7 +3,7 @@ package global
 import (
 	"sync"
 
-	"hz-admin-base/utils/timer"
+	"hab/utils/timer"
 
 	"github.com/bytedance/sonic"
 	"github.com/gin-gonic/gin"
@@ -15,7 +15,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"hz-admin-base/config"
+	"hab/config"
 
 	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
@@ -23,20 +23,20 @@ import (
 )
 
 var (
-	GVA_DB        *gorm.DB
-	GVA_DBList    map[string]*gorm.DB
+	HAB_DB        *gorm.DB
+	HAB_DBList    map[string]*gorm.DB
 	NoLogDB       *gorm.DB
-	GVA_REDIS     redis.UniversalClient
-	GVA_REDISList map[string]redis.UniversalClient
-	GVA_MONGO     *qmgo.QmgoClient
-	GVA_CONFIG    config.Server
-	GVA_VP        *viper.Viper
-	// GVA_LOG    *oplogging.Logger
-	GVA_LOG                 *zap.Logger
-	GVA_Timer               timer.Timer = timer.NewTimerTask()
-	GVA_Concurrency_Control             = &singleflight.Group{}
-	GVA_ROUTERS             gin.RoutesInfo
-	GVA_ACTIVE_DBNAME       *string
+	HAB_REDIS     redis.UniversalClient
+	HAB_REDISList map[string]redis.UniversalClient
+	HAB_MONGO     *qmgo.QmgoClient
+	HAB_CONFIG    config.Server
+	HAB_VP        *viper.Viper
+	// HAB_LOG    *oplogging.Logger
+	HAB_LOG                 *zap.Logger
+	HAB_Timer               timer.Timer = timer.NewTimerTask()
+	HAB_Concurrency_Control             = &singleflight.Group{}
+	HAB_ROUTERS             gin.RoutesInfo
+	HAB_ACTIVE_DBNAME       *string
 	BlackCache              local_cache.Cache
 	lock                    sync.RWMutex
 	Json                    = sonic.ConfigFastest
@@ -46,14 +46,14 @@ var (
 func GetGlobalDBByDBName(dbname string) *gorm.DB {
 	lock.RLock()
 	defer lock.RUnlock()
-	return GVA_DBList[dbname]
+	return HAB_DBList[dbname]
 }
 
 // MustGetGlobalDBByDBName 通过名称获取db 如果不存在则panic
 func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
 	lock.RLock()
 	defer lock.RUnlock()
-	db, ok := GVA_DBList[dbname]
+	db, ok := HAB_DBList[dbname]
 	if !ok || db == nil {
 		panic("db no init")
 	}
@@ -61,5 +61,5 @@ func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
 }
 
 func SkipLog(skip int) *zap.Logger {
-	return GVA_LOG.WithOptions(zap.AddCallerSkip(skip))
+	return HAB_LOG.WithOptions(zap.AddCallerSkip(skip))
 }

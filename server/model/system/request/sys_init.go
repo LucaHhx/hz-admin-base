@@ -2,7 +2,7 @@ package request
 
 import (
 	"fmt"
-	"hz-admin-base/config"
+	"hab/config"
 	"os"
 )
 

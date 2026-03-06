@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	"hz-admin-base/config"
-	"hz-admin-base/global"
+	"hab/config"
+	"hab/global"
 
 	"gorm.io/gorm"
 )
@@ -11,7 +11,7 @@ const sys = "system"
 
 func DBList() {
 	dbMap := make(map[string]*gorm.DB)
-	for _, info := range global.GVA_CONFIG.DBList {
+	for _, info := range global.HAB_CONFIG.DBList {
 		if info.Disable {
 			continue
 		}
@@ -31,7 +31,7 @@ func DBList() {
 	// 做特殊判断,是否有迁移
 	// 适配低版本迁移多数据库版本
 	if sysDB, ok := dbMap[sys]; ok {
-		global.GVA_DB = sysDB
+		global.HAB_DB = sysDB
 	}
-	global.GVA_DBList = dbMap
+	global.HAB_DBList = dbMap
 }

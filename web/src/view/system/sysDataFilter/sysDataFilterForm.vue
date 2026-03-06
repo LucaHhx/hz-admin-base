@@ -3,7 +3,7 @@
     v-model="visible" :title="$t('common.' + formType)" width="50%" :close-on-click-modal="false"
     :close-on-press-escape="false" @close="handleClose"
   >
-    <div class="gva-form-box">
+    <div class="hab-form-box">
       <el-form ref="formRef" :model="form" label-position="right" :rules="rules" label-width="auto">
         <el-container>
           <el-aside width="50%">

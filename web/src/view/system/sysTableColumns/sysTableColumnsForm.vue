@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="gva-form-box">
+    <div class="hab-form-box">
       <el-form
         ref="elFormRef"
         :model="formData"

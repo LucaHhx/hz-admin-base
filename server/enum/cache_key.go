@@ -4,6 +4,6 @@ import "fmt"
 
 const Head_RepeatCount = "rabbit-count"
 
-const AppKey = "hz-admin-base"
+const AppKey = "hab"
 
 var CacheKey = fmt.Sprintf("{%s}", AppKey)

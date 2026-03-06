@@ -2,9 +2,9 @@ package initialize
 
 import (
 	//"github.com/dzwvip/oracle"
-	"hz-admin-base/config"
-	"hz-admin-base/global"
-	"hz-admin-base/initialize/internal"
+	"hab/config"
+	"hab/global"
+	"hab/initialize/internal"
 
 	//_ "github.com/godror/godror"
 	"gorm.io/driver/mysql"
@@ -14,7 +14,7 @@ import (
 // GormOracle 初始化oracle数据库
 // 如果需要Oracle库 放开import里的注释 把下方 mysql.Config 改为 oracle.Config ;  mysql.New 改为 oracle.New
 func GormOracle() *gorm.DB {
-	m := global.GVA_CONFIG.Oracle
+	m := global.HAB_CONFIG.Oracle
 	if m.Dbname == "" {
 		return nil
 	}

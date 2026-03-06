@@ -1,11 +1,11 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	"hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	"hab/model/system/request"
+	"hab/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -31,7 +31,7 @@ func (s *DictionaryDetailApi) CreateSysDictionaryDetail(c *gin.Context) {
 	}
 	err = dictionaryDetailService.CreateSysDictionaryDetail(detail)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("Creation failed", c)
 		return
 	}
@@ -56,7 +56,7 @@ func (s *DictionaryDetailApi) DeleteSysDictionaryDetail(c *gin.Context) {
 	}
 	err = dictionaryDetailService.DeleteSysDictionaryDetail(detail)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("Deletion failed", c)
 		return
 	}
@@ -81,7 +81,7 @@ func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c *gin.Context) {
 	}
 	err = dictionaryDetailService.UpdateSysDictionaryDetail(&detail)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.HAB_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("Update failed", c)
 		return
 	}
@@ -111,7 +111,7 @@ func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {
 	}
 	reSysDictionaryDetail, err := dictionaryDetailService.GetSysDictionaryDetail(detail.ID)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.HAB_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -136,7 +136,7 @@ func (s *DictionaryDetailApi) GetSysDictionaryDetailList(c *gin.Context) {
 	}
 	list, total, err := dictionaryDetailService.GetSysDictionaryDetailInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}

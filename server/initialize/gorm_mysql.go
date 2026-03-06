@@ -1,9 +1,9 @@
 package initialize
 
 import (
-	"hz-admin-base/config"
-	"hz-admin-base/global"
-	"hz-admin-base/initialize/internal"
+	"hab/config"
+	"hab/global"
+	"hab/initialize/internal"
 
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
@@ -14,7 +14,7 @@ import (
 // Author [piexlmax](https://github.com/piexlmax)
 // Author [SliverHorn](https://github.com/SliverHorn)
 func GormMysql() *gorm.DB {
-	m := global.GVA_CONFIG.Mysql
+	m := global.HAB_CONFIG.Mysql
 	if m.Dbname == "" {
 		return nil
 	}

@@ -1,11 +1,11 @@
 package system
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 )
 
 type SysBaseMenu struct {
-	global.GVA_MODEL
+	global.HAB_MODEL
 	MenuLevel     uint                                       `json:"-"`
 	ParentId      uint                                       `json:"parentId" gorm:"comment:父菜单ID"`     // 父菜单ID
 	Path          string                                     `json:"path" gorm:"comment:路由path"`        // 路由path
@@ -32,7 +32,7 @@ type Meta struct {
 }
 
 type SysBaseMenuParameter struct {
-	global.GVA_MODEL
+	global.HAB_MODEL
 	SysBaseMenuID uint
 	Type          string `json:"type" gorm:"comment:地址栏携带参数为params还是query"` // 地址栏携带参数为params还是query
 	Key           string `json:"key" gorm:"comment:地址栏携带参数的key"`            // 地址栏携带参数的key

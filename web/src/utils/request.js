@@ -22,7 +22,7 @@ const showLoading = (
     target: null
   }
 ) => {
-  const loadDom = document.getElementById('gva-base-load-dom')
+  const loadDom = document.getElementById('hab-base-load-dom')
   activeAxios++
   if (timer) {
     clearTimeout(timer)

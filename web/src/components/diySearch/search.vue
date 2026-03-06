@@ -1,5 +1,5 @@
 <template>
-  <div class="gva-table-box">
+  <div class="hab-table-box">
     <el-form
       ref="form"
       :rules="rules"
@@ -290,7 +290,7 @@ defineExpose({
 </script>
 
 <style scoped>
-.gva-table-box {
+.hab-table-box {
   padding: 12px;
 }
 

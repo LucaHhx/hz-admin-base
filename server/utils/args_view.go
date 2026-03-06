@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"hz-admin-base/global"
 	"github.com/samber/lo"
+	"hab/global"
 	"reflect"
 	"strings"
 )
@@ -69,17 +69,17 @@ func AnalysisStructure(v interface{}, prefix string) []ParamsComments {
 		if prefix != "" {
 			fName = prefix + "." + field.Name
 		}
-		fName = strings.ReplaceAll(fName, "GVA_MODEL.", "")
+		fName = strings.ReplaceAll(fName, "HAB_MODEL.", "")
 		pre := ParamsComments{
 			Name:    fName,
 			Type:    fieldValue.Type().String(),
 			Comment: getCommentFromGormTag(gormTag),
 			Sub:     make([]ParamsComments, 0),
 		}
-		if fieldValue.Type() == reflect.TypeOf(global.GVA_MODEL{}) ||
-			fieldValue.Type() == reflect.TypeOf(&global.GVA_MODEL{}).Elem() {
+		if fieldValue.Type() == reflect.TypeOf(global.HAB_MODEL{}) ||
+			fieldValue.Type() == reflect.TypeOf(&global.HAB_MODEL{}).Elem() {
 			pre = ParamsComments{
-				Name:    strings.ReplaceAll(fName+".ID", "GVA_MODEL.", ""),
+				Name:    strings.ReplaceAll(fName+".ID", "HAB_MODEL.", ""),
 				Type:    "uint",
 				Comment: "ID",
 			}

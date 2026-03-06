@@ -146,7 +146,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="gva-pagination">
+    <div class="hab-pagination">
       <el-pagination
         layout="total, sizes, prev, pager, next, jumper"
         :current-page="pageInfo.page"

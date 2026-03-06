@@ -2,10 +2,10 @@ package system
 
 import (
 	"errors"
-	"hz-admin-base/global"
-	"hz-admin-base/model/system"
-	"hz-admin-base/model/system/request"
-	"hz-admin-base/model/system/response"
+	"hab/global"
+	"hab/model/system"
+	"hab/model/system/request"
+	"hab/model/system/response"
 
 	"gorm.io/gorm"
 )
@@ -16,7 +16,7 @@ var AuthorityBtnServiceApp = new(AuthorityBtnService)
 
 func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (res response.SysAuthorityBtnRes, err error) {
 	var authorityBtn []system.SysAuthorityBtn
-	err = global.GVA_DB.Find(&authorityBtn, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
+	err = global.HAB_DB.Find(&authorityBtn, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
 	if err != nil {
 		return
 	}
@@ -30,7 +30,7 @@ func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (r
 
 func (a *AuthorityBtnService) GetAuthorityBtnAll(req request.SysAuthorityBtnReq) (res response.SysAuthorityBtnRes, err error) {
 	var authorityBtn []system.SysAuthorityBtn
-	err = global.GVA_DB.Find(&authorityBtn, "authority_id = ?", req.AuthorityId).Error
+	err = global.HAB_DB.Find(&authorityBtn, "authority_id = ?", req.AuthorityId).Error
 	if err != nil {
 		return
 	}
@@ -43,7 +43,7 @@ func (a *AuthorityBtnService) GetAuthorityBtnAll(req request.SysAuthorityBtnReq)
 }
 
 func (a *AuthorityBtnService) SetAuthorityBtn(req request.SysAuthorityBtnReq) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	return global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		var authorityBtn []system.SysAuthorityBtn
 		err = tx.Delete(&[]system.SysAuthorityBtn{}, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
 		if err != nil {
@@ -67,7 +67,7 @@ func (a *AuthorityBtnService) SetAuthorityBtn(req request.SysAuthorityBtnReq) (e
 }
 
 func (a *AuthorityBtnService) CanRemoveAuthorityBtn(ID string) (err error) {
-	fErr := global.GVA_DB.First(&system.SysAuthorityBtn{}, "sys_base_menu_btn_id = ?", ID).Error
+	fErr := global.HAB_DB.First(&system.SysAuthorityBtn{}, "sys_base_menu_btn_id = ?", ID).Error
 	if errors.Is(fErr, gorm.ErrRecordNotFound) {
 		return nil
 	}

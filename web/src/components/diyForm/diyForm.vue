@@ -25,7 +25,7 @@
       </ThreeColumnLayout>
     </template>
 
-    <div class="gva-form-box">
+    <div class="hab-form-box">
       <el-form ref="formRef" :model="form" label-position="right" :rules="rules" inline label-width="auto">
         <el-form-item
           v-for="column in visibleColumns"
@@ -453,7 +453,7 @@ const handleDateChange = (value, data) => {
 </script>
 
 <style lang="scss" scoped>
-.gva-form-box {
+.hab-form-box {
   padding: 12px;
   max-height: var(--dialog-height, auto);
   overflow-y: auto;

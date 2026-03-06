@@ -2,9 +2,9 @@ package system
 
 import (
 	"fmt"
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system/request"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system/request"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -64,7 +64,7 @@ func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	plugName := c.Query("plugName")
 	zipPath, err := autoCodePluginService.PubPlug(plugName)
 	if err != nil {
-		global.GVA_LOG.Error("打包失败!", zap.Error(err))
+		global.HAB_LOG.Error("打包失败!", zap.Error(err))
 		response.FailWithMessage("打包失败"+err.Error(), c)
 		return
 	}
@@ -88,7 +88,7 @@ func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
 	}
 	err = autoCodePluginService.InitMenu(menuInfo)
 	if err != nil {
-		global.GVA_LOG.Error("创建初始化Menu失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建初始化Menu失败!", zap.Error(err))
 		response.FailWithMessage("创建初始化Menu失败"+err.Error(), c)
 		return
 	}
@@ -112,7 +112,7 @@ func (a *AutoCodePluginApi) InitAPI(c *gin.Context) {
 	}
 	err = autoCodePluginService.InitAPI(apiInfo)
 	if err != nil {
-		global.GVA_LOG.Error("创建初始化API失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建初始化API失败!", zap.Error(err))
 		response.FailWithMessage("创建初始化API失败"+err.Error(), c)
 		return
 	}

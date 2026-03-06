@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"hz-admin-base/config"
-	"hz-admin-base/global"
+	"hab/config"
+	"hab/global"
 	"time"
 
 	"gorm.io/gorm"
@@ -18,19 +18,19 @@ type _gorm struct{}
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (g *_gorm) Config(prefix string, singular bool) *gorm.Config {
 	var general config.GeneralDB
-	switch global.GVA_CONFIG.System.DbType {
+	switch global.HAB_CONFIG.System.DbType {
 	case "mysql":
-		general = global.GVA_CONFIG.Mysql.GeneralDB
+		general = global.HAB_CONFIG.Mysql.GeneralDB
 	case "pgsql":
-		general = global.GVA_CONFIG.Pgsql.GeneralDB
+		general = global.HAB_CONFIG.Pgsql.GeneralDB
 	case "oracle":
-		general = global.GVA_CONFIG.Oracle.GeneralDB
+		general = global.HAB_CONFIG.Oracle.GeneralDB
 	case "sqlite":
-		general = global.GVA_CONFIG.Sqlite.GeneralDB
+		general = global.HAB_CONFIG.Sqlite.GeneralDB
 	case "mssql":
-		general = global.GVA_CONFIG.Mssql.GeneralDB
+		general = global.HAB_CONFIG.Mssql.GeneralDB
 	default:
-		general = global.GVA_CONFIG.Mysql.GeneralDB
+		general = global.HAB_CONFIG.Mysql.GeneralDB
 	}
 	return &gorm.Config{
 		Logger: logger.New(NewWriter(general), logger.Config{

@@ -2,9 +2,9 @@ package utils
 
 import (
 	"context"
-	"hz-admin-base/global"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
+	"hab/global"
 	"strconv"
 	"strings"
 	"time"
@@ -15,9 +15,9 @@ func GetCacheKey(place string, keys ...string) string {
 }
 
 func GetCache(key string, to interface{}) error {
-	res, err := global.GVA_REDIS.Get(context.Background(), key).Bytes()
+	res, err := global.HAB_REDIS.Get(context.Background(), key).Bytes()
 	if err != nil {
-		//global.GVA_LOG.Error("GetCache Error: ", zap.Error(err))
+		//global.HAB_LOG.Error("GetCache Error: ", zap.Error(err))
 		return err
 	}
 	return JsonDecode(res, to)
@@ -26,20 +26,20 @@ func GetCache(key string, to interface{}) error {
 func SetCache(key string, data interface{}, expiration time.Duration) error {
 	res, err := JsonEncode(data)
 	if err != nil {
-		global.GVA_LOG.Error("SetCache Error: ", zap.Error(err))
+		global.HAB_LOG.Error("SetCache Error: ", zap.Error(err))
 		return err
 	}
-	err = global.GVA_REDIS.Set(context.Background(), key, res, expiration).Err()
+	err = global.HAB_REDIS.Set(context.Background(), key, res, expiration).Err()
 	if err != nil {
-		global.GVA_LOG.Error("SetCache Error: ", zap.Error(err))
+		global.HAB_LOG.Error("SetCache Error: ", zap.Error(err))
 	}
 	return err
 }
 
 func DelCache(key ...string) error {
-	err := global.GVA_REDIS.Del(context.Background(), key...).Err()
+	err := global.HAB_REDIS.Del(context.Background(), key...).Err()
 	if err != nil {
-		global.GVA_LOG.Error("DelCache Error: ", zap.Error(err))
+		global.HAB_LOG.Error("DelCache Error: ", zap.Error(err))
 	}
 	return err
 }
@@ -47,38 +47,38 @@ func DelCache(key ...string) error {
 func SetHCache(key string, field string, data interface{}) error {
 	res, err := JsonEncode(data)
 	if err != nil {
-		global.GVA_LOG.Error("SetHCache Error: ", zap.Error(err))
+		global.HAB_LOG.Error("SetHCache Error: ", zap.Error(err))
 		return err
 	}
-	err = global.GVA_REDIS.HSet(context.Background(), key, field, res).Err()
+	err = global.HAB_REDIS.HSet(context.Background(), key, field, res).Err()
 	if err != nil {
-		global.GVA_LOG.Error("SetHCache Error: ", zap.Error(err))
+		global.HAB_LOG.Error("SetHCache Error: ", zap.Error(err))
 	}
 	return err
 }
 
 func GetHCache(key string, field string, to interface{}) error {
-	res, err := global.GVA_REDIS.HGet(context.Background(), key, field).Bytes()
+	res, err := global.HAB_REDIS.HGet(context.Background(), key, field).Bytes()
 	if err != nil {
-		global.GVA_LOG.Error("GetHCache Error: ", zap.Error(err))
+		global.HAB_LOG.Error("GetHCache Error: ", zap.Error(err))
 		return err
 	}
 	return JsonDecode(res, to)
 }
 
 func DelHCache(key string, field string) error {
-	err := global.GVA_REDIS.HDel(context.Background(), key, field).Err()
+	err := global.HAB_REDIS.HDel(context.Background(), key, field).Err()
 	if err != nil {
-		global.GVA_LOG.Error("DelHCache Error: ", zap.Error(err))
+		global.HAB_LOG.Error("DelHCache Error: ", zap.Error(err))
 	}
 	return err
 }
 
 func GetHAllCache[T any](key string, maps map[string]T) error {
 	// 获取所有字段和值
-	res, err := global.GVA_REDIS.HGetAll(context.Background(), key).Result()
+	res, err := global.HAB_REDIS.HGetAll(context.Background(), key).Result()
 	if err != nil {
-		global.GVA_LOG.Error("GetHAllCache Error: ", zap.Error(err))
+		global.HAB_LOG.Error("GetHAllCache Error: ", zap.Error(err))
 		return err
 	}
 
@@ -86,7 +86,7 @@ func GetHAllCache[T any](key string, maps map[string]T) error {
 	for field, value := range res {
 		var item T
 		if err = JsonDecode([]byte(value), &item); err != nil {
-			global.GVA_LOG.Error("GetHAllCache Error: ", zap.Error(err))
+			global.HAB_LOG.Error("GetHAllCache Error: ", zap.Error(err))
 			return err
 		}
 		maps[field] = item
@@ -129,5 +129,5 @@ func AtomicOperate(evals ...*Eval) *redis.Cmd {
 	builder.WriteString("}")
 	command := builder.String()
 	//fmt.Println(fmt.Sprintf(`eval "%s" %d %s %s`, command, len(keys), strings.Join(keys, " "), helper.AnyJoin(args, " ")))
-	return global.GVA_REDIS.Eval(context.Background(), command, keys, args...)
+	return global.HAB_REDIS.Eval(context.Background(), command, keys, args...)
 }

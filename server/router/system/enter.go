@@ -1,6 +1,6 @@
 package system
 
-import api "hz-admin-base/api/v1"
+import api "hab/api/v1"
 
 type RouterGroup struct {
 	ApiRouter

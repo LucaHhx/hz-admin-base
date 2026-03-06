@@ -13,7 +13,7 @@
         </el-form-item>
       </template>
     </DivSearch>
-    <div class="gva-table-box">
+    <div class="hab-table-box">
       <ThreeColumnLayout :section-gap="5" :item-gap="10">
         <template #left>
           <el-button v-auth="btnAuth.add" type="primary" :icon="Plus" @click="openDialog()">
@@ -44,7 +44,7 @@
       </ThreeColumnLayout>
     </div>
 
-    <div class="gva-table-box">
+    <div class="hab-table-box">
       <Table
         ref="tableRef" :table-data="tableData" :columns="columns" row-key="ID"
         :show-selection="true" :total="total" :get-table-data="getTableData" :struct-name="structName"

@@ -1,6 +1,6 @@
 {{- $db := "" }}
 {{- if eq .BusinessDB "" }}
- {{- $db = "global.GVA_DB" }}
+ {{- $db = "global.HAB_DB" }}
 {{- else}}
  {{- $db =  printf "global.MustGetGlobalDBByDBName(\"%s\")" .BusinessDB   }}
 {{- end}}
@@ -104,7 +104,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service) Import{{.StructName}}(te
                 return nil
             })
     	case enum.ImportType_Append:
-    		return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+    		return global.HAB_DB.Transaction(func(tx *gorm.DB) error {
     			for i, _ := range list {
     				nowTime := global.NowMySQLTime()
     				list[i].CreatedAt = nowTime

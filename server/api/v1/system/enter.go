@@ -1,6 +1,6 @@
 package system
 
-import "hz-admin-base/service"
+import "hab/service"
 
 type ApiGroup struct {
 	DBApi

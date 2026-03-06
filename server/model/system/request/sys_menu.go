@@ -1,8 +1,8 @@
 package request
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/system"
+	"hab/global"
+	"hab/model/system"
 )
 
 // AddMenuAuthorityInfo Add menu authority info structure
@@ -13,7 +13,7 @@ type AddMenuAuthorityInfo struct {
 
 func DefaultMenu() []system.SysBaseMenu {
 	return []system.SysBaseMenu{{
-		GVA_MODEL: global.GVA_MODEL{ID: 53},
+		HAB_MODEL: global.HAB_MODEL{ID: 53},
 		ParentId:  0,
 		Path:      "userInfo",
 		Name:      "userInfo",

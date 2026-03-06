@@ -1,8 +1,8 @@
 package request
 
 import (
-	"hz-admin-base/model/common/request"
-	"hz-admin-base/model/system"
+	"hab/model/common/request"
+	"hab/model/system"
 )
 
 // api分页条件查询及排序结构体

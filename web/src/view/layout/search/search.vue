@@ -1,13 +1,13 @@
 <template>
   <div class="search-component items-center">
     <div
-      class="gvaIcon gvaIcon-refresh"
+      class="habIcon habIcon-refresh"
       :class="[reload ? 'reloading' : '']"
       @click="handleReload"
     />
     <Screenfull class="search-icon" />
     <div
-      class="gvaIcon gvaIcon-customer-service"
+      class="habIcon habIcon-customer-service"
       @click="toService"
     />
     <el-switch

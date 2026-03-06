@@ -43,11 +43,11 @@
           {{ fmtTitle(item.meta.title, route) }}
         </el-breadcrumb-item> -->
       </el-breadcrumb>
-      <gva-aside
+      <hab-aside
         v-if="config.side_mode === 'head' && !isMobile"
         class="flex-1"
       />
-      <gva-aside
+      <hab-aside
         v-if="config.side_mode === 'combination' && !isMobile"
         mode="head"
         class="flex-1"
@@ -125,7 +125,7 @@ import { storeToRefs } from 'pinia'
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { setUserAuthority } from '@/api/user'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
-import gvaAside from '@/view/layout/aside/index.vue'
+import habAside from '@/view/layout/aside/index.vue'
 import getPageTitle from '@/utils/page'
 
 const userStore = useUserStore()

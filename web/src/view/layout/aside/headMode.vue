@@ -32,7 +32,7 @@
   const { device } = storeToRefs(appStore)
 
   defineOptions({
-    name: 'GvaAside'
+    name: 'HabAside'
   })
   const route = useRoute()
   const router = useRouter()

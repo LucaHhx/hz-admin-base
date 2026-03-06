@@ -2,7 +2,7 @@
 package system
 
 import (
-	"hz-admin-base/model/gtype"
+	"hab/model/gtype"
 )
 
 // 表字段配置 结构体  SysTableColumns

@@ -90,7 +90,7 @@
           </el-scrollbar>
         </div>
         <div class="ml-4 w-[605px]">
-          <div class="gva-btn-list gap-2">
+          <div class="hab-btn-list gap-2">
             <el-input
               v-model.trim="search.keyword"
               class="w-96"
@@ -103,7 +103,7 @@
               @click="onSubmit"
             />
           </div>
-          <div class="gva-btn-list gap-2">
+          <div class="hab-btn-list gap-2">
             <el-button
               type="danger"
               :disabled="selectedImages.length === 0"

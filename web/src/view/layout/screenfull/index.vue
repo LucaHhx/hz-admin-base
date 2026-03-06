@@ -2,11 +2,11 @@
   <div @click="clickFull">
     <div
       v-if="isShow"
-      class="gvaIcon gvaIcon-fullscreen-expand"
+      class="habIcon habIcon-fullscreen-expand"
     />
     <div
       v-else
-      class="gvaIcon gvaIcon-fullscreen-shrink"
+      class="habIcon habIcon-fullscreen-shrink"
     />
   </div>
 </template>

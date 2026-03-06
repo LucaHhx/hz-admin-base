@@ -288,11 +288,6 @@
               :placeholder="$t('system.email.secretPlaceholder')"
             />
           </el-form-item>
-          <el-form-item :label="$t('system.email.test')">
-            <el-button @click="email">
-              {{ $t('system.email.test') }}
-            </el-button>
-          </el-form-item>
         </el-tab-pane>
         <el-tab-pane
           v-if="config.system['use-mongo']"
@@ -1178,7 +1173,6 @@ import { getSystemConfig, reloadSystem, setSystemConfig } from '@/api/system'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Minus, Plus } from '@element-plus/icons-vue'
-import { emailTest } from '@/api/email'
 import { CreateUUID } from '@/utils/format'
 import { useI18n } from 'vue-i18n'
 
@@ -1276,21 +1270,6 @@ const update = async() => {
   }
 }
 
-const email = async() => {
-  const res = await emailTest()
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: t('system.messages.emailSuccess')
-    })
-    await initForm()
-  } else {
-    ElMessage({
-      type: 'error',
-      message: t('system.messages.emailError')
-    })
-  }
-}
 
 const getUUID = () => {
   config.value.jwt['signing-key'] = CreateUUID()

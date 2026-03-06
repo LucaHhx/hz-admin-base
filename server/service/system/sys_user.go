@@ -3,16 +3,16 @@ package system
 import (
 	"errors"
 	"fmt"
-	"hz-admin-base/enum"
-	"hz-admin-base/model/common"
-	systemReq "hz-admin-base/model/system/request"
+	"hab/enum"
+	"hab/model/common"
+	systemReq "hab/model/system/request"
 	"time"
 
 	"github.com/gin-gonic/gin"
 
-	"hz-admin-base/global"
-	"hz-admin-base/model/system"
-	"hz-admin-base/utils"
+	"hab/global"
+	"hab/model/system"
+	"hab/utils"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -31,13 +31,13 @@ var UserServiceApp = new(UserService)
 
 func (userService *UserService) Register(u system.SysUser) (userInter system.SysUser, err error) {
 	var user system.SysUser
-	if !errors.Is(global.GVA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
+	if !errors.Is(global.HAB_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return userInter, errors.New("用户名已注册")
 	}
 	// 否则 附加uuid 密码hash加密 注册
 	u.Password = utils.BcryptHash(u.Password)
 	u.UUID = uuid.New()
-	err = global.GVA_DB.Create(&u).Error
+	err = global.HAB_DB.Create(&u).Error
 	return u, err
 }
 
@@ -49,12 +49,12 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 //@return: err error, userInter *model.SysUser
 
 func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysUser, err error) {
-	if nil == global.GVA_DB {
+	if nil == global.HAB_DB {
 		return nil, fmt.Errorf("db not init")
 	}
 
 	var user system.SysUser
-	err = global.GVA_DB.Where("username = ?", u.Username).Preload("Authorities").Preload("Authority").First(&user).Error
+	err = global.HAB_DB.Where("username = ?", u.Username).Preload("Authorities").Preload("Authority").First(&user).Error
 	if err == nil {
 		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return nil, errors.New("密码错误")
@@ -72,14 +72,14 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 
 func (userService *UserService) ChangePassword(u *system.SysUser, newPassword string) (userInter *system.SysUser, err error) {
 	var user system.SysUser
-	if err = global.GVA_DB.Where("id = ?", u.ID).First(&user).Error; err != nil {
+	if err = global.HAB_DB.Where("id = ?", u.ID).First(&user).Error; err != nil {
 		return nil, err
 	}
 	if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 		return nil, errors.New("原密码错误")
 	}
 	user.Password = utils.BcryptHash(newPassword)
-	err = global.GVA_DB.Save(&user).Error
+	err = global.HAB_DB.Save(&user).Error
 	return &user, err
 
 }
@@ -93,7 +93,7 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 func (userService *UserService) GetUserInfoList(info systemReq.GetUserList, c *gin.Context) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB.Model(&system.SysUser{})
+	db := global.HAB_DB.Model(&system.SysUser{})
 	var userList []system.SysUser
 
 	if info.NickName != "" {
@@ -130,19 +130,19 @@ func (userService *UserService) GetUserInfoList(info systemReq.GetUserList, c *g
 
 func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err error) {
 
-	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUserAuthority{}).Error
+	assignErr := global.HAB_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUserAuthority{}).Error
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
 	}
 
 	var authority system.SysAuthority
-	err = global.GVA_DB.Where("authority_id = ?", authorityId).First(&authority).Error
+	err = global.HAB_DB.Where("authority_id = ?", authorityId).First(&authority).Error
 	if err != nil {
 		return err
 	}
 	var authorityMenu []system.SysAuthorityMenu
 	var authorityMenuIDs []string
-	err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&authorityMenu).Error
+	err = global.HAB_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&authorityMenu).Error
 	if err != nil {
 		return err
 	}
@@ -152,7 +152,7 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 	}
 
 	var authorityMenus []system.SysBaseMenu
-	err = global.GVA_DB.Preload("Parameters").Where("id in (?)", authorityMenuIDs).Find(&authorityMenus).Error
+	err = global.HAB_DB.Preload("Parameters").Where("id in (?)", authorityMenuIDs).Find(&authorityMenus).Error
 	if err != nil {
 		return err
 	}
@@ -167,7 +167,7 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 		return errors.New("找不到默认路由,无法切换本角色")
 	}
 
-	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", id).Update("authority_id", authorityId).Error
+	err = global.HAB_DB.Model(&system.SysUser{}).Where("id = ?", id).Update("authority_id", authorityId).Error
 	return err
 }
 
@@ -178,11 +178,11 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 //@return: err error
 
 func (userService *UserService) SetUserAuthorities(adminAuthorityID, id uint, authorityIds []uint) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	return global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		var user system.SysUser
 		TxErr := tx.Where("id = ?", id).First(&user).Error
 		if TxErr != nil {
-			global.GVA_LOG.Debug(TxErr.Error())
+			global.HAB_LOG.Debug(TxErr.Error())
 			return errors.New("查询用户数据失败")
 		}
 		TxErr = tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
@@ -219,7 +219,7 @@ func (userService *UserService) SetUserAuthorities(adminAuthorityID, id uint, au
 //@return: err error
 
 func (userService *UserService) DeleteUser(id int) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	return global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Where("id = ?", id).Delete(&system.SysUser{}).Error; err != nil {
 			return err
 		}
@@ -237,7 +237,7 @@ func (userService *UserService) DeleteUser(id int) (err error) {
 //@return: err error, user model.SysUser
 
 func (userService *UserService) SetUserInfo(req system.SysUser) error {
-	return global.GVA_DB.Model(&system.SysUser{}).
+	return global.HAB_DB.Model(&system.SysUser{}).
 		Select("updated_at", "nick_name", "header_img", "phone", "email", "enable", "language", "type", "parameter").
 		Where("id=?", req.ID).
 		Updates(map[string]interface{}{
@@ -260,7 +260,7 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 //@return: err error, user model.SysUser
 
 func (userService *UserService) SetSelfInfo(req system.SysUser) error {
-	return global.GVA_DB.Model(&system.SysUser{}).
+	return global.HAB_DB.Model(&system.SysUser{}).
 		Where("id=?", req.ID).
 		Updates(req).Error
 }
@@ -272,7 +272,7 @@ func (userService *UserService) SetSelfInfo(req system.SysUser) error {
 //@return: err error
 
 func (userService *UserService) SetSelfSetting(req common.JSONMap, uid uint) error {
-	return global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", uid).Update("origin_setting", req).Error
+	return global.HAB_DB.Model(&system.SysUser{}).Where("id = ?", uid).Update("origin_setting", req).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -284,7 +284,7 @@ func (userService *UserService) SetSelfSetting(req common.JSONMap, uid uint) err
 
 func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser, err error) {
 	var reqUser system.SysUser
-	err = global.GVA_DB.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
+	err = global.HAB_DB.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
 	if err != nil {
 		return reqUser, err
 	}
@@ -300,7 +300,7 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser
 
 func (userService *UserService) FindUserById(id int) (user *system.SysUser, err error) {
 	var u system.SysUser
-	err = global.GVA_DB.Where("id = ?", id).First(&u).Error
+	err = global.HAB_DB.Where("id = ?", id).First(&u).Error
 	return &u, err
 }
 
@@ -312,7 +312,7 @@ func (userService *UserService) FindUserById(id int) (user *system.SysUser, err 
 
 func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUser, err error) {
 	var u system.SysUser
-	if err = global.GVA_DB.Where("uuid = ?", uuid).First(&u).Error; err != nil {
+	if err = global.HAB_DB.Where("uuid = ?", uuid).First(&u).Error; err != nil {
 		return &u, errors.New("用户不存在")
 	}
 	return &u, nil
@@ -325,27 +325,27 @@ func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUse
 //@return: err error
 
 func (userService *UserService) ResetPassword(ID uint) (err error) {
-	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
+	err = global.HAB_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
 	return err
 }
 
 // GetUserByID 根据ID获取用户信息
 func (userService *UserService) GetUserByID(id uint) (user *system.SysUser, err error) {
 	var u system.SysUser
-	err = global.GVA_DB.Where("id = ?", id).First(&u).Error
+	err = global.HAB_DB.Where("id = ?", id).First(&u).Error
 	return &u, err
 }
 
 // BindGoogleAuth 绑定谷歌验证器
 func (userService *UserService) BindGoogleAuth(userID uint, secret string) error {
-	return global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", userID).Updates(map[string]interface{}{
+	return global.HAB_DB.Model(&system.SysUser{}).Where("id = ?", userID).Updates(map[string]interface{}{
 		"google_auth_secret": secret,
 	}).Error
 }
 
 // ResetGoogleAuth 重置谷歌验证器
 func (userService *UserService) ResetGoogleAuth(userID uint) error {
-	return global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", userID).Updates(map[string]interface{}{
+	return global.HAB_DB.Model(&system.SysUser{}).Where("id = ?", userID).Updates(map[string]interface{}{
 		//"google_auth_enabled": false,
 		"google_auth_secret": "",
 	}).Error
@@ -354,15 +354,15 @@ func (userService *UserService) ResetGoogleAuth(userID uint) error {
 // BindPasskey 绑定Passkey
 func (userService *UserService) BindPasskey(userID uint, passkeyData string, isTest bool) error {
 	if isTest {
-		return global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", userID).Update("test_passkey", passkeyData).Error
+		return global.HAB_DB.Model(&system.SysUser{}).Where("id = ?", userID).Update("test_passkey", passkeyData).Error
 	}
-	return global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", userID).Update("passkey", passkeyData).Error
+	return global.HAB_DB.Model(&system.SysUser{}).Where("id = ?", userID).Update("passkey", passkeyData).Error
 }
 
 // GetUserByUsername 根据用户名获取用户信息（不验证密码）
 func (userService *UserService) GetUserByUsername(username string) (*system.SysUser, error) {
 	var user system.SysUser
-	err := global.GVA_DB.Where("username = ?", username).Preload("Authorities").Preload("Authority").First(&user).Error
+	err := global.HAB_DB.Where("username = ?", username).Preload("Authorities").Preload("Authority").First(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -373,7 +373,7 @@ func (userService *UserService) GetUserByUsername(username string) (*system.SysU
 // UnbindSecurity 解绑安全验证（谷歌验证器和Passkey）
 func (userService *UserService) UnbindSecurity(userID uint) error {
 	// 清理数据库中的安全绑定
-	err := global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", userID).Updates(map[string]interface{}{
+	err := global.HAB_DB.Model(&system.SysUser{}).Where("id = ?", userID).Updates(map[string]interface{}{
 		//"google_auth_enabled": false,
 		"google_auth_secret": "",
 		"passkey":            "",
@@ -388,7 +388,7 @@ func (userService *UserService) UnbindSecurity(userID uint) error {
 	err = userService.DeleteUserBindSessions(userID)
 	if err != nil {
 		// 记录错误但不阻止解绑流程
-		global.GVA_LOG.Error("Failed to delete user bind sessions", zap.Uint("userID", userID), zap.Error(err))
+		global.HAB_LOG.Error("Failed to delete user bind sessions", zap.Uint("userID", userID), zap.Error(err))
 	}
 
 	return nil
@@ -402,13 +402,13 @@ func (userService *UserService) CreateBindSession(sessionToken string, user *sys
 		Username:     user.Username,
 		NickName:     user.NickName,
 	}
-	return global.GVA_DB.Create(&bindSession).Error
+	return global.HAB_DB.Create(&bindSession).Error
 }
 
 // GetBindSession 获取绑定会话
 func (userService *UserService) GetBindSession(sessionToken string) (*system.SysBindSession, error) {
 	var session system.SysBindSession
-	err := global.GVA_DB.Where("session_token = ?", sessionToken).First(&session).Error
+	err := global.HAB_DB.Where("session_token = ?", sessionToken).First(&session).Error
 	if err != nil {
 		return nil, err
 	}
@@ -417,24 +417,24 @@ func (userService *UserService) GetBindSession(sessionToken string) (*system.Sys
 
 // DeleteBindSession 删除绑定会话
 func (userService *UserService) DeleteBindSession(sessionToken string) error {
-	return global.GVA_DB.Where("session_token = ?", sessionToken).Delete(&system.SysBindSession{}).Error
+	return global.HAB_DB.Where("session_token = ?", sessionToken).Delete(&system.SysBindSession{}).Error
 }
 
 // DeleteUserBindSessions 删除用户的所有绑定会话
 func (userService *UserService) DeleteUserBindSessions(userID uint) error {
-	return global.GVA_DB.Where("user_id = ?", userID).Delete(&system.SysBindSession{}).Error
+	return global.HAB_DB.Where("user_id = ?", userID).Delete(&system.SysBindSession{}).Error
 }
 
 // GetUserByPasskeyCredentialId 根据Passkey凭证ID查找用户
 func (userService *UserService) GetUserByPasskeyCredentialId(credentialId string, isTest bool) (*system.SysUser, error) {
 	var user system.SysUser
 	if isTest {
-		err := global.GVA_DB.Where("test_passkey = ?", credentialId).Preload("Authorities").Preload("Authority").First(&user).Error
+		err := global.HAB_DB.Where("test_passkey = ?", credentialId).Preload("Authorities").Preload("Authority").First(&user).Error
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		err := global.GVA_DB.Where("passkey = ?", credentialId).Preload("Authorities").Preload("Authority").First(&user).Error
+		err := global.HAB_DB.Where("passkey = ?", credentialId).Preload("Authorities").Preload("Authority").First(&user).Error
 		if err != nil {
 			return nil, err
 		}

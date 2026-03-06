@@ -43,7 +43,7 @@ import (
 type {{.StructName}} struct {
 {{- if not .OnlyTemplate}}
 {{- if .GvaModel }}
-    global.GVA_MODEL
+    global.HAB_MODEL
 {{- end }}
 {{- range .Fields}}
     {{- if eq .FieldType "string" }}

@@ -1,14 +1,14 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system"
-	systemRes "hz-admin-base/model/system/response"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"go.uber.org/zap"
 	"gorm.io/gorm/utils"
+	"hab/global"
+	"hab/model/common/response"
+	"hab/model/system"
+	systemRes "hab/model/system/response"
 )
 
 type AutoCodeApi struct{}
@@ -25,7 +25,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbs, err := autoCodeService.Database(businessDB).GetDB(businessDB)
 	var dbList []map[string]interface{}
-	for _, db := range global.GVA_CONFIG.DBList {
+	for _, db := range global.HAB_CONFIG.DBList {
 		var item = make(map[string]interface{})
 		item["aliasName"] = db.AliasName
 		item["dbName"] = db.Dbname
@@ -34,7 +34,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 		dbList = append(dbList, item)
 	}
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 	} else {
 		response.OkWithDetailed(gin.H{"dbs": dbs, "dbList": dbList}, "Success", c)
@@ -53,9 +53,9 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 	dbName := c.Query("dbName")
 	businessDB := c.Query("businessDB")
 	if dbName == "" {
-		dbName = *global.GVA_ACTIVE_DBNAME
+		dbName = *global.HAB_ACTIVE_DBNAME
 		if businessDB != "" {
-			for _, db := range global.GVA_CONFIG.DBList {
+			for _, db := range global.HAB_CONFIG.DBList {
 				if db.AliasName == businessDB {
 					dbName = db.Dbname
 				}
@@ -63,12 +63,12 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 		}
 	}
 	var names []string
-	global.GVA_DB.Model(system.SysAutoCodeHistory{}).Select("table_name").
+	global.HAB_DB.Model(system.SysAutoCodeHistory{}).Select("table_name").
 		Where("flag = ?", 0).
 		Scan(&names)
 	tables, err := autoCodeService.Database(businessDB).GetTables(businessDB, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("查询table失败!", zap.Error(err))
+		global.HAB_LOG.Error("查询table失败!", zap.Error(err))
 		response.FailWithMessage("查询table失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"tables": lo.Filter(tables, func(item systemRes.Table, index int) bool {
@@ -89,9 +89,9 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbName := c.Query("dbName")
 	if dbName == "" {
-		dbName = *global.GVA_ACTIVE_DBNAME
+		dbName = *global.HAB_ACTIVE_DBNAME
 		if businessDB != "" {
-			for _, db := range global.GVA_CONFIG.DBList {
+			for _, db := range global.HAB_CONFIG.DBList {
 				if db.AliasName == businessDB {
 					dbName = db.Dbname
 				}
@@ -101,7 +101,7 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	tableName := c.Query("tableName")
 	columns, err := autoCodeService.Database(businessDB).GetColumn(businessDB, tableName, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 	} else {
 		response.OkWithDetailed(gin.H{"columns": columns}, "Success", c)
@@ -115,12 +115,12 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 	//	response.FailWithMessage(err.Error(), c)
 	//	return
 	//}
-	//if global.GVA_CONFIG.AutoCode.AiPath == "" {
+	//if global.HAB_CONFIG.AutoCode.AiPath == "" {
 	//	response.FailWithMessage("请先前往插件市场个人中心获取AiPath并填入config.yaml中", c)
 	//	return
 	//}
 	//
-	//path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", fmt.Sprintf("api/chat/%s", llm["mode"]))
+	//path := strings.ReplaceAll(global.HAB_CONFIG.AutoCode.AiPath, "{FUNC}", fmt.Sprintf("api/chat/%s", llm["mode"]))
 	//res, err := request.HttpRequest(
 	//	path,
 	//	"POST",
@@ -129,7 +129,7 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 	//	llm,
 	//)
 	//if err != nil {
-	//	global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
+	//	global.HAB_LOG.Error("大模型生成失败!", zap.Error(err))
 	//	response.FailWithMessage("大模型生成失败"+err.Error(), c)
 	//	return
 	//}
@@ -137,19 +137,19 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 	//b, err := io.ReadAll(res.Body)
 	//defer res.Body.Close()
 	//if err != nil {
-	//	global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
+	//	global.HAB_LOG.Error("大模型生成失败!", zap.Error(err))
 	//	response.FailWithMessage("大模型生成失败"+err.Error(), c)
 	//	return
 	//}
 	//err = json.Unmarshal(b, &resStruct)
 	//if err != nil {
-	//	global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
+	//	global.HAB_LOG.Error("大模型生成失败!", zap.Error(err))
 	//	response.FailWithMessage("大模型生成失败"+err.Error(), c)
 	//	return
 	//}
 	//
 	//if resStruct.Code == 7 {
-	//	global.GVA_LOG.Error("大模型生成失败!"+resStruct.Message, zap.Error(err))
+	//	global.HAB_LOG.Error("大模型生成失败!"+resStruct.Message, zap.Error(err))
 	//	response.FailWithMessage("大模型生成失败"+resStruct.Message, c)
 	//	return
 	//}

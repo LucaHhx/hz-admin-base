@@ -1,9 +1,9 @@
 package main
 
 import (
-	"hz-admin-base/core"
-	"hz-admin-base/global"
-	"hz-admin-base/initialize"
+	"hab/core"
+	"hab/global"
+	"hab/initialize"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -22,11 +22,11 @@ func main() {
 
 	// 设置时区
 	var err error
-	if time.Local, err = time.LoadLocation(global.GVA_CONFIG.System.TimeZone); err != nil {
+	if time.Local, err = time.LoadLocation(global.HAB_CONFIG.System.TimeZone); err != nil {
 		panic(err)
 	}
 
-	global.GVA_LOG.Info("nowTime: " + time.Now().Format("2006-01-02 15:04:05"))
+	global.HAB_LOG.Info("nowTime: " + time.Now().Format("2006-01-02 15:04:05"))
 
 	// 启动后台服务（阻塞）
 	switch global.SysMode {

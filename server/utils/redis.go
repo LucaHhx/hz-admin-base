@@ -3,8 +3,8 @@ package utils
 import (
 	"context"
 	"fmt"
-	"hz-admin-base/enum"
-	"hz-admin-base/global"
+	"hab/enum"
+	"hab/global"
 
 	"github.com/samber/lo"
 )
@@ -25,7 +25,7 @@ func LuaHINCRBY(key string, field string, value int64) (int64, error) {
 		-- 执行 HINCRBY
 		return redis.call("HINCRBY", KEYS[1], ARGV[1], delta)
 	`
-	return global.GVA_REDIS.Eval(context.Background(), luaScript, []string{key}, field, value).Int64()
+	return global.HAB_REDIS.Eval(context.Background(), luaScript, []string{key}, field, value).Int64()
 }
 
 func LuaHINCRBYList(key string, fields []string, values []int64) ([]int64, error) {
@@ -59,7 +59,7 @@ func LuaHINCRBYList(key string, fields []string, values []int64) ([]int64, error
 	for _, value := range values {
 		args = append(args, value)
 	}
-	slice, err := global.GVA_REDIS.Eval(context.Background(), luaScript, fields, args...).Int64Slice()
+	slice, err := global.HAB_REDIS.Eval(context.Background(), luaScript, fields, args...).Int64Slice()
 	if err != nil {
 		return nil, enum.Msg_InternalError
 	}
@@ -79,5 +79,5 @@ func LuaHGETInt64(key string, fields ...string) ([]int64, error) {
 	`, key)
 	args := make([]interface{}, 0)
 	args = append(args, fields)
-	return global.GVA_REDIS.Eval(context.Background(), luaScript, fields).Int64Slice()
+	return global.HAB_REDIS.Eval(context.Background(), luaScript, fields).Int64Slice()
 }

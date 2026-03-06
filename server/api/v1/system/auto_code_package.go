@@ -1,11 +1,11 @@
 package system
 
 import (
-	"hz-admin-base/global"
-	common "hz-admin-base/model/common/request"
-	"hz-admin-base/model/common/response"
-	"hz-admin-base/model/system/request"
-	"hz-admin-base/utils"
+	"hab/global"
+	common "hab/model/common/request"
+	"hab/model/common/response"
+	"hab/model/system/request"
+	"hab/utils"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -36,7 +36,7 @@ func (a *AutoCodePackageApi) Create(c *gin.Context) {
 	} // PackageName可能导致路径穿越的问题 / 和 \ 都要防止
 	err := autoCodePackageService.Create(c.Request.Context(), &info)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.HAB_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("Creation failed", c)
 		return
 	}
@@ -57,7 +57,7 @@ func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 	_ = c.ShouldBindJSON(&info)
 	err := autoCodePackageService.Delete(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.HAB_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("Deletion failed", c)
 		return
 	}
@@ -75,7 +75,7 @@ func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 func (a *AutoCodePackageApi) All(c *gin.Context) {
 	data, err := autoCodePackageService.All(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}
@@ -93,7 +93,7 @@ func (a *AutoCodePackageApi) All(c *gin.Context) {
 func (a *AutoCodePackageApi) Templates(c *gin.Context) {
 	data, err := autoCodePackageService.Templates(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.HAB_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("Failed to get", c)
 		return
 	}

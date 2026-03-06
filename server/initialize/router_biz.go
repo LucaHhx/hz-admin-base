@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"hz-admin-base/router"
+	"hab/router"
 
 	"github.com/gin-gonic/gin"
 )

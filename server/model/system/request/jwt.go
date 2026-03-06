@@ -1,7 +1,7 @@
 package request
 
 import (
-	"hz-admin-base/enum"
+	"hab/enum"
 
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"

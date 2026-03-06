@@ -3,17 +3,17 @@ package system
 import (
 	"database/sql"
 	"fmt"
-	"hz-admin-base/enum"
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/request"
-	"hz-admin-base/model/system"
-	"hz-admin-base/utils"
+	"hab/enum"
+	"hab/global"
+	"hab/model/common/request"
+	"hab/model/system"
+	"hab/utils"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
-	//systemReq "hz-admin-base/model/system/request"
+	//systemReq "hab/model/system/request"
 	"gorm.io/gorm"
 )
 
@@ -22,7 +22,7 @@ type SysDataFilterService struct{}
 // CreateSysDataFilter 创建sysDataFilter记录
 // Author [yourname](https://github.com/yourname)
 func (sysDataFilterService *SysDataFilterService) CreateSysDataFilter(sysDataFilter *system.SysDataFilter, c *gin.Context) (err error) {
-	err = global.GVA_DB.Create(sysDataFilter).Error
+	err = global.HAB_DB.Create(sysDataFilter).Error
 	return err
 }
 
@@ -31,7 +31,7 @@ func (sysDataFilterService *SysDataFilterService) CreateSysDataFilter(sysDataFil
 func (sysDataFilterService *SysDataFilterService) ImportSysDataFilter(tep enum.ImportType, list []system.SysDataFilter, c *gin.Context) (err error) {
 	switch tep {
 	case enum.ImportType_Full:
-		return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		return global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 			// 截断表（清空表并重置自增ID）
 			if err := tx.Exec("TRUNCATE TABLE sys_data_filter").Error; err != nil {
 				return err
@@ -43,7 +43,7 @@ func (sysDataFilterService *SysDataFilterService) ImportSysDataFilter(tep enum.I
 			return nil
 		})
 	case enum.ImportType_Append:
-		return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		return global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 			for i, _ := range list {
 				nowTime := global.NowMySQLTime()
 				list[i].CreatedAt = nowTime
@@ -64,7 +64,7 @@ func (sysDataFilterService *SysDataFilterService) ImportSysDataFilter(tep enum.I
 // DeleteSysDataFilter 删除sysDataFilter记录
 // Author [yourname](https://github.com/yourname)
 func (sysDataFilterService *SysDataFilterService) DeleteSysDataFilter(ID string, userID uint, c *gin.Context) (err error) {
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	err = global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&system.SysDataFilter{}).Where("id = ?", ID).Update("deleted_by", userID).Error; err != nil {
 			return err
 		}
@@ -79,7 +79,7 @@ func (sysDataFilterService *SysDataFilterService) DeleteSysDataFilter(ID string,
 // DeleteSysDataFilterByIds 批量删除sysDataFilter记录
 // Author [yourname](https://github.com/yourname)
 func (sysDataFilterService *SysDataFilterService) DeleteSysDataFilterByIds(IDs []string, deleted_by uint, c *gin.Context) (err error) {
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	err = global.HAB_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&system.SysDataFilter{}).Where("id in ?", IDs).Update("deleted_by", deleted_by).Error; err != nil {
 			return err
 		}
@@ -94,15 +94,15 @@ func (sysDataFilterService *SysDataFilterService) DeleteSysDataFilterByIds(IDs [
 // UpdateSysDataFilter 更新sysDataFilter记录
 // Author [yourname](https://github.com/yourname)
 func (sysDataFilterService *SysDataFilterService) UpdateSysDataFilter(sysDataFilter system.SysDataFilter, c *gin.Context) (err error) {
-	err = global.GVA_DB.Model(&system.SysDataFilter{}).Where("id = ?", sysDataFilter.ID).Updates(&sysDataFilter).Error
+	err = global.HAB_DB.Model(&system.SysDataFilter{}).Where("id = ?", sysDataFilter.ID).Updates(&sysDataFilter).Error
 	return err
 }
 
 // GetSysDataFilter 根据ID获取sysDataFilter记录
 // Author [yourname](https://github.com/yourname)
 func (sysDataFilterService *SysDataFilterService) GetSysDataFilter(ID string, c *gin.Context) (sysDataFilter system.SysDataFilter, err error) {
-	// err = global.GVA_DB.Where("id = ?", ID).First(&sysDataFilter).Error
-	db := global.GVA_DB.Model(&system.SysDataFilter{})
+	// err = global.HAB_DB.Where("id = ?", ID).First(&sysDataFilter).Error
+	db := global.HAB_DB.Model(&system.SysDataFilter{})
 	err = db.Where("id = ?", ID).First(&sysDataFilter).Error
 	return
 }
@@ -111,7 +111,7 @@ func (sysDataFilterService *SysDataFilterService) GetSysDataFilter(ID string, c 
 // Author [yourname](https://github.com/yourname)
 func (sysDataFilterService *SysDataFilterService) GetSysDataFilterInfoList(info request.QueryInfo, c *gin.Context) (list []system.SysDataFilter, total int64, err error) {
 	// Create db
-	db := global.GVA_DB.Model(&system.SysDataFilter{})
+	db := global.HAB_DB.Model(&system.SysDataFilter{})
 	var sysDataFilters []system.SysDataFilter
 	total, err = utils.TableQuery(db, info, c)
 	if err != nil {
@@ -127,7 +127,7 @@ func (sysDataFilterService *SysDataFilterService) GetSysDataFilterPublic() {
 
 func (sysDataFilterService *SysDataFilterService) ExecuteSql(sqlStr string) (interface{}, error) {
 	//data := make(map[string]any)
-	db, err := global.GVA_DB.DB()
+	db, err := global.HAB_DB.DB()
 	if err != nil {
 		return nil, err
 	}
@@ -154,7 +154,7 @@ func (sysDataFilterService *SysDataFilterService) ExecuteSql(sqlStr string) (int
 
 func (sysDataFilterService *SysDataFilterService) FilterData(filters []string, id uint) (interface{}, error) {
 	var sysDataFilter system.SysDataFilter
-	err := global.GVA_DB.Model(&system.SysDataFilter{}).Where("id = ?", id).First(&sysDataFilter).Error
+	err := global.HAB_DB.Model(&system.SysDataFilter{}).Where("id = ?", id).First(&sysDataFilter).Error
 	if err != nil {
 		return nil, err
 	}
@@ -181,9 +181,9 @@ func (sysDataFilterService *SysDataFilterService) FilterData(filters []string, i
 	}
 	var data []map[string]interface{}
 	if len(havingStr) > 0 {
-		err = global.GVA_DB.Raw(fmt.Sprintf("%s HAVING %s", sysDataFilter.Sql, havingStr)).Scan(&data).Error
+		err = global.HAB_DB.Raw(fmt.Sprintf("%s HAVING %s", sysDataFilter.Sql, havingStr)).Scan(&data).Error
 	} else {
-		err = global.GVA_DB.Raw(sysDataFilter.Sql).Scan(&data).Error
+		err = global.HAB_DB.Raw(sysDataFilter.Sql).Scan(&data).Error
 	}
 	return data, err
 }

@@ -2,9 +2,9 @@ package utils
 
 import (
 	"fmt"
-	"hz-admin-base/global"
-	"hz-admin-base/model/common/request"
-	"hz-admin-base/model/system"
+	"hab/global"
+	"hab/model/common/request"
+	"hab/model/system"
 	"sort"
 	"strings"
 
@@ -40,7 +40,7 @@ func FindTableColumns(tableName string, aid uint) []*system.SysAuthorityCol {
 		}
 	}
 	var authority []*system.SysAuthorityCol
-	err := global.GVA_DB.Model(system.SysAuthorityCol{}).
+	err := global.HAB_DB.Model(system.SysAuthorityCol{}).
 		Where("authority_id = ?", aid).
 		Preload("SysTableColumns").Find(&authority).Error
 	if err != nil {

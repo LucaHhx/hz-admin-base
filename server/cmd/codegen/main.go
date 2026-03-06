@@ -8,11 +8,11 @@ import (
 
 	"gorm.io/gorm/schema"
 
-	"hz-admin-base/core"
-	"hz-admin-base/global"
-	modelsystem "hz-admin-base/model/system"
-	"hz-admin-base/model/system/request"
-	servicesystem "hz-admin-base/service/system"
+	"hab/core"
+	"hab/global"
+	modelsystem "hab/model/system"
+	"hab/model/system/request"
+	servicesystem "hab/service/system"
 )
 
 // ColumnInfo represents database column metadata
@@ -42,7 +42,7 @@ func main() {
 		description = os.Args[3]
 	}
 
-	fmt.Printf("=== GVA Code Generator ===\n")
+	fmt.Printf("=== HAB Code Generator ===\n")
 	fmt.Printf("Table: %s | Package: %s | Description: %s\n\n", tableName, pkg, description)
 
 	// Change to server directory for config file access
@@ -51,8 +51,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Initialize GVA using core.InitServer
-	fmt.Println("Initializing GVA...")
+	// Initialize HAB using core.InitServer
+	fmt.Println("Initializing HAB...")
 	core.InitServer()
 
 	// Get table columns
@@ -77,7 +77,7 @@ func main() {
 	if servicesystem.AutocodeHistory.Repeat(autoCode.BusinessDB, autoCode.StructName, autoCode.Abbreviation, autoCode.Package) {
 		fmt.Printf("Found duplicate struct/abbreviation: %s/%s - removing old records...\n", autoCode.StructName, autoCode.Abbreviation)
 		// Delete all duplicate records using GORM (hard delete)
-		if err := global.GVA_DB.Unscoped().Where("struct_name = ? OR abbreviation = ?", autoCode.StructName, autoCode.Abbreviation).Delete(&modelsystem.SysAutoCodeHistory{}).Error; err != nil {
+		if err := global.HAB_DB.Unscoped().Where("struct_name = ? OR abbreviation = ?", autoCode.StructName, autoCode.Abbreviation).Delete(&modelsystem.SysAutoCodeHistory{}).Error; err != nil {
 			fmt.Printf("Warning: Could not delete duplicate records: %v\n", err)
 			fmt.Println("Continuing anyway...")
 		} else {
@@ -113,7 +113,7 @@ func printUsage() {
 }
 
 func getTableColumns(tableName string) ([]ColumnInfo, error) {
-	dbName := global.GVA_CONFIG.Mysql.Dbname
+	dbName := global.HAB_CONFIG.Mysql.Dbname
 
 	query := `
 		SELECT
@@ -141,7 +141,7 @@ func getTableColumns(tableName string) ([]ColumnInfo, error) {
 		ORDER BY c.ORDINAL_POSITION`
 
 	var columns []ColumnInfo
-	if err := global.GVA_DB.Raw(query, tableName, dbName).Scan(&columns).Error; err != nil {
+	if err := global.HAB_DB.Raw(query, tableName, dbName).Scan(&columns).Error; err != nil {
 		return nil, err
 	}
 
@@ -167,11 +167,11 @@ func buildAutoCodeRequest(tableName, pkg, description string, columns []ColumnIn
 		description = inferDescription(baseName)
 	}
 
-	// Check if table has GVA_MODEL fields (before filtering)
+	// Check if table has HAB_MODEL fields (before filtering)
 	gvaModel := hasGvaModelColumns(columns)
 
 	// Build fields from database columns
-	// Skip GVA_MODEL fields to avoid duplication
+	// Skip HAB_MODEL fields to avoid duplication
 	// Note: created_by, updated_by, deleted_by are auto-added by template when AutoCreateResource=true
 	gvaModelFields := map[string]string{
 		"id":         "ID",
@@ -187,10 +187,10 @@ func buildAutoCodeRequest(tableName, pkg, description string, columns []ColumnIn
 	var primaryField *request.AutoCodeField
 
 	for _, col := range columns {
-		// Skip GVA_MODEL fields
+		// Skip HAB_MODEL fields
 		if _, exists := gvaModelFields[col.ColumnName]; exists {
 			if col.PrimaryKey == 1 {
-				// Still set primaryField for GVA_MODEL tables
+				// Still set primaryField for HAB_MODEL tables
 				primaryField = &request.AutoCodeField{
 					FieldName:    "ID",
 					FieldDesc:    "主键ID",
@@ -433,7 +433,7 @@ func isRequiredField(columnName string) bool {
 	return false
 }
 
-// hasGvaModelColumns checks if the original table columns contain GVA_MODEL fields
+// hasGvaModelColumns checks if the original table columns contain HAB_MODEL fields
 func hasGvaModelColumns(columns []ColumnInfo) bool {
 	gvaFields := map[string]bool{
 		"id": true, "created_at": true, "updated_at": true, "deleted_at": true,

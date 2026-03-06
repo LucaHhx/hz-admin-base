@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"hz-admin-base/global"
+	"hab/global"
 	"path/filepath"
 	"testing"
 )
@@ -24,8 +24,8 @@ func TestPluginInitializeGorm_Injection(t *testing.T) {
 			name: "测试 &model.User{} 注入",
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				StructName:  "User",
 				PackageName: "model",
 				IsNew:       false,
@@ -35,8 +35,8 @@ func TestPluginInitializeGorm_Injection(t *testing.T) {
 			name: "测试 new(model.ExaCustomer) 注入",
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				StructName:  "User",
 				PackageName: "model",
 				IsNew:       true,
@@ -46,8 +46,8 @@ func TestPluginInitializeGorm_Injection(t *testing.T) {
 			name: "测试 new(model.SysUsers) 注入",
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				StructName:  "SysUser",
 				PackageName: "model",
 				IsNew:       true,
@@ -95,8 +95,8 @@ func TestPluginInitializeGorm_Rollback(t *testing.T) {
 			name: "测试 &model.User{} 回滚",
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				StructName:  "User",
 				PackageName: "model",
 				IsNew:       false,
@@ -106,8 +106,8 @@ func TestPluginInitializeGorm_Rollback(t *testing.T) {
 			name: "测试 new(model.ExaCustomer) 回滚",
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
-				ImportPath:  `"hz-admin-base/plugin/gva/model"`,
+				Path:        filepath.Join(global.HAB_CONFIG.AutoCode.Root, global.HAB_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
+				ImportPath:  `"hab/plugin/gva/model"`,
 				StructName:  "User",
 				PackageName: "model",
 				IsNew:       true,

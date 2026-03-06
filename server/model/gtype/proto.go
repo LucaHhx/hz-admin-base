@@ -2,8 +2,8 @@ package gtype
 
 import (
 	"database/sql/driver"
-	"hz-admin-base/enum"
 	"google.golang.org/protobuf/proto"
+	"hab/enum"
 )
 
 type Proto[T proto.Message] struct {

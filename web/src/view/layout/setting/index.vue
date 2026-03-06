@@ -207,7 +207,7 @@ const appStore = useAppStore()
 const { config, device } = storeToRefs(appStore)
 
 defineOptions({
-  name: 'GvaSetting'
+  name: 'HabSetting'
 })
 
 const width = computed(() => {
