@@ -1,0 +1,12 @@
+{
+    "paySimulation": {
+        "order_fail": "订单失败",
+        "order_success": "订单成功"
+    },
+    "recSimulation": {
+        "order_fail": "订单失败",
+        "order_success": "订单成功",
+        "settle_failed": "结算失败",
+        "settle_success": "结算成功"
+    }
+}

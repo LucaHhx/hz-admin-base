@@ -1,0 +1,20 @@
+{
+  "columns": {
+      "name": "Name",
+      "sql": "Sql",
+      "columns": "Columns",
+      "orderBy": "OrderBy",
+      "note": "Note",
+      "ID": "ID",
+      "CreatedAt": "Creation Time",
+      "UpdatedAt": "Update Time",
+      "DeletedAt": "Delete time",
+      "CreatedBy": "Create By",
+      "UpdatedBy": "Updated By",
+      "DeletedBy": "Deleted By"
+  },
+  "enums": {
+  },
+  "messages": {
+  }
+}

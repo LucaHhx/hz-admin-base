@@ -1,0 +1,21 @@
+{
+    "columns": {
+        "CreatedAt": "创建时间",
+        "CreatedBy": "创建人",
+        "DeletedAt": "删除时间",
+        "DeletedBy": "删除人",
+        "ID": "ID",
+        "UpdatedAt": "更新时间",
+        "UpdatedBy": "更新人",
+        "columns": "列",
+        "key": "键",
+        "label": "标签",
+        "name": "关联表",
+        "note": "备注",
+        "orderBy": "排序",
+        "sql": "配置",
+        "value": "值"
+    },
+    "enums": {},
+    "messages": {}
+}

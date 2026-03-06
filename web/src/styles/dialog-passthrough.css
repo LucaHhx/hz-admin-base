@@ -1,0 +1,17 @@
+/* 
+ * 对话框穿透点击样式
+ * 用于让对话框背景可以被穿透点击到后面的元素
+ */
+
+.dialog_modal {
+  pointer-events: none !important;
+  background-color: transparent !important;
+}
+
+.el-overlay.dialog_modal {
+  pointer-events: none !important;
+}
+
+.el-dialog {
+  pointer-events: auto !important;
+} 

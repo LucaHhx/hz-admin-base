@@ -1,0 +1,37 @@
+{
+  "title": "System Settings",
+  "theme": {
+    "title": "Default Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "auto": "Auto"
+  },
+  "themeColor": "Theme Color",
+  "display": {
+    "title": "Theme Configuration",
+    "watermark": "Show Watermark",
+    "greyMode": "Grey Mode",
+    "weaknessMode": "Color Weakness Mode",
+    "menuMode": "Menu Mode",
+    "showTabs": "Show Tabs",
+    "animation": "Page Transition Animation",
+    "language": "Language"
+  },
+  "menuModes": {
+    "normal": "Normal Mode",
+    "head": "Top Menu Mode",
+    "combination": "Combination Mode"
+  },
+  "animations": {
+    "fade": "Fade",
+    "slide": "Slide",
+    "zoom": "Zoom",
+    "none": "None"
+  },
+  "layout": {
+    "title": "Layout Size Configuration",
+    "sideWidth": "Sidebar Expanded Width",
+    "sideCollapsedWidth": "Sidebar Collapsed Width",
+    "sideItemHeight": "Sidebar Item Height"
+  }
+}

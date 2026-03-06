@@ -1,0 +1,37 @@
+{
+    "0": "Operation successful",
+    "7": {
+        "insufficient_permissions": "insufficient permissions"
+    },
+    "1000": {
+        "user_not_found": "User does not exist or password is incorrect",
+        "invalid_password": "Incorrect password",
+        "user_exists": "User already exists",
+        "user_disabled": "User has been disabled",
+        "google_auth_required": "Google authentication code required",
+        "invalid_google_auth": "Invalid Google authentication code",
+        "delete_self_not_allowed": "Cannot delete your own account",
+        "old_password_error": "Original password is incorrect",
+        "set_info_failed": "Failed to set user information",
+        "get_info_failed": "Failed to get user information",
+        "bind_google_auth_failed": "Failed to bind Google authenticator",
+        "reset_google_auth_failed": "Failed to reset Google authenticator",
+        "reset_password_failed": "Failed to reset password"
+    },
+
+    "1001": {
+        "invalid_params": "Invalid parameters",
+        "no_data": "No data",
+        "no_permission": "No permission"
+    },
+
+    "1002": {
+        "create": "Creation failed",
+        "import": "Import failed",
+        "delete": "Deletion failed",
+        "update": "Update failed",
+        "get": "Failed to get",
+        "list": "Failed to get list",
+        "export": "Export failed"
+    }
+} 

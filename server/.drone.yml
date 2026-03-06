@@ -1,0 +1,84 @@
+kind: pipeline
+name: build
+type: docker
+volumes:
+  - name: go-path
+    host:
+      path: /srv/go
+  - name: go-cache
+    host:
+      path: /root/.cache/go-build
+  - name: known_hosts
+    host:
+      path: /root/.ssh/known_hosts
+  - name: base_dir
+    host:
+      path: /srv/server/hz-admin-base
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
+  - name: node_modules
+    host:
+      path: /srv/server/hz-admin-base/web/node_modules
+  - name: webDir
+    host:
+      path: /srv/www
+
+steps:
+  - name: go-build
+    image: golang:latest
+    commands:
+    - set -euo pipefail
+    - apt-get update && apt-get install -y --no-install-recommends rsync ca-certificates && rm -rf /var/lib/apt/lists/*
+    - export BASE_DIR=/srv/server/hz-admin-base
+    - mkdir -p "$BASE_DIR/server"
+
+    - cd ./server
+    - go mod tidy
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o hz-admin-base
+    - rsync -av ./hz-admin-base "$BASE_DIR/server/hz-admin-base"
+    - rsync -av ./config.${DRONE_BRANCH}.yaml "$BASE_DIR/server/config.yaml"
+
+    - cd ../
+    - rsync -av ./docker-compose.${DRONE_BRANCH}.yaml "$BASE_DIR/docker-compose.yaml"
+    volumes:
+      - name: go-path
+        path: /go
+      - name: go-cache
+        path: /root/.cache/go-build
+      - name: base_dir
+        path: /srv/server/hz-admin-base
+    when:
+      branch: [pre,prod]
+
+  - name: npm-build
+    image: node:20
+    commands:
+      - >
+        if [ "${npm}" = "1" ]; then
+          cd ./web
+          npm install &&
+          NODE_OPTIONS="--max-old-space-size=2572" npm run build &&
+          rm -rf /srv/www/hz-admin-web &&
+          cp -r dist /srv/www/hz-admin-web;
+        fi
+    volumes:
+      - name: node_modules
+        path: /drone/src/web/node_modules
+      - name: webDir
+        path: /srv/www
+    when:
+      branch: [ prod ]
+
+  - name: deploy-service
+    image: docker/compose:latest
+    commands:
+      - cd /srv/server/hz-admin-base
+      - docker-compose up -d --force-recreate
+    volumes:
+      - name: base_dir
+        path: /srv/server/hz-admin-base
+      - name: docker_sock
+        path: /var/run/docker.sock
+    when:
+      branch: [pre, prod]

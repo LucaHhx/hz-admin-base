@@ -1,0 +1,16 @@
+{
+  "basicInfo": "Basic Information",
+  "balanceInfo": "Balance Information",
+  "securityInfo": "Security Information",
+  "columns": {
+    "name": "Merchant Name",
+    "uuid": "Merchant ID",
+    "domain": "Domain",
+    "amount": "Available Balance",
+    "settleAmount": "Pending Settlement",
+    "freezeAmount": "Frozen Amount",
+    "sumAmount": "Total Balance",
+    "whitelist": "IP Whitelist",
+    "pubKey": "Public Key"
+  }
+} 

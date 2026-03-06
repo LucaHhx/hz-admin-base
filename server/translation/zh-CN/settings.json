@@ -1,0 +1,37 @@
+{
+    "animations": {
+        "fade": "淡入淡出",
+        "none": "无动画",
+        "slide": "滑动",
+        "zoom": "缩放"
+    },
+    "display": {
+        "animation": "页面切换动画",
+        "greyMode": "灰色模式",
+        "language": "语言设置",
+        "menuMode": "菜单模式",
+        "showTabs": "显示标签页",
+        "title": "主题配置",
+        "watermark": "展示水印",
+        "weaknessMode": "色弱模式"
+    },
+    "layout": {
+        "sideCollapsedWidth": "侧边栏收缩宽度",
+        "sideItemHeight": "侧边栏子项高度",
+        "sideWidth": "侧边栏展开宽度",
+        "title": "layout 大小配置"
+    },
+    "menuModes": {
+        "combination": "组合模式",
+        "head": "顶部菜单栏模式",
+        "normal": "正常模式"
+    },
+    "theme": {
+        "auto": "自动",
+        "dark": "深色",
+        "light": "浅色",
+        "title": "默认主题"
+    },
+    "themeColor": "主题色",
+    "title": "系统配置"
+}

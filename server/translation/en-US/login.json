@@ -1,0 +1,21 @@
+{
+  "title": "Login",
+  "username": "Please enter username",
+  "password": "Please enter password",
+  "captcha": "Please enter captcha",
+  "login": "Login",
+  "goInit": "Go to Initialize",
+  "description": "A Management Platform Using Golang and Vue",
+  "usernameRule": "Please enter a valid username",
+  "passwordRule": "Please enter a valid password",
+  "captchaRule": "Please enter {length} digits captcha",
+  "validateError": "Please fill in the login information correctly",
+  "dbConfigured": "Database is already configured, cannot initialize",
+  "docs": "Docs",
+  "support": "Support",
+  "video": "Video",
+  "googleAuthCode": "Google Auth Code",
+  "enterGoogleAuthCode": "Not bound, no need to enter",
+  "googleAuthCodeRule": "Please enter 6 digits Google Auth Code",
+  "googleAuthCodeError": "Google Auth Code Error"
+}

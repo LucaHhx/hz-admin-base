@@ -1,0 +1,16 @@
+{
+    "balanceInfo": "余额信息",
+    "basicInfo": "基本信息",
+    "columns": {
+        "amount": "可用余额",
+        "domain": "域名",
+        "freezeAmount": "冻结金额",
+        "name": "商户名称",
+        "pubKey": "公钥",
+        "settleAmount": "待结算金额",
+        "sumAmount": "总余额",
+        "uuid": "商户编号",
+        "whitelist": "IP白名单"
+    },
+    "securityInfo": "安全信息"
+}
