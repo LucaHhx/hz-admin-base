@@ -18,4 +18,8 @@ func initBizRouter(routers ...*gin.RouterGroup) {
 		systemRouter.InitSysTableColumnsRouter(privateGroup, publicGroup)
 		systemRouter.InitSysDataFilterRouter(privateGroup, publicGroup)
 	}
+	{
+		testsRouter := router.RouterGroupApp.Tests
+		testsRouter.InitOrderRouter(privateGroup, publicGroup)
+	}
 }

@@ -57,13 +57,13 @@ res["{{$key}}"] = {{$key}}
 package {{.Package}}
 
 import (
-    "forge-basic/global"
-    "forge-basic/enum"
+    "{{.Module}}/global"
+    "{{.Module}}/enum"
     "github.com/pkg/errors"
 {{- if not .OnlyTemplate }}
     "github.com/gin-gonic/gin"
-    "forge-basic/model/common/request"
-    "forge-basic/utils"
+    "{{.Module}}/model/common/request"
+    "{{.Module}}/utils"
 	"{{.Module}}/model/{{.Package}}"
 	{{- if not .IsTree}}
     //{{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
@@ -71,9 +71,7 @@ import (
     "{{.Module}}/utils"
     "errors"
     {{- end }}
-    {{- if .AutoCreateResource }}
     "gorm.io/gorm"
-    {{- end}}
 {{- end }}
 )
 

@@ -1,9 +1,9 @@
 package {{.Package}}
 
 import (
-    "forge-basic/code"
-    "forge-basic/enum"
-	"forge-basic/model/common/request"
+    "{{.Module}}/code"
+    "{{.Module}}/enum"
+	"{{.Module}}/model/common/request"
 	{{if not .OnlyTemplate}}
 	"{{.Module}}/global"
     "{{.Module}}/model/common/response"
