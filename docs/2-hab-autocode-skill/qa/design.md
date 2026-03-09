@@ -38,7 +38,27 @@
 | 场景 D | 使用 API Key 回滚 | 返回成功，文件已移除 |
 | 场景 E | 使用 API Key 查询表结构 | 返回数据库/表/列信息 |
 
-### 4. 配置变更测试
+### 4. 辅助脚本测试
+
+| 用例 | 操作 | 期望结果 |
+|------|------|----------|
+| config.sh 读取正确配置 | source config.sh，检查 HAB_API_KEY 等变量 | 环境变量值与 config.yaml 一致 |
+| config.sh 配置文件缺失 | 删除 config.yaml 后 source config.sh | 输出错误信息并退出 |
+| autocode.sh 无参数 | 运行 ./autocode.sh | 输出 help 信息 |
+| autocode.sh 未配置 API Key | api-key 为空时运行 ./autocode.sh packages | 输出错误信息并退出 |
+| autocode.sh packages 命令 | 运行 ./autocode.sh packages | 返回包列表 JSON |
+| 示例 JSON 格式验证 | 对 examples/ 下所有 JSON 文件执行 `jq .` | 全部解析成功，格式正确 |
+
+### 5. SKILL.md 文档验证
+
+| 用例 | 操作 | 期望结果 |
+|------|------|----------|
+| API 端点覆盖率 | 比对 SKILL.md 中的 API 列表与 plan.md 中的端点清单 | 全部 13+ 个端点均有文档 |
+| curl 示例可执行 | 按 SKILL.md 中的 curl 示例发送请求 | 请求格式正确，服务端能正常处理 |
+| 操作流程完整性 | SKILL.md 包含创建包→创建模块→预览→确认→回滚完整流程 | 流程步骤完整且顺序正确 |
+| 字段参考表准确性 | 比对 SKILL.md 字段表与实际代码中的结构体定义 | 字段名、类型、必填性一致 |
+
+### 6. 配置变更测试
 
 | 用例 | 操作 | 期望结果 |
 |------|------|----------|

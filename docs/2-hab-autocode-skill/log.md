@@ -2,6 +2,10 @@
 
 > 计划: hab-autocode-skill
 
+## 2026-03-09
+
+- [决策] Tech Lead 评审: backend/design.md 技术方案完整可行; qa/design.md 补充辅助脚本测试和 SKILL.md 文档验证用例; qa/tasks.md 新增任务 #5(脚本验证) #6(文档验证); L2 tasks.md 任务 #1 补充完成日期
+
 ## 2026-03-06
 
 - [变更] 补充 Skill 交付物清单、端到端使用场景、细化验收标准；拆分 Skill 文档和辅助脚本为独立任务
