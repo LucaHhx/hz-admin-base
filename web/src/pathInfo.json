@@ -68,5 +68,7 @@
   "/src/view/systemTools/pubPlug/pubPlug.vue": "PubPlug",
   "/src/view/systemTools/system/system.vue": "Config",
   "/src/view/systemTools/translation/index.vue": "Index",
+  "/src/view/tests/order/order.vue": "Order",
+  "/src/view/tests/order/orderForm.vue": "OrderForm",
   "/src/view/user/index.vue": "UserInfo"
 }
