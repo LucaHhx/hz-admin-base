@@ -16,4 +16,5 @@ type System struct {
 	Migration      bool   `mapstructure:"migration" json:"migration" yaml:"migration"`                   // 是否迁移数据库
 	TranslationDir string `mapstructure:"translation-dir" json:"translation-dir" yaml:"translation-dir"` // 翻译文件目录
 	Environment    string `mapstructure:"environment" json:"environment" yaml:"environment"`             // 环境
+	LoginMode      string `mapstructure:"login-mode" json:"login-mode" yaml:"login-mode"`                // 登录模式: simple|captcha|strict
 }

@@ -27,67 +27,18 @@
             </div>
 
             <el-form ref="loginForm" :model="formData" :rules="rules" @keyup.enter="handleMainAction">
-              <!-- 用户名输入步骤 -->
-              <div v-if="step === 'USERNAME'">
+              <!-- ==================== simple / captcha 模式 ==================== -->
+              <div v-if="loginMode !== 'strict'">
                 <el-form-item prop="username" class="mb-6">
-                  <div class="flex w-full gap-2">
-                    <el-input
-                      v-model="formData.username"
-                      size="large"
-                      :placeholder="$t('login.username')"
-                      suffix-icon="user"
-                      class="flex-1"
-                    />
-
-                    <el-tooltip :content="$t('login.next')" placement="top">
-                      <el-button
-                        size="large"
-                        :loading="loading"
-                        circle
-                        class="next-btn"
-                        aria-label="Next"
-                        @click="handleNext"
-                      >
-                        <el-icon class="arrow-icon"><Right /></el-icon>
-                      </el-button>
-                    </el-tooltip>
-                  </div>
-                </el-form-item>
-              </div>
-
-              <!-- 认证步骤 -->
-              <div v-if="step === 'AUTH'">
-                <!-- 用户名显示 + 返回按钮 -->
-                <el-form-item class="mb-6">
-                  <div class="flex w-full gap-2 items-center">
-                    <el-button
-                      size="large"
-                      type="default"
-                      class="px-3"
-                      @click="resetToUsername"
-                    >
-                      <el-icon><Back /></el-icon>
-                    </el-button>
-                    <div class="flex-1 text-center text-lg font-medium text-gray-700">
-                      {{ securityState?.display_name || formData.username }}
-                    </div>
-                  </div>
-                </el-form-item>
-
-                <!-- TOTP验证码输入 -->
-                <el-form-item v-if="showTotpInput" prop="code" class="mb-6">
                   <el-input
-                    v-model="formData.code"
+                    v-model="formData.username"
                     size="large"
-                    :placeholder="$t('login.enterTotpCode')"
-                    maxlength="6"
-                    clearable
-                    @input="handleCodeInput"
+                    :placeholder="$t('login.username')"
+                    suffix-icon="user"
                   />
                 </el-form-item>
 
-                <!-- 密码输入（未绑定安全验证时） -->
-                <el-form-item v-if="showPasswordInput" prop="password" class="mb-6">
+                <el-form-item prop="password" class="mb-6">
                   <el-input
                     v-model="formData.password"
                     show-password
@@ -97,8 +48,8 @@
                   />
                 </el-form-item>
 
-                <!-- 图片验证码（密码登录时显示） -->
-                <el-form-item v-if="showPasswordInput" prop="captcha" class="mb-6">
+                <!-- 仅 captcha 模式显示验证码 -->
+                <el-form-item v-if="loginMode === 'captcha'" prop="captcha" class="mb-6">
                   <div class="flex w-full gap-2">
                     <el-input
                       v-model="formData.captcha"
@@ -107,42 +58,144 @@
                       class="flex-1"
                       maxlength="6"
                     />
-                    <div class="w-32 h-10 border border-gray-300 rounded cursor-pointer flex items-center justify-center bg-white" @click="getCaptcha">
-                      <img v-if="captchaUrl" :src="captchaUrl" alt="验证码" class="w-full h-full object-cover rounded">
+                    <div class="w-32 h-11 border border-gray-300 rounded-lg cursor-pointer flex items-center justify-center bg-white" @click="getCaptcha">
+                      <img v-if="captchaUrl" :src="captchaUrl" alt="验证码" class="w-full h-full object-cover rounded-lg">
                       <span v-else class="text-gray-400 text-sm">点击获取</span>
                     </div>
                   </div>
                 </el-form-item>
 
-                <!-- 登录按钮 -->
                 <el-form-item class="mb-6">
                   <el-button
-                    v-if="!securityState.has_passkey"
                     class="shadow shadow-active h-11 w-full"
                     type="primary"
                     size="large"
                     :loading="loading"
-                    @click="handleLogin"
+                    @click="handleSimpleLogin"
                   >
-                    {{ getLoginButtonText }}
+                    {{ $t('login.login') }}
                   </el-button>
                 </el-form-item>
               </div>
 
-              <!-- Passkey登录按钮（总是显示） -->
-              <el-form-item class="mb-6">
-                <el-button
+              <!-- ==================== strict 模式: 保持现有分步流程 ==================== -->
+              <div v-else>
+                <!-- 用户名输入步骤 -->
+                <div v-if="step === 'USERNAME'">
+                  <el-form-item prop="username" class="mb-6">
+                    <div class="flex w-full gap-2">
+                      <el-input
+                        v-model="formData.username"
+                        size="large"
+                        :placeholder="$t('login.username')"
+                        suffix-icon="user"
+                        class="flex-1"
+                      />
 
-                  class="h-11 w-full"
-                  type="default"
-                  size="large"
-                  :loading="passkeyLoading"
-                  @click="handlePasskeyLogin"
-                >
-                  <el-icon class="mr-2"><Key /></el-icon>
-                  {{ $t('login.passkeyLogin') }}
-                </el-button>
-              </el-form-item>
+                      <el-tooltip :content="$t('login.next')" placement="top">
+                        <el-button
+                          size="large"
+                          :loading="loading"
+                          circle
+                          class="next-btn"
+                          aria-label="Next"
+                          @click="handleNext"
+                        >
+                          <el-icon class="arrow-icon"><Right /></el-icon>
+                        </el-button>
+                      </el-tooltip>
+                    </div>
+                  </el-form-item>
+                </div>
+
+                <!-- 认证步骤 -->
+                <div v-if="step === 'AUTH'">
+                  <!-- 用户名显示 + 返回按钮 -->
+                  <el-form-item class="mb-6">
+                    <div class="flex w-full gap-2 items-center">
+                      <el-button
+                        size="large"
+                        type="default"
+                        class="px-3"
+                        @click="resetToUsername"
+                      >
+                        <el-icon><Back /></el-icon>
+                      </el-button>
+                      <div class="flex-1 text-center text-lg font-medium text-gray-700">
+                        {{ securityState?.display_name || formData.username }}
+                      </div>
+                    </div>
+                  </el-form-item>
+
+                  <!-- TOTP验证码输入 -->
+                  <el-form-item v-if="showTotpInput" prop="code" class="mb-6">
+                    <el-input
+                      v-model="formData.code"
+                      size="large"
+                      :placeholder="$t('login.enterTotpCode')"
+                      maxlength="6"
+                      clearable
+                      @input="handleCodeInput"
+                    />
+                  </el-form-item>
+
+                  <!-- 密码输入（未绑定安全验证时） -->
+                  <el-form-item v-if="showPasswordInput" prop="password" class="mb-6">
+                    <el-input
+                      v-model="formData.password"
+                      show-password
+                      size="large"
+                      type="password"
+                      :placeholder="$t('login.pleaseEnterPassword')"
+                    />
+                  </el-form-item>
+
+                  <!-- 图片验证码（密码登录时显示） -->
+                  <el-form-item v-if="showPasswordInput" prop="captcha" class="mb-6">
+                    <div class="flex w-full gap-2">
+                      <el-input
+                        v-model="formData.captcha"
+                        size="large"
+                        :placeholder="$t('login.pleaseEnterCaptcha')"
+                        class="flex-1"
+                        maxlength="6"
+                      />
+                      <div class="w-32 h-10 border border-gray-300 rounded cursor-pointer flex items-center justify-center bg-white" @click="getCaptcha">
+                        <img v-if="captchaUrl" :src="captchaUrl" alt="验证码" class="w-full h-full object-cover rounded">
+                        <span v-else class="text-gray-400 text-sm">点击获取</span>
+                      </div>
+                    </div>
+                  </el-form-item>
+
+                  <!-- 登录按钮 -->
+                  <el-form-item class="mb-6">
+                    <el-button
+                      v-if="!securityState.has_passkey"
+                      class="shadow shadow-active h-11 w-full"
+                      type="primary"
+                      size="large"
+                      :loading="loading"
+                      @click="handleLogin"
+                    >
+                      {{ getLoginButtonText }}
+                    </el-button>
+                  </el-form-item>
+                </div>
+
+                <!-- Passkey登录按钮（仅 strict 模式显示） -->
+                <el-form-item class="mb-6">
+                  <el-button
+                    class="h-11 w-full"
+                    type="default"
+                    size="large"
+                    :loading="passkeyLoading"
+                    @click="handlePasskeyLogin"
+                  >
+                    <el-icon class="mr-2"><Key /></el-icon>
+                    {{ $t('login.passkeyLogin') }}
+                  </el-button>
+                </el-form-item>
+              </div>
             </el-form>
           </div>
         </div>
@@ -260,6 +313,8 @@ import QRCode from 'qrcode'
 
 // 新的API服务
 import {
+  getLoginMode as getLoginModeApi,
+  passwordLogin,
   securityState as securityStateApi,
   passwordVerify,
   totpLogin,
@@ -280,6 +335,9 @@ const language = ref('zh-CN')
 const LanguageList = ref([])
 const loginForm = ref(null)
 const qrCanvas = ref(null)
+
+// 登录模式
+const loginMode = ref('simple') // 'simple' | 'captcha' | 'strict'
 
 // 状态管理
 const step = ref('USERNAME') // 'USERNAME' | 'AUTH'
@@ -335,14 +393,14 @@ const rules = computed(() => ({
   username: [
     { required: true, message: t('login.usernameRequired'), trigger: 'blur' }
   ],
-  password: showPasswordInput.value ? [
+  password: (loginMode.value !== 'strict' || showPasswordInput.value) ? [
     { required: true, message: t('login.passwordRequired'), trigger: 'blur' }
   ] : [],
   code: showTotpInput.value ? [
     { required: true, message: t('login.codeRequired'), trigger: 'blur' },
     { len: 6, message: t('login.codeLength'), trigger: 'blur' }
   ] : [],
-  captcha: showPasswordInput.value ? [
+  captcha: (loginMode.value === 'captcha' || (loginMode.value === 'strict' && showPasswordInput.value)) ? [
     { required: true, message: t('login.captchaRequired'), trigger: 'blur' },
     { min: 4, message: t('login.captchaLength'), trigger: 'blur' }
   ] : []
@@ -354,6 +412,21 @@ const routerStore = useRouterStore()
 
 // 生命周期
 onMounted(async() => {
+  // 获取登录模式
+  try {
+    const modeRes = await getLoginModeApi()
+    if (modeRes.code === 0) {
+      loginMode.value = modeRes.data.login_mode
+    }
+  } catch (error) {
+    console.error('Failed to get login mode:', error)
+  }
+
+  // captcha 模式自动获取验证码
+  if (loginMode.value === 'captcha') {
+    await getCaptcha()
+  }
+
   try {
     const res = await getDict('Language')
     LanguageList.value = res
@@ -368,10 +441,38 @@ const handleLanguageChange = (val) => {
 }
 
 const handleMainAction = () => {
-  if (step.value === 'USERNAME') {
+  if (loginMode.value !== 'strict') {
+    handleSimpleLogin()
+  } else if (step.value === 'USERNAME') {
     handleNext()
   } else if (step.value === 'AUTH') {
     handleLogin()
+  }
+}
+
+const handleSimpleLogin = async() => {
+  loading.value = true
+  try {
+    const payload = {
+      username: formData.username,
+      password: formData.password
+    }
+    if (loginMode.value === 'captcha') {
+      payload.captcha = formData.captcha
+      payload.captchaId = formData.captchaId
+    }
+    const res = await passwordLogin(payload)
+    if (res.code === 0) {
+      await handleLoginSuccess(res.data)
+    } else {
+      ElMessage.error(res.msg)
+      if (loginMode.value === 'captcha') {
+        formData.captcha = ''
+        await getCaptcha()
+      }
+    }
+  } finally {
+    loading.value = false
   }
 }
 

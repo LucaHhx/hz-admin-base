@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设计稿 — 登录模式配置（响应式）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              500: '#2563EB',
+              600: '#1D4ED8',
+              700: '#1E40AF',
+            },
+            'brand-bg': '#0F6BF8',
+          },
+          fontFamily: {
+            sans: ['system-ui', '-apple-system', 'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 4px 24px rgba(0, 0, 0, 0.08)',
+            'btn': '0 6px 16px rgba(37, 99, 235, 0.3)',
+            'btn-hover': '0 10px 24px rgba(37, 99, 235, 0.35)',
+          },
+        },
+      },
+    }
+  </script>
+  <!--
+    ==================== 资源规则 ====================
+    禁止使用外部 URL 引用本地应有的资源（图标、图片、logo 等）。
+    所有本地资源必须放在 Resources/ 目录并使用相对路径引用。
+    示例:
+      正确: <img src="Resources/icons/logo.svg" />
+      错误: <img src="https://example.com/logo.svg" />
+    ================================================
+  -->
+  <style>
+    /* 模式切换器样式 */
+    .mode-switcher {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 9999;
+      background: white;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    }
+    .mode-switcher label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      cursor: pointer;
+      font-size: 14px;
+      color: #374151;
+    }
+    .mode-switcher input[type="radio"] {
+      accent-color: #2563EB;
+    }
+    .mode-section { display: none; }
+    .mode-section.active { display: block; }
+
+    /* 渐变按钮 */
+    .btn-gradient {
+      background: linear-gradient(135deg, #5b8cff, #2a62f2);
+      box-shadow: 0 6px 16px rgba(25, 75, 251, 0.3), 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+    .btn-gradient:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(25, 75, 251, 0.35), 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .btn-gradient:active {
+      transform: translateY(0);
+    }
+
+    /* 验证码占位 */
+    .captcha-placeholder {
+      background: linear-gradient(135deg, #f0f0f0 25%, #e0e0e0 25%, #e0e0e0 50%, #f0f0f0 50%, #f0f0f0 75%, #e0e0e0 75%);
+      background-size: 20px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Courier New', monospace;
+      font-size: 20px;
+      font-weight: bold;
+      color: #6B7280;
+      letter-spacing: 4px;
+      user-select: none;
+    }
+
+    /* 装饰背景 SVG 占位 */
+    .deco-bg {
+      background: linear-gradient(135deg, #2563EB 0%, #0F6BF8 50%, #1D4ED8 100%);
+    }
+
+    /* 输入框聚焦样式模拟 */
+    .input-mock {
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-mock:focus-within {
+      border-color: #2563EB;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    /* 分隔线 */
+    .divider-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #9CA3AF;
+      font-size: 12px;
+    }
+    .divider-text::before,
+    .divider-text::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #E5E7EB;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <!-- ============================================================ -->
+  <!-- 模式切换器（仅设计稿预览用，非实际 UI 组件）                    -->
+  <!-- ============================================================ -->
+  <div class="mode-switcher">
+    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">预览模式</div>
+    <label>
+      <input type="radio" name="mode" value="simple" checked onchange="switchMode('simple')">
+      <span>Simple — 简单模式</span>
+    </label>
+    <label>
+      <input type="radio" name="mode" value="captcha" onchange="switchMode('captcha')">
+      <span>Captcha — 验证码模式</span>
+    </label>
+    <label>
+      <input type="radio" name="mode" value="strict" onchange="switchMode('strict')">
+      <span>Strict — 强验证模式</span>
+    </label>
+    <hr class="my-2 border-gray-200">
+    <label>
+      <input type="radio" name="mode" value="strict-auth" onchange="switchMode('strict-auth')">
+      <span>Strict — 认证步骤</span>
+    </label>
+    <label>
+      <input type="radio" name="mode" value="strict-bind" onchange="switchMode('strict-bind')">
+      <span>Strict — 绑定弹窗</span>
+    </label>
+    <label>
+      <input type="radio" name="mode" value="error" onchange="switchMode('error')">
+      <span>错误状态</span>
+    </label>
+    <label>
+      <input type="radio" name="mode" value="loading" onchange="switchMode('loading')">
+      <span>加载状态</span>
+    </label>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Simple 模式 — 用户名 + 密码直接登录                            -->
+  <!-- 场景 A: 开发环境，最简洁的登录体验                              -->
+  <!-- ============================================================ -->
+  <div id="mode-simple" class="mode-section active">
+    <div class="min-h-screen w-full relative">
+      <!-- 语言切换器 -->
+      <div class="absolute top-4 right-4 z-50">
+        <div class="flex items-center gap-1.5 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-600 cursor-pointer hover:border-gray-300">
+          <img src="Resources/icons/globe.svg" alt="" class="w-4 h-4 opacity-50">
+          <span>中文</span>
+          <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <div class="flex min-h-screen">
+        <!-- 左侧：登录表单 -->
+        <div class="w-full md:w-1/2 lg:w-2/5 flex items-center justify-center bg-white px-6 py-12">
+          <div class="w-full max-w-sm">
+            <!-- Logo + 应用名 -->
+            <div class="text-center mb-9">
+              <!-- Logo 占位：纯色圆形 + 首字母 -->
+              <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center">
+                <span class="text-white text-3xl font-bold">H</span>
+              </div>
+              <h1 class="text-3xl font-bold text-gray-900">hab</h1>
+              <p class="text-sm text-gray-500 mt-2">通用后台管理系统</p>
+            </div>
+
+            <!-- 表单 -->
+            <div class="space-y-4">
+              <!-- 用户名 -->
+              <div>
+                <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                  <img src="Resources/icons/user.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                  <span class="text-gray-400 text-sm">请输入用户名</span>
+                </div>
+              </div>
+
+              <!-- 密码 -->
+              <div>
+                <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                  <img src="Resources/icons/lock.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                  <span class="text-gray-400 text-sm">请输入密码</span>
+                </div>
+              </div>
+
+              <!-- 登录按钮 -->
+              <button class="w-full h-11 bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white font-medium rounded-lg shadow-btn cursor-pointer transition-colors">
+                登 录
+              </button>
+            </div>
+
+            <!-- 模式标签 -->
+            <!-- 交互说明: 此标签仅在设计稿中标注当前模式，实际 UI 不需要显示 -->
+            <div class="mt-8 text-center">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-600 text-xs rounded-full">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                Simple 模式 — 开发环境
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：装饰区域（桌面端显示） -->
+        <div class="hidden md:flex md:w-1/2 lg:w-3/5 deco-bg items-center justify-center p-12">
+          <div class="text-center text-white max-w-md">
+            <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-white/10 flex items-center justify-center">
+              <img src="Resources/icons/shield.svg" alt="" class="w-12 h-12" style="filter: brightness(0) invert(1);">
+            </div>
+            <h2 class="text-3xl font-bold mb-4">安全可靠的后台管理</h2>
+            <p class="text-white/70 text-base leading-relaxed">灵活的登录模式配置，满足从开发调试到生产环境的不同安全需求</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Captcha 模式 — 用户名 + 密码 + 图片验证码                      -->
+  <!-- 场景 B: 内部部署，增加验证码防止暴力破解                        -->
+  <!-- ============================================================ -->
+  <div id="mode-captcha" class="mode-section">
+    <div class="min-h-screen w-full relative">
+      <!-- 语言切换器 -->
+      <div class="absolute top-4 right-4 z-50">
+        <div class="flex items-center gap-1.5 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-600 cursor-pointer hover:border-gray-300">
+          <img src="Resources/icons/globe.svg" alt="" class="w-4 h-4 opacity-50">
+          <span>中文</span>
+          <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <div class="flex min-h-screen">
+        <!-- 左侧：登录表单 -->
+        <div class="w-full md:w-1/2 lg:w-2/5 flex items-center justify-center bg-white px-6 py-12">
+          <div class="w-full max-w-sm">
+            <!-- Logo + 应用名 -->
+            <div class="text-center mb-9">
+              <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center">
+                <span class="text-white text-3xl font-bold">H</span>
+              </div>
+              <h1 class="text-3xl font-bold text-gray-900">hab</h1>
+              <p class="text-sm text-gray-500 mt-2">通用后台管理系统</p>
+            </div>
+
+            <!-- 表单 -->
+            <div class="space-y-4">
+              <!-- 用户名 -->
+              <div>
+                <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                  <img src="Resources/icons/user.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                  <span class="text-gray-400 text-sm">请输入用户名</span>
+                </div>
+              </div>
+
+              <!-- 密码 -->
+              <div>
+                <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                  <img src="Resources/icons/lock.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                  <span class="text-gray-400 text-sm">请输入密码</span>
+                </div>
+              </div>
+
+              <!-- 验证码 -->
+              <!-- 交互说明: 点击验证码图片刷新 -->
+              <div>
+                <div class="flex gap-2">
+                  <div class="input-mock flex-1 flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                    <img src="Resources/icons/image-captcha.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                    <span class="text-gray-400 text-sm">请输入验证码</span>
+                  </div>
+                  <!-- 验证码图片占位 -->
+                  <div class="w-32 h-11 rounded-lg border border-gray-200 captcha-placeholder cursor-pointer" title="点击刷新验证码">
+                    <span>A7x2</span>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-400 mt-1 ml-1">点击图片刷新验证码</p>
+              </div>
+
+              <!-- 登录按钮 -->
+              <button class="w-full h-11 bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white font-medium rounded-lg shadow-btn cursor-pointer transition-colors">
+                登 录
+              </button>
+            </div>
+
+            <!-- 模式标签 -->
+            <div class="mt-8 text-center">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-600 text-xs rounded-full">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                Captcha 模式 — 内部部署
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧装饰 -->
+        <div class="hidden md:flex md:w-1/2 lg:w-3/5 deco-bg items-center justify-center p-12">
+          <div class="text-center text-white max-w-md">
+            <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-white/10 flex items-center justify-center">
+              <img src="Resources/icons/shield.svg" alt="" class="w-12 h-12" style="filter: brightness(0) invert(1);">
+            </div>
+            <h2 class="text-3xl font-bold mb-4">安全可靠的后台管理</h2>
+            <p class="text-white/70 text-base leading-relaxed">灵活的登录模式配置，满足从开发调试到生产环境的不同安全需求</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Strict 模式 — 第一步：输入用户名                               -->
+  <!-- 场景 C: 生产环境，分步认证流程                                 -->
+  <!-- ============================================================ -->
+  <div id="mode-strict" class="mode-section">
+    <div class="min-h-screen w-full relative">
+      <!-- 语言切换器 -->
+      <div class="absolute top-4 right-4 z-50">
+        <div class="flex items-center gap-1.5 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-600 cursor-pointer hover:border-gray-300">
+          <img src="Resources/icons/globe.svg" alt="" class="w-4 h-4 opacity-50">
+          <span>中文</span>
+          <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <div class="flex min-h-screen">
+        <div class="w-full md:w-1/2 lg:w-2/5 flex items-center justify-center bg-white px-6 py-12">
+          <div class="w-full max-w-sm">
+            <div class="text-center mb-9">
+              <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center">
+                <span class="text-white text-3xl font-bold">H</span>
+              </div>
+              <h1 class="text-3xl font-bold text-gray-900">hab</h1>
+              <p class="text-sm text-gray-500 mt-2">通用后台管理系统</p>
+            </div>
+
+            <!-- 第一步：用户名 + 下一步按钮 -->
+            <div class="space-y-4">
+              <div>
+                <div class="flex gap-2">
+                  <div class="input-mock flex-1 flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                    <img src="Resources/icons/user.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                    <span class="text-gray-400 text-sm">请输入用户名</span>
+                  </div>
+                  <!-- 下一步圆形按钮 -->
+                  <button class="w-11 h-11 rounded-full btn-gradient flex items-center justify-center cursor-pointer flex-shrink-0">
+                    <img src="Resources/icons/arrow-right.svg" alt="下一步" class="w-5 h-5" style="filter: brightness(0) invert(1);">
+                  </button>
+                </div>
+              </div>
+
+              <!-- 分隔线 -->
+              <div class="divider-text">或</div>
+
+              <!-- Passkey 按钮 -->
+              <!-- 交互说明: Passkey 登录无需先输入用户名，可直接点击 -->
+              <button class="w-full h-11 border border-gray-200 hover:border-gray-300 bg-white text-gray-700 font-medium rounded-lg flex items-center justify-center gap-2 cursor-pointer transition-colors">
+                <img src="Resources/icons/key.svg" alt="" class="w-5 h-5 opacity-60">
+                使用 Passkey 登录
+              </button>
+            </div>
+
+            <!-- 模式标签 -->
+            <div class="mt-8 text-center">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-orange-50 text-orange-600 text-xs rounded-full">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                Strict 模式 — 生产环境
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧装饰 -->
+        <div class="hidden md:flex md:w-1/2 lg:w-3/5 deco-bg items-center justify-center p-12">
+          <div class="text-center text-white max-w-md">
+            <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-white/10 flex items-center justify-center">
+              <img src="Resources/icons/shield.svg" alt="" class="w-12 h-12" style="filter: brightness(0) invert(1);">
+            </div>
+            <h2 class="text-3xl font-bold mb-4">安全可靠的后台管理</h2>
+            <p class="text-white/70 text-base leading-relaxed">灵活的登录模式配置，满足从开发调试到生产环境的不同安全需求</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Strict 模式 — 第二步：认证（TOTP / 密码+验证码）               -->
+  <!-- 输入用户名后，根据安全状态显示不同的认证方式                     -->
+  <!-- ============================================================ -->
+  <div id="mode-strict-auth" class="mode-section">
+    <div class="min-h-screen w-full relative">
+      <div class="absolute top-4 right-4 z-50">
+        <div class="flex items-center gap-1.5 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-600 cursor-pointer hover:border-gray-300">
+          <img src="Resources/icons/globe.svg" alt="" class="w-4 h-4 opacity-50">
+          <span>中文</span>
+          <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <div class="flex min-h-screen">
+        <div class="w-full md:w-1/2 lg:w-2/5 flex items-center justify-center bg-white px-6 py-12">
+          <div class="w-full max-w-sm">
+            <div class="text-center mb-9">
+              <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center">
+                <span class="text-white text-3xl font-bold">H</span>
+              </div>
+              <h1 class="text-3xl font-bold text-gray-900">hab</h1>
+              <p class="text-sm text-gray-500 mt-2">通用后台管理系统</p>
+            </div>
+
+            <div class="space-y-4">
+              <!-- 用户名显示 + 返回按钮 -->
+              <div class="flex items-center gap-2">
+                <button class="w-11 h-11 rounded-lg border border-gray-200 hover:border-gray-300 flex items-center justify-center cursor-pointer transition-colors flex-shrink-0">
+                  <img src="Resources/icons/arrow-left.svg" alt="返回" class="w-5 h-5 opacity-60">
+                </button>
+                <div class="flex-1 text-center">
+                  <span class="text-lg font-medium text-gray-700">张三</span>
+                </div>
+              </div>
+
+              <!-- 场景 1: 已绑定 TOTP — 显示 TOTP 输入 -->
+              <div class="bg-gray-50 rounded-lg p-4">
+                <p class="text-xs text-gray-500 mb-3">已绑定 TOTP 验证，请输入动态验证码</p>
+                <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                  <img src="Resources/icons/shield.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                  <span class="text-gray-400 text-sm">请输入 6 位验证码</span>
+                </div>
+                <!-- 交互说明: 输入满 6 位自动提交 -->
+              </div>
+
+              <!-- 场景 2: 未绑定 — 显示密码 + 验证码 -->
+              <div class="border-t border-gray-100 pt-4">
+                <p class="text-xs text-gray-400 mb-3">或（未绑定 TOTP 时显示）</p>
+
+                <!-- 密码 -->
+                <div class="space-y-3">
+                  <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                    <img src="Resources/icons/lock.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                    <span class="text-gray-400 text-sm">请输入密码</span>
+                  </div>
+
+                  <!-- 验证码 -->
+                  <div class="flex gap-2">
+                    <div class="input-mock flex-1 flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                      <img src="Resources/icons/image-captcha.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                      <span class="text-gray-400 text-sm">请输入验证码</span>
+                    </div>
+                    <div class="w-32 h-11 rounded-lg border border-gray-200 captcha-placeholder cursor-pointer" title="点击刷新验证码">
+                      <span>K9mP</span>
+                    </div>
+                  </div>
+
+                  <!-- 登录按钮 -->
+                  <button class="w-full h-11 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-lg shadow-btn cursor-pointer transition-colors">
+                    登 录
+                  </button>
+                </div>
+              </div>
+
+              <!-- 分隔线 -->
+              <div class="divider-text">或</div>
+
+              <!-- Passkey -->
+              <button class="w-full h-11 border border-gray-200 hover:border-gray-300 bg-white text-gray-700 font-medium rounded-lg flex items-center justify-center gap-2 cursor-pointer transition-colors">
+                <img src="Resources/icons/key.svg" alt="" class="w-5 h-5 opacity-60">
+                使用 Passkey 登录
+              </button>
+            </div>
+
+            <div class="mt-8 text-center">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-orange-50 text-orange-600 text-xs rounded-full">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                Strict 模式 — 认证步骤
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden md:flex md:w-1/2 lg:w-3/5 deco-bg items-center justify-center p-12">
+          <div class="text-center text-white max-w-md">
+            <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-white/10 flex items-center justify-center">
+              <img src="Resources/icons/shield.svg" alt="" class="w-12 h-12" style="filter: brightness(0) invert(1);">
+            </div>
+            <h2 class="text-3xl font-bold mb-4">安全可靠的后台管理</h2>
+            <p class="text-white/70 text-base leading-relaxed">灵活的登录模式配置，满足从开发调试到生产环境的不同安全需求</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Strict 模式 — 绑定弹窗（密码验证通过后，强制绑定 TOTP/Passkey） -->
+  <!-- ============================================================ -->
+  <div id="mode-strict-bind" class="mode-section">
+    <div class="min-h-screen w-full relative">
+      <div class="absolute top-4 right-4 z-50">
+        <div class="flex items-center gap-1.5 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-600 cursor-pointer hover:border-gray-300">
+          <img src="Resources/icons/globe.svg" alt="" class="w-4 h-4 opacity-50">
+          <span>中文</span>
+          <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <div class="flex min-h-screen">
+        <div class="w-full md:w-1/2 lg:w-2/5 flex items-center justify-center bg-white px-6 py-12">
+          <div class="w-full max-w-sm">
+            <div class="text-center mb-9">
+              <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center">
+                <span class="text-white text-3xl font-bold">H</span>
+              </div>
+              <h1 class="text-3xl font-bold text-gray-900">hab</h1>
+              <p class="text-sm text-gray-500 mt-2">通用后台管理系统</p>
+            </div>
+
+            <!-- 占位：登录表单在弹窗后面 -->
+            <div class="space-y-4 opacity-30 pointer-events-none">
+              <div class="flex items-center gap-2">
+                <div class="w-11 h-11 rounded-lg border border-gray-200 flex items-center justify-center flex-shrink-0">
+                  <img src="Resources/icons/arrow-left.svg" alt="" class="w-5 h-5 opacity-60">
+                </div>
+                <div class="flex-1 text-center"><span class="text-lg font-medium text-gray-700">张三</span></div>
+              </div>
+              <div class="flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                <span class="text-gray-400 text-sm">请输入密码</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden md:flex md:w-1/2 lg:w-3/5 deco-bg items-center justify-center p-12">
+          <div class="text-center text-white max-w-md">
+            <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-white/10 flex items-center justify-center">
+              <img src="Resources/icons/shield.svg" alt="" class="w-12 h-12" style="filter: brightness(0) invert(1);">
+            </div>
+            <h2 class="text-3xl font-bold mb-4">安全可靠的后台管理</h2>
+            <p class="text-white/70 text-base leading-relaxed">灵活的登录模式配置，满足从开发调试到生产环境的不同安全需求</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 绑定弹窗遮罩 -->
+      <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+          <!-- 弹窗头部 -->
+          <div class="px-6 py-5 border-b border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-900">绑定安全验证</h3>
+            <p class="text-sm text-gray-500 mt-1">为了账户安全，请绑定至少一种验证方式</p>
+          </div>
+
+          <!-- Tab 切换 -->
+          <div class="flex border-b border-gray-100">
+            <button class="flex-1 py-3 text-sm font-medium text-gray-400 hover:text-gray-600 cursor-pointer transition-colors border-b-2 border-transparent">
+              <div class="flex items-center justify-center gap-1.5">
+                <img src="Resources/icons/key.svg" alt="" class="w-4 h-4 opacity-50">
+                绑定 Passkey
+              </div>
+            </button>
+            <button class="flex-1 py-3 text-sm font-medium text-primary-500 cursor-pointer border-b-2 border-primary-500">
+              <div class="flex items-center justify-center gap-1.5">
+                <img src="Resources/icons/shield.svg" alt="" class="w-4 h-4">
+                绑定 TOTP
+              </div>
+            </button>
+          </div>
+
+          <!-- TOTP 绑定内容 -->
+          <div class="px-6 py-6">
+            <!-- 二维码占位 -->
+            <div class="flex justify-center mb-4">
+              <div class="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center border border-gray-200">
+                <div class="text-center">
+                  <svg class="w-10 h-10 mx-auto text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="3" height="3" rx="0.5"/>
+                    <rect x="18" y="14" width="3" height="3" rx="0.5"/>
+                    <rect x="14" y="18" width="3" height="3" rx="0.5"/>
+                  </svg>
+                  <span class="text-xs text-gray-400">QR Code</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 手动输入密钥 -->
+            <div class="text-center mb-4">
+              <p class="text-xs text-gray-500 mb-2">手动输入密钥</p>
+              <div class="bg-gray-50 rounded-lg px-3 py-2 font-mono text-sm text-gray-700 select-all">
+                JBSWY3DPEHPK3PXP
+              </div>
+            </div>
+
+            <!-- 验证码输入 -->
+            <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+              <span class="text-gray-400 text-sm">请输入 6 位验证码确认绑定</span>
+            </div>
+          </div>
+
+          <!-- 弹窗底部 -->
+          <div class="px-6 py-4 border-t border-gray-100 flex justify-end gap-3">
+            <button class="px-4 h-9 rounded-lg border border-gray-200 text-gray-600 text-sm hover:border-gray-300 cursor-pointer transition-colors">
+              取消
+            </button>
+            <button class="px-4 h-9 rounded-lg bg-primary-500 text-white text-sm hover:bg-primary-600 cursor-pointer transition-colors">
+              确认绑定
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 错误状态 — 展示登录失败时的 UI 表现                             -->
+  <!-- ============================================================ -->
+  <div id="mode-error" class="mode-section">
+    <div class="min-h-screen w-full relative">
+      <div class="absolute top-4 right-4 z-50">
+        <div class="flex items-center gap-1.5 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-600 cursor-pointer hover:border-gray-300">
+          <img src="Resources/icons/globe.svg" alt="" class="w-4 h-4 opacity-50">
+          <span>中文</span>
+          <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <div class="flex min-h-screen">
+        <div class="w-full md:w-1/2 lg:w-2/5 flex items-center justify-center bg-white px-6 py-12">
+          <div class="w-full max-w-sm">
+            <div class="text-center mb-9">
+              <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center">
+                <span class="text-white text-3xl font-bold">H</span>
+              </div>
+              <h1 class="text-3xl font-bold text-gray-900">hab</h1>
+              <p class="text-sm text-gray-500 mt-2">通用后台管理系统</p>
+            </div>
+
+            <!-- 错误提示 Toast -->
+            <div class="mb-4 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3 flex items-start gap-2">
+              <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+              <span>用户名或密码错误，请重试</span>
+            </div>
+
+            <div class="space-y-4">
+              <!-- 用户名（已填写） -->
+              <div>
+                <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-white">
+                  <img src="Resources/icons/user.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                  <span class="text-gray-900 text-sm">admin</span>
+                </div>
+              </div>
+
+              <!-- 密码（错误态 — 红色边框） -->
+              <div>
+                <div class="input-mock flex items-center border border-red-300 rounded-lg px-3 h-11 bg-red-50/50" style="box-shadow: 0 0 0 3px rgba(239,68,68,0.1);">
+                  <img src="Resources/icons/lock.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                  <span class="text-gray-900 text-sm">********</span>
+                </div>
+                <p class="text-xs text-red-500 mt-1 ml-1">密码错误</p>
+              </div>
+
+              <!-- 验证码（错误态） -->
+              <div>
+                <div class="flex gap-2">
+                  <div class="input-mock flex-1 flex items-center border border-red-300 rounded-lg px-3 h-11 bg-red-50/50" style="box-shadow: 0 0 0 3px rgba(239,68,68,0.1);">
+                    <img src="Resources/icons/image-captcha.svg" alt="" class="w-5 h-5 opacity-40 mr-3">
+                    <span class="text-gray-900 text-sm">1234</span>
+                  </div>
+                  <div class="w-32 h-11 rounded-lg border border-gray-200 captcha-placeholder cursor-pointer">
+                    <span>N3kR</span>
+                  </div>
+                </div>
+                <p class="text-xs text-red-500 mt-1 ml-1">验证码错误，已自动刷新</p>
+              </div>
+
+              <button class="w-full h-11 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-lg shadow-btn cursor-pointer transition-colors">
+                登 录
+              </button>
+            </div>
+
+            <div class="mt-8 text-center">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-50 text-red-500 text-xs rounded-full">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                错误状态示例
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden md:flex md:w-1/2 lg:w-3/5 deco-bg items-center justify-center p-12">
+          <div class="text-center text-white max-w-md">
+            <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-white/10 flex items-center justify-center">
+              <img src="Resources/icons/shield.svg" alt="" class="w-12 h-12" style="filter: brightness(0) invert(1);">
+            </div>
+            <h2 class="text-3xl font-bold mb-4">安全可靠的后台管理</h2>
+            <p class="text-white/70 text-base leading-relaxed">灵活的登录模式配置，满足从开发调试到生产环境的不同安全需求</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 加载状态 — 展示登录提交中的 UI 表现                             -->
+  <!-- ============================================================ -->
+  <div id="mode-loading" class="mode-section">
+    <div class="min-h-screen w-full relative">
+      <div class="absolute top-4 right-4 z-50">
+        <div class="flex items-center gap-1.5 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-600 cursor-pointer hover:border-gray-300">
+          <img src="Resources/icons/globe.svg" alt="" class="w-4 h-4 opacity-50">
+          <span>中文</span>
+          <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <div class="flex min-h-screen">
+        <div class="w-full md:w-1/2 lg:w-2/5 flex items-center justify-center bg-white px-6 py-12">
+          <div class="w-full max-w-sm">
+            <div class="text-center mb-9">
+              <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center">
+                <span class="text-white text-3xl font-bold">H</span>
+              </div>
+              <h1 class="text-3xl font-bold text-gray-900">hab</h1>
+              <p class="text-sm text-gray-500 mt-2">通用后台管理系统</p>
+            </div>
+
+            <div class="space-y-4">
+              <!-- 用户名（已填写，禁用态） -->
+              <div>
+                <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-gray-50">
+                  <img src="Resources/icons/user.svg" alt="" class="w-5 h-5 opacity-30 mr-3">
+                  <span class="text-gray-500 text-sm">admin</span>
+                </div>
+              </div>
+
+              <!-- 密码（已填写，禁用态） -->
+              <div>
+                <div class="input-mock flex items-center border border-gray-200 rounded-lg px-3 h-11 bg-gray-50">
+                  <img src="Resources/icons/lock.svg" alt="" class="w-5 h-5 opacity-30 mr-3">
+                  <span class="text-gray-500 text-sm">********</span>
+                </div>
+              </div>
+
+              <!-- 登录按钮（加载态） -->
+              <button class="w-full h-11 bg-primary-400 text-white font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                <!-- 旋转加载图标 -->
+                <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                <span>登录中...</span>
+              </button>
+            </div>
+
+            <div class="mt-8 text-center">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-50 text-yellow-600 text-xs rounded-full">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                加载状态示例
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden md:flex md:w-1/2 lg:w-3/5 deco-bg items-center justify-center p-12">
+          <div class="text-center text-white max-w-md">
+            <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-white/10 flex items-center justify-center">
+              <img src="Resources/icons/shield.svg" alt="" class="w-12 h-12" style="filter: brightness(0) invert(1);">
+            </div>
+            <h2 class="text-3xl font-bold mb-4">安全可靠的后台管理</h2>
+            <p class="text-white/70 text-base leading-relaxed">灵活的登录模式配置，满足从开发调试到生产环境的不同安全需求</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 模式切换脚本（仅设计稿预览用）                                  -->
+  <!-- ============================================================ -->
+  <script>
+    function switchMode(mode) {
+      document.querySelectorAll('.mode-section').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('mode-' + mode);
+      if (target) target.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

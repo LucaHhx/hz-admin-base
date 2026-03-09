@@ -1,0 +1,64 @@
+/* Design Tokens — 登录模式配置 */
+/* 从 design.md 设计系统导出 */
+
+:root {
+  /* === 主色 === */
+  --color-primary-50: #EFF6FF;
+  --color-primary-100: #DBEAFE;
+  --color-primary-500: #2563EB;
+  --color-primary-600: #1D4ED8;
+  --color-primary-700: #1E40AF;
+
+  /* === 中性色 === */
+  --color-gray-50: #F9FAFB;
+  --color-gray-100: #F3F4F6;
+  --color-gray-200: #E5E7EB;
+  --color-gray-300: #D1D5DB;
+  --color-gray-400: #9CA3AF;
+  --color-gray-500: #6B7280;
+  --color-gray-700: #374151;
+  --color-gray-900: #111827;
+
+  /* === 语义色 === */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+
+  /* === 装饰色 === */
+  --color-brand-bg: #0F6BF8;
+
+  /* === 字体 === */
+  --font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-2xl: 24px;
+  --font-size-4xl: 36px;
+
+  /* === 间距 === */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-12: 48px;
+
+  /* === 圆角 === */
+  --rounded-sm: 4px;
+  --rounded-md: 8px;
+  --rounded-lg: 12px;
+  --rounded-full: 9999px;
+
+  /* === 阴影 === */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-btn: 0 6px 16px rgba(37, 99, 235, 0.3);
+
+  /* === 组件尺寸 === */
+  --input-height: 44px;
+  --btn-height: 44px;
+  --captcha-width: 128px;
+  --card-max-width: 384px;
+}

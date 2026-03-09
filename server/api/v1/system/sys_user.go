@@ -29,6 +29,20 @@ import (
 
 // 按照设计规范重写登录系统
 
+// GetLoginMode 获取当前登录模式（公开接口，无需认证）
+// @Tags     Auth
+// @Summary  获取登录模式
+// @Produce  application/json
+// @Success  200  {object}  response.Response{data=map[string]string,msg=string}  "登录模式"
+// @Router   /auth/login-mode [get]
+func (b *BaseApi) GetLoginMode(c *gin.Context) {
+	mode := global.HAB_CONFIG.System.LoginMode
+	if mode == "" {
+		mode = "simple"
+	}
+	response.OkWithDetailed(gin.H{"login_mode": mode}, "Success", c)
+}
+
 // generateChallenge 生成WebAuthn挑战
 func generateChallenge() string {
 	challenge := make([]byte, 32)
@@ -186,16 +200,22 @@ func (b *BaseApi) PasswordLogin(c *gin.Context) {
 		return
 	}
 
-	// 验证图片验证码（防止爆破攻击）
-	if req.Captcha == "" || req.CaptchaId == "" {
-		response.FailWithMessage("请输入验证码", c)
-		return
+	// 获取登录模式
+	loginMode := global.HAB_CONFIG.System.LoginMode
+	if loginMode == "" {
+		loginMode = "simple"
 	}
 
-	// 验证验证码
-	if !store.Verify(req.CaptchaId, req.Captcha, true) {
-		response.FailWithMessage("验证码错误", c)
-		return
+	// 验证码校验 — 仅 captcha 和 strict 模式需要
+	if loginMode != "simple" {
+		if req.Captcha == "" || req.CaptchaId == "" {
+			response.FailWithMessage("请输入验证码", c)
+			return
+		}
+		if !store.Verify(req.CaptchaId, req.Captcha, true) {
+			response.FailWithMessage("验证码错误", c)
+			return
+		}
 	}
 
 	// 验证用户名和密码
@@ -211,25 +231,32 @@ func (b *BaseApi) PasswordLogin(c *gin.Context) {
 		return
 	}
 
-	var ok bool
-	for _, authority := range user.Authorities {
-		if authority.AuthorityName == "账户状态" {
-			ok = true
-			break
+	// 角色检查 — 仅 strict 模式需要检查"账户状态"角色
+	if loginMode == "strict" {
+		var ok bool
+		for _, authority := range user.Authorities {
+			if authority.AuthorityName == "账户状态" {
+				ok = true
+				break
+			}
+		}
+		if !ok {
+			response.FailWithMessage("用户权限不正确", c)
+			return
 		}
 	}
-	if !ok {
-		response.FailWithMessage("用户权限不正确", c)
-		return
+
+	// Token 签发 — strict 模式保持原行为，其他模式用 TokenNext 签发标准 JWT
+	if loginMode == "strict" {
+		token := pwd.SetPwdToken(user.ID)
+		response.OkWithDetailed(systemRes.LoginResponse{
+			User:      *user,
+			Token:     token,
+			ExpiresAt: time.Now().Add(7 * 24 * time.Hour).Unix(),
+		}, "登录成功", c)
+	} else {
+		b.TokenNext(c, *user)
 	}
-
-	token := pwd.SetPwdToken(user.ID)
-
-	response.OkWithDetailed(systemRes.LoginResponse{
-		User:      *user,
-		Token:     token,
-		ExpiresAt: time.Now().Add(7 * 24 * time.Hour).Unix(),
-	}, "登录成功", c)
 }
 
 // TotpLogin 用户名+TOTP登录（设计规范 5.2.3）

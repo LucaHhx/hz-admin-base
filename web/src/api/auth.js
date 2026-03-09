@@ -1,5 +1,31 @@
 import service from '@/utils/request'
 
+// 登录模式
+
+/**
+ * 获取登录模式（公开接口，无需 token）
+ * @returns {Promise} { login_mode: 'simple' | 'captcha' | 'strict' }
+ */
+export const getLoginMode = () => {
+  return service({
+    url: '/auth/login-mode',
+    method: 'get'
+  })
+}
+
+/**
+ * simple/captcha 模式的密码登录
+ * @param {Object} data - { username, password, captcha?, captchaId? }
+ * @returns {Promise}
+ */
+export const passwordLogin = (data) => {
+  return service({
+    url: '/auth/password/login',
+    method: 'post',
+    data
+  })
+}
+
 // 新的认证API - 按设计规范
 
 /**

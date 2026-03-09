@@ -17,6 +17,9 @@ func (s *BaseRouter) InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 	// 新的认证路由组 - 按设计规范
 	authRouter := Router.Group("auth")
 	{
+		// 登录模式查询（公开接口）
+		authRouter.GET("login-mode", baseApi.GetLoginMode)
+
 		// 用户安全状态查询
 		authRouter.POST("security-state", baseApi.SecurityState)
 

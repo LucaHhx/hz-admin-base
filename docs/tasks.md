@@ -21,3 +21,4 @@
 | 15 | 项目清理 | 进行中 | - | 移除示例/插件代码，统一标识为 HAB，打造可复用基础模板 |
 | 16 | AI 自动化代码生成 Skill | 进行中 | - | 创建 hab-autocode skill，让 AI 通过 API Key 调用 AutoCode API 自动创建包和模块 |
 | 17 | hab-autocode 完整功能测试 | 进行中 | - | 对 hab-autocode skill 和 cmd-autocode 命令进行动态功能测试和验收清单对照 |
+| 18 | 登录模式配置 | 进行中 | - | 支持 simple/captcha/strict 三种登录模式，通过后端配置切换登录严格程度 |

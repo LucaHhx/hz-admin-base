@@ -9,7 +9,7 @@ system:
   use-redis: false
   use-mongo: false
   use-strict-auth: true
-  time-zone: "Asia/Shanghai"
+  time-zone: "UTC"
   migration: true
   translation-dir: ./translation
   environment: dev
