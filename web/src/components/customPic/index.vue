@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-  import noAvatarPng from '@/assets/noBody.png'
+  import noAvatarPng from '@/assets/noBody.svg'
   import { useUserStore } from '@/pinia/modules/user'
   import { computed, ref } from 'vue'
 

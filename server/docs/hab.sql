@@ -993,7 +993,7 @@ CREATE TABLE `sys_user_authority` (
 -- Records of sys_user_authority
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_user_authority` (`sys_user_id`, `sys_authority_authority_id`) VALUES (1, 888);
+INSERT INTO `sys_user_authority` (`sys_user_id`, `sys_authority_authority_id`) VALUES (1, 1);
 COMMIT;
 
 -- ----------------------------

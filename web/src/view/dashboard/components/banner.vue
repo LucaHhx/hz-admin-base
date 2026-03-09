@@ -21,8 +21,7 @@
 </template>
 
 <script setup>
-  import banner from '@/assets/banner.jpg'
-  import banner2 from '@/assets/banner2.jpg'
+  import banner from '@/assets/banner.svg'
 
   const openLink = (link) => {
     window.open(link, '_blank')
@@ -31,10 +30,6 @@
   const banners = [
     {
       img: banner,
-      link: '#'
-    },
-    {
-      img: banner2,
       link: '#'
     }
   ]

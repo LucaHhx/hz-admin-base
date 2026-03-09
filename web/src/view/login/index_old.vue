@@ -472,7 +472,7 @@ const createPasskey = async() => {
       challenge: base64urlToArrayBuffer(passkeyInfo.challenge),
       rp: {
         id: passkeyInfo.rpId,
-        name: passkeyInfo.rpName || 'BankInf'
+        name: passkeyInfo.rpName || 'HZ Admin'
       },
       user: {
         id: base64urlToArrayBuffer(passkeyInfo.user.id),

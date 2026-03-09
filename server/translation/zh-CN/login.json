@@ -17,7 +17,7 @@
     "dbConfigured": "数据库配置已存在",
     "description": "1111",
     "docs": "在线文档",
-    "docsinfo": "欢迎使用BANK后后台",
+    "docsinfo": "欢迎使用 HZ Admin 管理后台",
     "enterGoogleAuthCode": "请输入谷歌验证码",
     "enterTotpCode": "请输入动态验证码",
     "enterUsername": "请先输入用户名",

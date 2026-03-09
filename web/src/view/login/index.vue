@@ -15,7 +15,7 @@
         <div class="z-[999] pt-12 pb-10 md:w-96 w-full rounded-lg flex flex-col justify-between box-border">
           <div>
             <div class="flex items-center justify-center">
-              <img class="w-24" src="@/assets/logo.png" alt="">
+              <img class="w-24" src="@/assets/logo.svg" alt="">
             </div>
             <div class="mb-9">
               <p class="text-center text-4xl font-bold">
@@ -148,8 +148,8 @@
         </div>
       </div>
 
-      <div class="hidden md:block w-1/2 h-full float-right bg-[#194bfb]">
-        <img class="h-full w-full object-cover" src="@/assets/login.jpg" alt="banner">
+      <div class="hidden md:block w-1/2 h-full float-right">
+        <img class="h-full w-full object-cover" src="@/assets/login_bg.svg" alt="banner">
       </div>
     </div>
 

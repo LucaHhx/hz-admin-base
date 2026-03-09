@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-lg flex items-center justify-evenly w-full h-full relative md:w-screen md:h-screen md:bg-[#194bfb] overflow-hidden"
+    class="rounded-lg flex items-center justify-evenly w-full h-full relative md:w-screen md:h-screen md:bg-[#1e40af] overflow-hidden"
   >
     <div
       class="rounded-md w-full h-full flex items-center justify-center overflow-hidden"
@@ -181,10 +181,10 @@
       </div>
     </div>
 
-    <div class="hidden md:block w-1/2 h-full float-right bg-[#194bfb]">
+    <div class="hidden md:block w-1/2 h-full float-right">
       <img
-        class="h-full"
-        src="@/assets/login_right_banner.jpg"
+        class="h-full w-full object-cover"
+        src="@/assets/login_bg.svg"
         alt="banner"
       >
     </div>

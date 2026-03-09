@@ -15,6 +15,13 @@ system:
   environment: dev
 
 # ===================== 数据库配置 =====================
+sqlite:
+  db-name: data
+  path: ""
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: info
+
 mysql:
   path: 127.0.0.1
   port: "3306"

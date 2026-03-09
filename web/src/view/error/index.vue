@@ -4,7 +4,7 @@
       <div class="flex flex-col items-center text-2xl gap-4">
         <img
           class="w-1/3"
-          src="../../assets/404.png"
+          src="../../assets/404.svg"
         >
         <p class="text-lg">
           页面被神秘力量吸走了

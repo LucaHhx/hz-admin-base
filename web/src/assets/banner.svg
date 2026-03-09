@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="b1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="200" fill="url(#b1)"/>
+  <circle cx="1050" cy="100" r="120" fill="rgba(255,255,255,0.06)"/>
+  <circle cx="950" cy="50" r="80" fill="rgba(255,255,255,0.04)"/>
+  <text x="60" y="90" font-family="Inter, -apple-system, sans-serif" font-weight="700" font-size="28" fill="white">Welcome to HZ Admin</text>
+  <text x="60" y="125" font-family="Inter, -apple-system, sans-serif" font-weight="400" font-size="14" fill="rgba(255,255,255,0.7)">Build your application with confidence</text>
+</svg>

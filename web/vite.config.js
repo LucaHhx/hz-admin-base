@@ -71,7 +71,7 @@ export default ({ mode }) => {
     },
     server: {
       host: '0.0.0.0',
-      allowedHosts: ['bankinf-b.cryptoreais.com'],
+      allowedHosts: true,
       // 如果使用docker-compose开发模式，设置为false
       open: true,
       port: process.env.VITE_CLI_PORT,
