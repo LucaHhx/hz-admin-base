@@ -10,6 +10,10 @@
 
 ## 2026-03-09
 
+- [修复] UI 视觉审查修复：strict 模式验证码图片高度 h-10→h-11、圆角 rounded→rounded-lg；右侧装饰区域响应式宽度 md:w-1/2 lg:w-3/5；captcha 模式验证码边框 border-gray-300→border-gray-200；绑定弹窗默认 Tab passkey→totp
+- [修复] PasswordLogin 中硬编码中文消息替换为错误码(ErrCaptchaRequired/ErrCaptchaInvalid/ErrUsernamePasswordEmpty/ErrPermissionDenied)，支持前端 i18n 翻译
+- [修复] config.example.yaml 添加 login-mode 配置示例字段
+- [修复] 移除登录页重复错误提示：request.js 中间件已统一处理 API 错误消息，前端 handleSimpleLogin/handleNext/handleLogin/handlePasskeyLogin/getCaptcha/confirmBind 等方法中的重复 ElMessage.error 调用已清除
 - [测试] API 测试发现严重 Bug: PasswordLogin 第 236 行检查 AuthorityName=='账户状态'，但数据库中不存在该角色，导致所有用户 simple/captcha 模式登录返回 code:7 '用户权限不正确'
 - [变更] [qa] 开始任务 #1: 测试 GET /auth/login-mode 接口 (三种配置值 + 默认值 + 无认证)
 - [完成] [frontend] 完成任务 #7: index.vue strict 模式保持现有分步流程不变

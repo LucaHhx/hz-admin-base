@@ -21,6 +21,12 @@ var (
 	// 恢复码错误 (1401-1499)
 	ErrRecoveryCodeInvalid = NewError(1401, "恢复码无效")
 
+	// 登录验证错误 (1051-1099)
+	ErrCaptchaRequired       = NewError(1051, "captcha_required")
+	ErrCaptchaInvalid        = NewError(1052, "captcha_invalid")
+	ErrUsernamePasswordEmpty = NewError(1053, "username_password_empty")
+	ErrPermissionDenied      = NewError(1054, "permission_denied")
+
 	// 安全相关错误 (1501-1599)
 	ErrCSRFFailed = NewError(1501, "CSRF验证失败")
 

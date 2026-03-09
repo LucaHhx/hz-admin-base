@@ -26,7 +26,7 @@
               </p>
             </div>
 
-            <el-form ref="loginForm" :model="formData" :rules="rules" @keyup.enter="handleMainAction">
+            <el-form ref="loginForm" :model="formData" :rules="rules" :validate-on-rule-change="false" @keyup.enter="handleMainAction">
               <!-- ==================== simple / captcha 模式 ==================== -->
               <div v-if="loginMode !== 'strict'">
                 <el-form-item prop="username" class="mb-6">
@@ -58,7 +58,7 @@
                       class="flex-1"
                       maxlength="6"
                     />
-                    <div class="w-32 h-11 border border-gray-300 rounded-lg cursor-pointer flex items-center justify-center bg-white" @click="getCaptcha">
+                    <div class="w-32 h-11 border border-gray-200 rounded-lg cursor-pointer flex items-center justify-center bg-white" @click="getCaptcha">
                       <img v-if="captchaUrl" :src="captchaUrl" alt="验证码" class="w-full h-full object-cover rounded-lg">
                       <span v-else class="text-gray-400 text-sm">点击获取</span>
                     </div>
@@ -160,8 +160,8 @@
                         class="flex-1"
                         maxlength="6"
                       />
-                      <div class="w-32 h-10 border border-gray-300 rounded cursor-pointer flex items-center justify-center bg-white" @click="getCaptcha">
-                        <img v-if="captchaUrl" :src="captchaUrl" alt="验证码" class="w-full h-full object-cover rounded">
+                      <div class="w-32 h-11 border border-gray-300 rounded-lg cursor-pointer flex items-center justify-center bg-white" @click="getCaptcha">
+                        <img v-if="captchaUrl" :src="captchaUrl" alt="验证码" class="w-full h-full object-cover rounded-lg">
                         <span v-else class="text-gray-400 text-sm">点击获取</span>
                       </div>
                     </div>
@@ -201,7 +201,7 @@
         </div>
       </div>
 
-      <div class="hidden md:block w-1/2 h-full float-right">
+      <div class="hidden md:block md:w-1/2 lg:w-3/5 h-full float-right">
         <img class="h-full w-full object-cover" src="@/assets/login_bg.svg" alt="banner">
       </div>
     </div>
@@ -356,7 +356,7 @@ const formData = reactive({
 
 // 绑定相关
 const showBindDialog = ref(false)
-const activeBindTab = ref('passkey')
+const activeBindTab = ref('totp')
 const binding = ref(false)
 const bindSession = ref('')
 const totpBindInfo = ref(null)
@@ -465,7 +465,7 @@ const handleSimpleLogin = async() => {
     if (res.code === 0) {
       await handleLoginSuccess(res.data)
     } else {
-      ElMessage.error(res.msg)
+      // 中间件已处理错误提示，此处只刷新验证码
       if (loginMode.value === 'captcha') {
         formData.captcha = ''
         await getCaptcha()
@@ -495,12 +495,10 @@ const handleNext = async() => {
       if (!res.data.has_totp && !res.data.has_passkey) {
         await getCaptcha()
       }
-    } else {
-      ElMessage.error(res.msg || t('login.checkUserFailed'))
     }
   } catch (error) {
     console.error('Security state check failed:', error)
-    ElMessage.error(t('login.checkUserFailed'))
+    // 中间件已处理错误提示
   } finally {
     loading.value = false
   }
@@ -523,12 +521,10 @@ const getCaptcha = async() => {
     if (res.code === 0) {
       captchaUrl.value = res.data.picPath
       formData.captchaId = res.data.captchaId
-    } else {
-      ElMessage.error(t('login.getCaptchaFailed'))
     }
+    // 中间件已处理错误提示
   } catch (error) {
     console.error('Get captcha failed:', error)
-    ElMessage.error(t('login.getCaptchaFailed'))
   }
 }
 
@@ -555,12 +551,9 @@ const handleLogin = async() => {
         // 需要绑定
         await initBindDialog()
       } else {
-        ElMessage.error(res.msg || t('login.loginFailed'))
-        // 如果是验证码相关错误，重新获取验证码
-        if (res.msg && (res.msg.includes('验证码') || res.msg.includes('captcha'))) {
-          formData.captcha = ''
-          await getCaptcha()
-        }
+        // 中间件已处理错误提示，此处只刷新验证码
+        formData.captcha = ''
+        await getCaptcha()
       }
     } else if (showTotpInput.value) {
       // TOTP登录
@@ -571,13 +564,11 @@ const handleLogin = async() => {
 
       if (res.code === 0) {
         await handleLoginSuccess(res.data)
-      } else {
-        ElMessage.error(res.msg || t('login.loginFailed'))
       }
+      // 中间件已处理错误提示
     }
   } catch (error) {
     console.error('Login failed:', error)
-    ElMessage.error(t('login.loginFailed'))
   } finally {
     loading.value = false
   }
@@ -593,7 +584,7 @@ const handlePasskeyLogin = async() => {
     })
 
     if (optionsRes.code !== 0) {
-      ElMessage.error(optionsRes.msg || t('login.passkeyFailed'))
+      // 中间件已处理错误提示
       return
     }
 
@@ -633,9 +624,8 @@ const handlePasskeyLogin = async() => {
 
     if (verifyRes.code === 0) {
       await handleLoginSuccess(verifyRes.data)
-    } else {
-      ElMessage.error(verifyRes.msg || t('login.passkeyFailed'))
     }
+    // 中间件已处理错误提示
   } catch (error) {
     console.error('Passkey login failed:', error)
     if (error.name === 'NotAllowedError') {
@@ -710,7 +700,7 @@ const createPasskey = async() => {
     })
 
     if (res.code !== 0) {
-      ElMessage.error(res.msg || t('login.passkeyCreateFailed'))
+      // 中间件已处理错误提示
       return
     }
 
@@ -767,9 +757,8 @@ const confirmBind = async() => {
         resetBindDialog()
         // 绑定成功后自动登录
         await handleNext()
-      } else {
-        ElMessage.error(res.msg || t('login.bindFailed'))
       }
+      // 中间件已处理错误提示
     } else if (activeBindTab.value === 'passkey') {
       if (!passkeyCreated.value || !passkeyData.value) {
         ElMessage.error(t('login.createPasskeyFirst'))
@@ -787,13 +776,11 @@ const confirmBind = async() => {
         resetBindDialog()
         // 绑定成功后自动登录
         await handleNext()
-      } else {
-        ElMessage.error(res.msg || t('login.bindFailed'))
       }
+      // 中间件已处理错误提示
     }
   } catch (error) {
     console.error('Bind failed:', error)
-    ElMessage.error(t('login.bindFailed'))
   } finally {
     binding.value = false
   }

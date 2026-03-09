@@ -19,6 +19,19 @@
         "reset_password_failed": "Failed to reset password"
     },
 
+    "1051": {
+        "captcha_required": "Please enter captcha"
+    },
+    "1052": {
+        "captcha_invalid": "Invalid captcha"
+    },
+    "1053": {
+        "username_password_empty": "Username and password are required"
+    },
+    "1054": {
+        "permission_denied": "Insufficient user permissions"
+    },
+
     "1001": {
         "invalid_params": "Invalid parameters",
         "no_data": "No data",

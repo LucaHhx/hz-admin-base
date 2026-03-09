@@ -13,6 +13,7 @@ system:
   migration: true
   translation-dir: ./translation
   environment: dev
+  login-mode: simple  # 登录模式: simple(无验证码) | captcha(需要验证码) | strict(分步强验证)
 
 # ===================== 数据库配置 =====================
 sqlite:

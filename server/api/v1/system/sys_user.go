@@ -196,7 +196,7 @@ func (b *BaseApi) PasswordLogin(c *gin.Context) {
 	}
 
 	if req.Username == "" || req.Password == "" {
-		response.FailWithMessage("用户名和密码不能为空", c)
+		response.FailWithErr(code.ErrUsernamePasswordEmpty, c)
 		return
 	}
 
@@ -209,11 +209,11 @@ func (b *BaseApi) PasswordLogin(c *gin.Context) {
 	// 验证码校验 — 仅 captcha 和 strict 模式需要
 	if loginMode != "simple" {
 		if req.Captcha == "" || req.CaptchaId == "" {
-			response.FailWithMessage("请输入验证码", c)
+			response.FailWithErr(code.ErrCaptchaRequired, c)
 			return
 		}
 		if !store.Verify(req.CaptchaId, req.Captcha, true) {
-			response.FailWithMessage("验证码错误", c)
+			response.FailWithErr(code.ErrCaptchaInvalid, c)
 			return
 		}
 	}
@@ -241,7 +241,7 @@ func (b *BaseApi) PasswordLogin(c *gin.Context) {
 			}
 		}
 		if !ok {
-			response.FailWithMessage("用户权限不正确", c)
+			response.FailWithErr(code.ErrPermissionDenied, c)
 			return
 		}
 	}
@@ -253,7 +253,7 @@ func (b *BaseApi) PasswordLogin(c *gin.Context) {
 			User:      *user,
 			Token:     token,
 			ExpiresAt: time.Now().Add(7 * 24 * time.Hour).Unix(),
-		}, "登录成功", c)
+		}, "Login successful", c)
 	} else {
 		b.TokenNext(c, *user)
 	}
