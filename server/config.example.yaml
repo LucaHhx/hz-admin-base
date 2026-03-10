@@ -1,85 +1,88 @@
 # ===================== 系统核心配置 =====================
 system:
-  db-type: sqlite
-  oss-type: local
-  addr: 9688
-  api-addr: 9689
-  iplimit-count: 15000
-  iplimit-time: 3600
-  use-redis: false
-  use-mongo: false
-  use-strict-auth: true
-  time-zone: "UTC"
-  migration: true
-  translation-dir: ./translation
-  environment: dev
-  login-mode: simple  # 登录模式: simple(无验证码) | captcha(需要验证码) | strict(分步强验证)
+  db-type: sqlite          # 数据库类型: sqlite | mysql | pgsql | mssql | oracle
+  oss-type: local          # 文件存储: local | aliyun | minio | aws | tencent | huawei
+  addr: 9688               # 后台管理接口端口（web/ 连接此端口）
+  api-addr: 9689           # 客户端/外部 API 端口（client/ 连接此端口）
+  iplimit-count: 15000     # IP 限流：时间窗口内最大请求数
+  iplimit-time: 3600       # IP 限流：时间窗口（秒）
+  use-redis: false         # 是否启用 Redis 缓存
+  use-mongo: false         # 是否启用 MongoDB
+  use-strict-auth: true    # 是否启用严格鉴权（Casbin）
+  time-zone: "UTC"         # 时区
+  migration: true          # 启动时自动迁移数据库
+  translation-dir: ./translation  # i18n 翻译文件目录
+  environment: dev         # 环境: dev | production
+  login-mode: simple       # 登录模式: simple(无验证码) | captcha(需验证码) | strict(分步强验证)
 
 # ===================== 数据库配置 =====================
+# SQLite（db-type: sqlite 时生效）
 sqlite:
-  db-name: data
-  path: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: info
+  db-name: data            # 数据库文件名（自动生成 data.db）
+  path: ""                 # 存储路径（空=当前目录）
+  max-idle-conns: 10       # 最大空闲连接数
+  max-open-conns: 100      # 最大打开连接数
+  log-mode: info           # SQL 日志级别: silent | error | warn | info
 
+# MySQL（db-type: mysql 时生效）
 mysql:
-  path: 127.0.0.1
-  port: "3306"
-  db-name: hab
-  username: root
-  password: your-password
-  config: charset=utf8mb4&parseTime=True&loc=Local
-  log-mode: info
-  max-idle-conns: 10
-  max-open-conns: 100
+  path: 127.0.0.1          # MySQL 地址
+  port: "3306"             # MySQL 端口
+  db-name: hab             # 数据库名
+  username: root           # 用户名
+  password: your-password  # 密码（config.example.yaml 中为占位值，实际值写到 config.local.yaml）
+  config: charset=utf8mb4&parseTime=True&loc=Local  # 连接参数
+  log-mode: info           # SQL 日志级别: silent | error | warn | info
+  max-idle-conns: 10       # 最大空闲连接数
+  max-open-conns: 100      # 最大打开连接数
 
+# Redis（可选，use-redis: true 时需要）
 redis:
-  addr: 127.0.0.1:6379
-  password: ""
-  db: 0
+  addr: 127.0.0.1:6379     # Redis 地址
+  password: ""             # Redis 密码
+  db: 0                    # Redis 数据库编号
 
 # ===================== JWT 认证 =====================
 jwt:
-  signing-key: d92a1971-6b0f-49a5-9222-adb2d132a009
-  expires-time: 7d
-  buffer-time: 1d
-  issuer: qmPlus
+  signing-key: d92a1971-6b0f-49a5-9222-adb2d132a009  # JWT 签名密钥（建议 uuidgen 生成唯一值）
+  expires-time: 7d         # Token 过期时间
+  buffer-time: 1d          # Token 刷新缓冲期
+  issuer: qmPlus           # 签发者
 
 # ===================== 验证码 =====================
 captcha:
-  key-long: 6
-  img-width: 240
-  img-height: 80
-  open-captcha: 0
-  open-captcha-timeout: 3600
+  key-long: 6              # 验证码位数
+  img-width: 240           # 图片宽度
+  img-height: 80           # 图片高度
+  open-captcha: 0          # 0=总是需要, >0=错误N次后需要
+  open-captcha-timeout: 3600  # 验证码缓存时间（秒）
 
 # ===================== 代码生成器 =====================
 autocode:
-  web: web/src
-  server: server
-  module: hab
-  api-key: ""  # 留空表示禁用 API Key 认证；填入随机字符串启用
+  web: web/src             # 前端代码生成目录
+  server: server           # 后端代码生成目录
+  module: hab              # Go module 名
+  api-key: ""              # AutoCode API Key（留空=禁用，填入=启用）
 
 # ===================== 本地文件存储 =====================
 local:
-  path: uploads/file
-  store-path: uploads/file
+  path: uploads/file       # 访问路径
+  store-path: uploads/file # 存储路径
 
 excel:
-  dir: ./resource/excel/
+  dir: ./resource/excel/   # Excel 模板目录
 
 # ===================== 日志 =====================
 zap:
-  level: info
-  prefix: '[hab]'
-  format: console
-  director: log
-  encode-level: LowercaseColorLevelEncoder
-  stacktrace-key: stacktrace
-  show-line: true
-  log-in-console: true
-  retention-day: -1
+  level: info              # 日志级别: debug | info | warn | error
+  prefix: '[hab]'          # 日志前缀
+  format: console          # 格式: console | json
+  director: log            # 日志目录
+  encode-level: LowercaseColorLevelEncoder  # 日志编码器
+  stacktrace-key: stacktrace  # 堆栈跟踪 key
+  show-line: true          # 显示调用行号
+  log-in-console: true     # 同时输出到控制台
+  retention-day: -1        # 日志保留天数（-1=永久）
 
 # ===================== 以下按需配置 =====================
 # 邮件（按需启用）
