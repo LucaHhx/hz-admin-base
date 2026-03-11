@@ -1,26 +1,26 @@
-# 极简配置 — 最小可运行
-# 使用 SQLite 无需额外数据库服务，其余参数使用默认值
-# 如需 MySQL，改为 db-type: mysql 并追加 mysql: 配置块（参考 config.example.yaml）
+# ===================== 极简配置 =====================
+# 最小可运行配置，未列出的字段均有默认值（见 config/defaults.go）
+# 完整配置参考 config.example.yaml
 
+# 数据库类型: sqlite(默认) | mysql | pgsql | mssql | oracle
 system:
-  db-type: sqlite          # 用 SQLite 免装数据库
-  addr: 9688               # 后台管理接口端口（web/ 连接此端口）
-  api-addr: 9689           # 客户端/外部 API 端口（client/ 连接此端口）
-  time-zone: "UTC"         # 时区（启动时解析，不可为空）
-  migration: true          # 启动时自动建表
+  db-type: sqlite
 
-sqlite:
-  db-name: data            # 数据库文件名（生成 data.db，不可为空）
+# SQLite 无需额外配置，以下默认值即可启动：
+#   db-name: data        → 生成 data.db
+#   addr: 9688           → 后台管理端口
+#   api-addr: 9689       → 客户端 API 端口
+#   jwt.signing-key      → 自动生成 UUID
+#   jwt.expires-time: 7d
+#   jwt.buffer-time: 1d
 
-jwt:
-  signing-key: <请用 uuidgen 命令生成唯一值>
-  expires-time: 7d         # Token 过期时间（必填，格式: Nd/Nh/Nm）
-  buffer-time: 1d          # Token 刷新缓冲期（必填）
-  issuer: qmPlus
-
-zap:
-  level: info
-  format: console
-  director: log
-  show-line: true
-  log-in-console: true
+# ==================== 如需 MySQL ====================
+# system:
+#   db-type: mysql
+#
+# mysql:
+#   path: 127.0.0.1
+#   port: "3306"
+#   db-name: hab
+#   username: root
+#   password: your-password

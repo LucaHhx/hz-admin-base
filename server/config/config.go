@@ -28,6 +28,8 @@ type Server struct {
 	CloudflareR2 CloudflareR2 `mapstructure:"cloudflare-r2" json:"cloudflare-r2" yaml:"cloudflare-r2"`
 	Minio        Minio        `mapstructure:"minio" json:"minio" yaml:"minio"`
 	DiskList     []DiskList   `mapstructure:"disk-list" json:"disk-list" yaml:"disk-list"`
+	// excel
+	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
 }

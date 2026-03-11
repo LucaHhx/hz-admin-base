@@ -35,10 +35,14 @@ func Viper() *viper.Viper {
 		if err = v.Unmarshal(&global.HAB_CONFIG); err != nil {
 			fmt.Println(err)
 		}
+		global.HAB_CONFIG.SetDefaults()
 	})
 	if err = v.Unmarshal(&global.HAB_CONFIG); err != nil {
 		panic(err)
 	}
+
+	// 为所有未设置的配置项填充默认值
+	global.HAB_CONFIG.SetDefaults()
 
 	// root 适配性 根据root位置去找到对应迁移位置,保证root路径有效
 	global.HAB_CONFIG.AutoCode.Root, _ = filepath.Abs("..")

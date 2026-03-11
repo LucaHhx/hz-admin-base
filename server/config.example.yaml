@@ -1,11 +1,18 @@
+# ===================== 完整配置模板 =====================
+# 所有字段均已列出默认值（与 config/defaults.go 一致）
+# 复制为 config.local.yaml 后修改敏感字段即可使用
+# config.local.yaml 在 .gitignore 中，不入库
+
 # ===================== 系统核心配置 =====================
 system:
   db-type: sqlite          # 数据库类型: sqlite | mysql | pgsql | mssql | oracle
   oss-type: local          # 文件存储: local | aliyun | minio | aws | tencent | huawei
   addr: 9688               # 后台管理接口端口（web/ 连接此端口）
   api-addr: 9689           # 客户端/外部 API 端口（client/ 连接此端口）
+  router-prefix: ""        # API 路由前缀（如 /api/v1）
   iplimit-count: 15000     # IP 限流：时间窗口内最大请求数
   iplimit-time: 3600       # IP 限流：时间窗口（秒）
+  use-multipoint: false    # 多点登录拦截（需 Redis）
   use-redis: false         # 是否启用 Redis 缓存
   use-mongo: false         # 是否启用 MongoDB
   use-strict-auth: true    # 是否启用严格鉴权（Casbin）
@@ -16,6 +23,8 @@ system:
   login-mode: simple       # 登录模式: simple(无验证码) | captcha(需验证码) | strict(分步强验证)
 
 # ===================== 数据库配置 =====================
+# 只需配置 db-type 对应的数据库，其余可省略
+
 # SQLite（db-type: sqlite 时生效）
 sqlite:
   db-name: data            # 数据库文件名（自动生成 data.db）
@@ -30,11 +39,24 @@ mysql:
   port: "3306"             # MySQL 端口
   db-name: hab             # 数据库名
   username: root           # 用户名
-  password: your-password  # 密码（config.example.yaml 中为占位值，实际值写到 config.local.yaml）
+  password: your-password  # 密码（请在 config.local.yaml 中设置真实密码）
   config: charset=utf8mb4&parseTime=True&loc=Local  # 连接参数
+  engine: InnoDB           # 数据库引擎
   log-mode: info           # SQL 日志级别: silent | error | warn | info
   max-idle-conns: 10       # 最大空闲连接数
   max-open-conns: 100      # 最大打开连接数
+
+# PostgreSQL（db-type: pgsql 时生效）
+# pgsql:
+#   path: 127.0.0.1
+#   port: "5432"
+#   db-name: hab
+#   username: postgres
+#   password: your-password
+#   config: "sslmode=disable TimeZone=UTC"
+#   log-mode: info
+#   max-idle-conns: 10
+#   max-open-conns: 100
 
 # Redis（可选，use-redis: true 时需要）
 redis:
@@ -44,10 +66,10 @@ redis:
 
 # ===================== JWT 认证 =====================
 jwt:
-  signing-key: d92a1971-6b0f-49a5-9222-adb2d132a009  # JWT 签名密钥（建议 uuidgen 生成唯一值）
-  expires-time: 7d         # Token 过期时间
+  signing-key: ""          # JWT 签名密钥（留空则自动生成 UUID，建议手动 uuidgen 设置固定值）
+  expires-time: 7d         # Token 过期时间（格式: Nd/Nh/Nm）
   buffer-time: 1d          # Token 刷新缓冲期
-  issuer: qmPlus           # 签发者
+  issuer: hab              # 签发者
 
 # ===================== 验证码 =====================
 captcha:
@@ -61,8 +83,9 @@ captcha:
 autocode:
   web: web/src             # 前端代码生成目录
   server: server           # 后端代码生成目录
-  module: hab              # Go module 名
-  api-key: ""              # AutoCode API Key（留空=禁用，填入=启用）
+  module: ""               # Go module 名（留空则自动从 go.mod 读取）
+  ai-path: ""              # AI 服务地址（可选）
+  api-key: ""              # AutoCode API Key（留空=禁用，填入=启用远程代码生成）
 
 # ===================== 本地文件存储 =====================
 local:
@@ -85,7 +108,8 @@ zap:
   retention-day: -1        # 日志保留天数（-1=永久）
 
 # ===================== 以下按需配置 =====================
-# 邮件（按需启用）
+
+# 邮件
 # email:
 #   to: xxx@qq.com
 #   from: xxx@qq.com
@@ -95,7 +119,17 @@ zap:
 #   port: 465
 #   is-ssl: true
 
-# 云存储（按需选择一种启用）
+# 跨域（默认允许所有，无需配置）
+# cors:
+#   mode: allow-all        # allow-all | strict-whitelist
+#   whitelist:
+#     - allow-origin: http://localhost:8080
+#       allow-methods: GET,POST,PUT,DELETE
+#       allow-headers: Content-Type,Authorization,x-api-key
+#       expose-headers: Content-Length
+#       allow-credentials: true
+
+# ===================== 云存储（按需选择一种启用） =====================
 # aliyun-oss:
 #   endpoint: yourEndpoint
 #   access-key-id: yourAccessKeyId
