@@ -5,6 +5,7 @@
 # 数据库类型: sqlite(默认) | mysql | pgsql | mssql | oracle
 system:
   db-type: sqlite
+  migration: true
 
 # SQLite 无需额外配置，以下默认值即可启动：
 #   db-name: data        → 生成 data.db
