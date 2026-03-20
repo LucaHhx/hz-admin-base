@@ -130,6 +130,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 					{SysBaseMenuID: entity.ID, Name: "delete", Desc: "delete"},
 					{SysBaseMenuID: entity.ID, Name: "edit", Desc: "edit"},
 					{SysBaseMenuID: entity.ID, Name: "info", Desc: "info"},
+					{SysBaseMenuID: entity.ID, Name: "copy", Desc: "copy"},
 					{SysBaseMenuID: entity.ID, Name: "exportTemplate", Desc: "exportTemplate"},
 					{SysBaseMenuID: entity.ID, Name: "exportExcel", Desc: "exportExcel"},
 					{SysBaseMenuID: entity.ID, Name: "importExcel", Desc: "importExcel"},
